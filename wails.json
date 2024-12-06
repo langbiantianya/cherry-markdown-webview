@@ -1,0 +1,13 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "cherry-markdown-webview",
+  "outputfilename": "cherry-markdown-webview",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "快醒醒你只是条单身汪",
+    "email": "langbiantianya@outlook.com"
+  }
+}
