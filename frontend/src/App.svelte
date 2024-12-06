@@ -4,12 +4,23 @@
   import "cherry-markdown/dist/cherry-markdown.css";
   import Cherry from "cherry-markdown";
 
+  // fileHandle is an instance of FileSystemFileHandle..
+  async function writeFile(fileHandle, contents) {
+    // Create a FileSystemWritableFileStream to write to.
+    const writable = await fileHandle.createWritable();
+    // Write the contents of the file to the stream.
+    await writable.write(contents);
+    // Close the file and write the contents to disk.
+    await writable.close();
+  }
+
+  let fileHandle;
   onMount(() => {
     var fileMenu = Cherry.createMenuHook("文件", {});
 
-    var openFileMenu = Cherry.createMenuHook("打开文件", {
+    var openFileMenu = Cherry.createMenuHook("打开", {
       onClick: async () => {
-        const [fileHandle] = await window.showOpenFilePicker({
+        [fileHandle] = await window.showOpenFilePicker({
           types: [
             {
               accept: {
@@ -17,27 +28,60 @@
               },
             },
           ],
-          multiple: true,
+          multiple: false,
         });
-        var reader = new FileReader();
         const fileData = await fileHandle.getFile();
-        console.log(fileData);
-        reader.readAsText(fileData);
-        reader.onload = function () {
-          cherryInstance.setMarkdown(this.result);
-        };
+        console.log(await fileData.text());
+
+        cherryInstance.setMarkdown(await fileData.text());
       },
     });
+    var saveAsFileMenu = Cherry.createMenuHook("另存为", {
+      onClick: async () => {
+        const savefileHandle = await window.showSaveFilePicker({
+          types: [
+            {
+              description: "Markdown file",
+              accept: {
+                "text/plain": [".md", ".mdx"],
+              },
+            },
+          ],
+        });
+        writeFile(savefileHandle, cherryInstance.getMarkdown());
+      },
+    });
+    var saveFileMenu = Cherry.createMenuHook("保存", {
+      onClick: async () => {
+        if (fileHandle) {
+          writeFile(fileHandle, cherryInstance.getMarkdown());
+        } else {
+          const savefileHandle = await window.showSaveFilePicker({
+            types: [
+              {
+                description: "Markdown file",
+                accept: {
+                  "text/plain": [".md", ".mdx"],
+                },
+              },
+            ],
+          });
+          writeFile(savefileHandle, cherryInstance.getMarkdown());
+        }
+      },
+    });
+
     const cherryInstance = new Cherry({
       id: "markdown-container",
       value: "",
       toolbars: {
         // 定义顶部工具栏
         toolbar: [
-          { fileMenu: ["openFileMenu"] },
-          "|",
           "undo",
           "redo",
+          "|",
+          { fileMenu: ["openFileMenu", "saveFileMenu", "saveAsFileMenu"] },
+          "export",
           "|",
           // 把字体样式类按钮都放在加粗按钮下面
           {
@@ -88,7 +132,7 @@
         // 定义侧边栏，默认为空
         sidebar: ["theme", "mobilePreview", "copy"],
         // 定义顶部右侧工具栏，默认为空
-        toolbarRight: ["export", "togglePreview"],
+        toolbarRight: ["togglePreview"],
         // 定义选中文字时弹出的“悬浮工具栏”，默认为 ['bold', 'italic', 'underline', 'strikethrough', 'sub', 'sup', 'quote', '|', 'size', 'color']
         bubble: [
           "color",
@@ -108,10 +152,18 @@
         // 定义光标出现在行首位置时出现的“提示工具栏”，默认为 ['h1', 'h2', 'h3', '|', 'checklist', 'quote', 'table', 'code']
         float: ["table", "code", "graph"],
         customMenu: {
-          fileMenu: fileMenu,
-          openFileMenu: openFileMenu,
+          fileMenu,
+          openFileMenu,
+          saveFileMenu,
+          saveAsFileMenu,
         },
       },
+    });
+
+    document.getElementsByClassName("cherry-toolbar-文件")[0];
+
+    document.getElementsByName("fileMenu").forEach((item) => {
+      item.style.left = "65";
     });
   });
 </script>
