@@ -1,10 +1,10 @@
 name: Wails build
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues
