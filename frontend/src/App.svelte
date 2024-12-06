@@ -5,9 +5,6 @@
   import Cherry from "cherry-markdown";
 
   onMount(() => {
-    /**
-     * 定义一个空壳，用于自行规划cherry已有工具栏的层级结构
-     */
     var fileMenu = Cherry.createMenuHook("文件", {});
 
     var openFileMenu = Cherry.createMenuHook("打开文件", {
@@ -22,7 +19,7 @@
           ],
           multiple: true,
         });
-        var reader = new FileReader(); // 创建FileReader对象
+        var reader = new FileReader();
         const fileData = await fileHandle.getFile();
         console.log(fileData);
         reader.readAsText(fileData);
