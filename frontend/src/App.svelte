@@ -3,74 +3,12 @@
   import { onMount } from "svelte";
   import "cherry-markdown/dist/cherry-markdown.css";
   import Cherry from "cherry-markdown";
+  import { FileMenu } from "./utils/fileMenu";
+  import { ExportMenu } from "./utils/exportMenu";
 
-  // fileHandle is an instance of FileSystemFileHandle..
-  async function writeFile(fileHandle, contents) {
-    // Create a FileSystemWritableFileStream to write to.
-    const writable = await fileHandle.createWritable();
-    // Write the contents of the file to the stream.
-    await writable.write(contents);
-    // Close the file and write the contents to disk.
-    await writable.close();
-  }
-
-  let fileHandle;
+  const fileMenu = FileMenu();
+  const exportMenu = ExportMenu();
   onMount(() => {
-    var fileMenu = Cherry.createMenuHook("文件", {});
-
-    var openFileMenu = Cherry.createMenuHook("打开", {
-      onClick: async () => {
-        [fileHandle] = await window.showOpenFilePicker({
-          types: [
-            {
-              accept: {
-                "text/plain": [".md", ".mdx"],
-              },
-            },
-          ],
-          multiple: false,
-        });
-        const fileData = await fileHandle.getFile();
-        console.log(await fileData.text());
-
-        cherryInstance.setMarkdown(await fileData.text());
-      },
-    });
-    var saveAsFileMenu = Cherry.createMenuHook("另存为", {
-      onClick: async () => {
-        const savefileHandle = await window.showSaveFilePicker({
-          types: [
-            {
-              description: "Markdown file",
-              accept: {
-                "text/plain": [".md", ".mdx"],
-              },
-            },
-          ],
-        });
-        writeFile(savefileHandle, cherryInstance.getMarkdown());
-      },
-    });
-    var saveFileMenu = Cherry.createMenuHook("保存", {
-      onClick: async () => {
-        if (fileHandle) {
-          writeFile(fileHandle, cherryInstance.getMarkdown());
-        } else {
-          const savefileHandle = await window.showSaveFilePicker({
-            types: [
-              {
-                description: "Markdown file",
-                accept: {
-                  "text/plain": [".md", ".mdx"],
-                },
-              },
-            ],
-          });
-          writeFile(savefileHandle, cherryInstance.getMarkdown());
-        }
-      },
-    });
-
     const cherryInstance = new Cherry({
       id: "markdown-container",
       value: "",
@@ -81,7 +19,9 @@
           "redo",
           "|",
           { fileMenu: ["openFileMenu", "saveFileMenu", "saveAsFileMenu"] },
-          "export",
+          {
+            exportMenu: ["exportPdfMenu", "exportHtmlMenu"],
+          },
           "|",
           // 把字体样式类按钮都放在加粗按钮下面
           {
@@ -152,19 +92,18 @@
         // 定义光标出现在行首位置时出现的“提示工具栏”，默认为 ['h1', 'h2', 'h3', '|', 'checklist', 'quote', 'table', 'code']
         float: ["table", "code", "graph"],
         customMenu: {
-          fileMenu,
-          openFileMenu,
-          saveFileMenu,
-          saveAsFileMenu,
+          fileMenu: fileMenu.fileMenu,
+          openFileMenu: fileMenu.openFileMenu,
+          saveFileMenu: fileMenu.saveFileMenu,
+          saveAsFileMenu: fileMenu.saveAsFileMenu,
+          exportMenu: exportMenu.exportMenu,
+          exportPdfMenu: exportMenu.exportPdfMenu,
+          exportHtmlMenu: exportMenu.exportHtmlMenu,
         },
       },
     });
-
-    document.getElementsByClassName("cherry-toolbar-文件")[0];
-
-    document.getElementsByName("fileMenu").forEach((item) => {
-      item.style.left = "65";
-    });
+    fileMenu.setCherry(cherryInstance);
+    exportMenu.setCherry(cherryInstance);
   });
 </script>
 
