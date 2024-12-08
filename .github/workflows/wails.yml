@@ -16,14 +16,14 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  lunux-amd64:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'langbiantianya/cherry-markdown-webview'
           submodules: recursive
@@ -33,21 +33,62 @@ jobs:
           build-platform: linux/amd64
           wails-build-webview2: "embed"
           wails-version: v2.9.2
-  macos:
-    runs-on: macos-latest
+  lunux-arm64:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checkout code
-      - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
         with:
           repository: 'langbiantianya/cherry-markdown-webview'
           submodules: recursive
       - uses: langbiantianya/cherry-markdown-webview@main
         with:
           build-name: cherryMarkdown
-          build-platform: darwin/universal
+          build-platform: linux/arm64
+          wails-build-webview2: "embed"
+          wails-version: v2.9.2
+  macos-amd64:
+    runs-on: macos-latest
+    steps:
+      # Checkout code
+      - uses: actions/checkout@v3
+        with:
+          repository: 'langbiantianya/cherry-markdown-webview'
+          submodules: recursive
+      - uses: langbiantianya/cherry-markdown-webview@main
+        with:
+          build-name: cherryMarkdown
+          build-platform: darwin/amd64
+          wails-build-webview2: "embed"
           wails-version: "v2.9.2"
           go-version: ^1.21
-          sign: "true"
+          sign: "false"
+          # sign-macos-apple-password: ${{ secrets.APPLE_PASSWORD }}
+          # sign-macos-app-id: "Developer ID Application: Lethean LTD (W2DNA5L5DY)"
+          # sign-macos-app-cert: ${{ secrets.MAC_DEVELOPER_CERT }}
+          # sign-macos-app-cert-password: ${{ secrets.MAC_DEVELOPER_PASS }}
+          # sign-macos-installer-id: "Developer ID Installer: Lethean LTD (W2DNA5L5DY)"
+          # sign-macos-installer-cert: ${{ secrets.MAC_DEVELOPER_INSTALL_CERT }}
+          # sign-macos-installer-cert-password: ${{ secrets.MAC_DEVELOPER_INSTALL_PASS }}
+  macos-arm64:
+    runs-on: macos-latest
+    steps:
+      # Checkout code
+      - uses: actions/checkout@v3
+        with:
+          repository: 'langbiantianya/cherry-markdown-webview'
+          submodules: recursive
+      - uses: langbiantianya/cherry-markdown-webview@main
+        with:
+          build-name: cherryMarkdown
+          build-platform: darwin/arm64
+          wails-build-webview2: "embed"
+          wails-version: "v2.9.2"
+          go-version: ^1.21
+          sign: "false"
           # sign-macos-apple-password: ${{ secrets.APPLE_PASSWORD }}
           # sign-macos-app-id: "Developer ID Application: Lethean LTD (W2DNA5L5DY)"
           # sign-macos-app-cert: ${{ secrets.MAC_DEVELOPER_CERT }}
@@ -56,11 +97,11 @@ jobs:
           # sign-macos-installer-cert: ${{ secrets.MAC_DEVELOPER_INSTALL_CERT }}
           # sign-macos-installer-cert-password: ${{ secrets.MAC_DEVELOPER_INSTALL_PASS }}
 
-  windows:
+  windows-amd64:
     runs-on: windows-2022
     steps:
       # Checkout code
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'langbiantianya/cherry-markdown-webview'
           submodules: recursive
@@ -68,6 +109,23 @@ jobs:
         with:
           build-name: cherryMarkdown.exe
           build-platform: windows/amd64
+          wails-build-webview2: "embed"
+          wails-version: v2.9.2
+          go-version: ^1.21
+          nsis: 'false'
+
+  windows-arm64:
+    runs-on: windows-2022
+    steps:
+      # Checkout code
+      - uses: actions/checkout@v3
+        with:
+          repository: 'langbiantianya/cherry-markdown-webview'
+          submodules: recursive
+      - uses: langbiantianya/cherry-markdown-webview@main
+        with:
+          build-name: cherryMarkdown.exe
+          build-platform: windows/arm64
           wails-build-webview2: "embed"
           wails-version: v2.9.2
           go-version: ^1.21
