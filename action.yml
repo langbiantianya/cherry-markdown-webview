@@ -236,7 +236,7 @@ runs:
     - uses: actions/upload-artifact@v3
       if: inputs.package == 'true'
       with:
-        name: Wails Build ${{runner.os}} ${{inputs.build-name}}
+        name: Wails Build ${{runner.os}} ${{runner.name}} ${{inputs.build-name}}
         path: |
           */bin/
           *\bin\*
