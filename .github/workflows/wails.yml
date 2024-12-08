@@ -19,9 +19,10 @@ jobs:
   lunux-amd64:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: set job names
+      run: echo "JOB_NAME=lunux-amd64" >> "$GITHUB_ENV"
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with:
@@ -34,9 +35,11 @@ jobs:
           wails-build-webview2: "embed"
           wails-version: v2.9.2
           
-  macos-arm64:
+  macos:
     runs-on: macos-latest
     steps:
+      - name: set job names
+      run: echo "JOB_NAME=macos" >> "$GITHUB_ENV"
       # Checkout code
       - uses: actions/checkout@v4
         with:
@@ -61,6 +64,8 @@ jobs:
   windows-amd64:
     runs-on: windows-2022
     steps:
+      - name: set job names
+      run: echo "JOB_NAME=windows-amd64" >> "$GITHUB_ENV"
       # Checkout code
       - uses: actions/checkout@v4
         with:
@@ -77,7 +82,11 @@ jobs:
 
   windows-arm64:
     runs-on: windows-2022
+    env: 
+      JOB_NAME:"windows-arm64"
     steps:
+      - name: set job names
+      run: echo "JOB_NAME=windows-arm64" >> "$GITHUB_ENV"
       # Checkout code
       - uses: actions/checkout@v4
         with:
