@@ -42,7 +42,7 @@ inputs:
   node-version:
     description: "Node js version"
     required: false
-    default: "16.x"
+    default: "22.x"
   deno-build:
     description: "This gets run into bash, use the full command"
     required: false
