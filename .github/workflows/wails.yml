@@ -47,7 +47,7 @@ jobs:
           build-platform: darwin/universal
           wails-version: "v2.9.2"
           go-version: ^1.21
-          sign: "false"
+          sign: "true"
           # sign-macos-apple-password: ${{ secrets.APPLE_PASSWORD }}
           # sign-macos-app-id: "Developer ID Application: Lethean LTD (W2DNA5L5DY)"
           # sign-macos-app-cert: ${{ secrets.MAC_DEVELOPER_CERT }}
