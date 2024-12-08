@@ -60,7 +60,7 @@ jobs:
           submodules: recursive
       - uses: langbiantianya/cherry-markdown-webview@main
         with:
-          build-name: cherryMarkdown
+          build-name: cherry-markdown-webview
           build-platform: darwin/amd64
           wails-build-webview2: "embed"
           wails-version: "v2.9.2"
@@ -83,7 +83,7 @@ jobs:
           submodules: recursive
       - uses: langbiantianya/cherry-markdown-webview@main
         with:
-          build-name: cherryMarkdown
+          build-name: cherry-markdown-webview
           build-platform: darwin/arm64
           wails-build-webview2: "embed"
           wails-version: "v2.9.2"
