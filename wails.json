@@ -9,5 +9,16 @@
   "author": {
     "name": "快醒醒你只是条单身汪",
     "email": "langbiantianya@outlook.com"
+  },
+  "info": {
+    "fileAssociations": [
+      {
+        "ext": "md",
+        "name": "Markdown File",
+        "description": "Markdown Document",
+        "iconName": "markdownIcon",
+        "role": "Editor"
+      }
+    ]
   }
 }
