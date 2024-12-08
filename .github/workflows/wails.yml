@@ -54,7 +54,7 @@ jobs:
   #         wails-build-webview2: "embed"
   #         wails-version: v2.9.2
   macos-amd64:
-    runs-on: macos-latest
+    runs-on: macos-latest-large
     steps:
       # Checkout code
       - uses: actions/checkout@v3
