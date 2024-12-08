@@ -2,10 +2,13 @@ package main
 
 import (
 	"embed"
+	"fmt"
+	"runtime"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
@@ -13,6 +16,14 @@ import (
 var assets embed.FS
 
 func main() {
+	switch runtime.GOOS {
+	case "linux":
+		// TODO
+		fmt.Println("Running on Linux")
+	case "windows":
+		// TODO
+		fmt.Println("Running on Windows")
+	}
 	// Create an instance of the app structure
 	app := NewApp()
 
@@ -29,7 +40,12 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		Mac: &mac.Options{
+			OnFileOpen: func(filePaths string) {
+				panic("TODO macos open file")
+			},
+		},
+		OnStartup: app.startup,
 		Bind: []interface{}{
 			app,
 		},
