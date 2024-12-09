@@ -50,7 +50,7 @@
           // 把插入类按钮都放在插入按钮下面
           {
             insert: [
-              // "image",
+              "image",
               // "audio",
               // "video",
               // "pdf",
