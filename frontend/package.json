@@ -10,11 +10,16 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@tailwindcss/typography": "^0.5.14",
+    "autoprefixer": "^10.4.20",
     "svelte": "^5.2.7",
+    "svelte-loading-spinners": "^0.3.6",
     "tailwindcss": "^3.4.9",
     "vite": "^6.0.1"
   },
   "dependencies": {
-    "cherry-markdown": "^0.8.52"
+    "cherry-markdown": "^0.8.52",
+    "echarts": "^4.6.0",
+    "mermaid": "^9.4.3"
   }
 }

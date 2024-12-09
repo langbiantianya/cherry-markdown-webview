@@ -1,8 +1,9 @@
 package main
 
 import (
+	"cherry-markdown-webview/internal/file"
 	"embed"
-	"fmt"
+	"os"
 	"runtime"
 
 	"github.com/wailsapp/wails/v2"
@@ -18,11 +19,16 @@ var assets embed.FS
 func main() {
 	switch runtime.GOOS {
 	case "linux":
-		// TODO
-		fmt.Println("Running on Linux")
+		argsWithoutProg := os.Args[1:]
+		if len(argsWithoutProg) != 0 {
+			file.AsynLoadingToRam(argsWithoutProg[0])
+		}
+
 	case "windows":
-		// TODO
-		fmt.Println("Running on Windows")
+		argsWithoutProg := os.Args[1:]
+		if len(argsWithoutProg) != 0 {
+			file.AsynLoadingToRam(argsWithoutProg[0])
+		}
 	}
 	// Create an instance of the app structure
 	app := NewApp()
@@ -42,7 +48,7 @@ func main() {
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		Mac: &mac.Options{
 			OnFileOpen: func(filePaths string) {
-				panic("TODO macos open file")
+				file.AsynLoadingToRam(filePaths)
 			},
 		},
 		OnStartup: app.startup,
