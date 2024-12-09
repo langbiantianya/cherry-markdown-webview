@@ -10,9 +10,6 @@
 			"LegalCopyright": "{{.Info.Copyright}}",
 			"ProductName": "{{.Info.ProductName}}",
 			"Comments": "{{.Info.Comments}}"
-		},
-		"fileAssociations":{
-			
 		}
 	}
 }

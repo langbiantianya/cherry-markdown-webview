@@ -1,4 +1,5 @@
 {
+  "version": "2",
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "cherry-markdown-webview",
   "outputfilename": "cherry-markdown-webview",
@@ -11,6 +12,11 @@
     "email": "langbiantianya@outlook.com"
   },
   "info": {
+    "companyName":"langbiantianya",
+    "productName": "CherryMarkdownOnWebview",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright © 2024 langbiantianya. All rights reserved.",
+    "comments": "Built using langbiantianya (https://github.com/langbiantianya)",
     "fileAssociations": [
       {
         "ext": "md",
