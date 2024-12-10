@@ -34,6 +34,11 @@ func (a *App) SaveFileEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "saveFileEvent")
 }
 
+// OpenFileEvent implements appmenu.AppMenuFunc.
+func (a *App) OpenFileEvent() {
+	wailsRuntime.EventsEmit(a.ctx, "openFileEvent")
+}
+
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{}
@@ -62,8 +67,62 @@ func (a *App) OpenFile() {
 	})
 	if err != nil {
 		log.Logger.Error(err.Error())
+		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+			Type:    "error",
+			Title:   "错误",
+			Message: err.Error(),
+		})
 		return
 	}
 	file.AsynLoadingToRam(filePath)
 	wailsRuntime.WindowReloadApp(a.ctx)
+}
+
+func (a *App) SaveFile(doc file.File) {
+	if doc.Path == "" {
+		// 打开选项框
+		displayName := "Markdown file"
+		pattern := "*.md;*.mdx"
+		if doc.Pattern != "" {
+			pattern = doc.Pattern
+		}
+		if doc.DisplayName != "" {
+			displayName = doc.DisplayName
+		}
+		filePath, err := wailsRuntime.SaveFileDialog(a.ctx, wailsRuntime.SaveDialogOptions{
+			DefaultFilename: doc.Name,
+			Title:           "保存",
+			Filters: []wailsRuntime.FileFilter{
+				{
+					DisplayName: displayName,
+					Pattern:     pattern,
+				},
+			},
+		})
+		if err != nil {
+			log.Logger.Error(err.Error())
+			wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+				Type:    "error",
+				Title:   "错误",
+				Message: err.Error(),
+			})
+		}
+		doc.Path = filePath
+	}
+	// 保存
+	err := file.WriteFile(doc)
+	if err != nil {
+		log.Logger.Error(err.Error())
+		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+			Type:    "error",
+			Title:   "错误",
+			Message: err.Error(),
+		})
+	}
+	wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+		Type:    "info",
+		Title:   "成功",
+		Message: "保存成功",
+	})
+
 }

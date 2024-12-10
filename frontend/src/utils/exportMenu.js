@@ -1,20 +1,22 @@
 import Cherry from "cherry-markdown";
-import { getOpenFileHandle, getSaveFileHandle, writeFile } from "./io";
+import { getSaveFileHandle, writeFile } from "./io";
+import { SaveFile } from "../../wailsjs/go/main/App";
+import { file } from "../../wailsjs/go/models";
 
 export const ExportMenu = function () {
-  //   let fileHandle;
-  let cherryInstance;
+  //   let fileHandle
+  let cherryInstance
   return {
     /**
      *
      * @param {Cherry} cherry
      */
     setCherry: (cherry) => {
-      cherryInstance = cherry;
+      cherryInstance = cherry
     },
     exportMenu: Cherry.createMenuHook("导出", {}),
     exportPdf: () => {
-      cherryInstance.export();
+      cherryInstance.export()
     },
     exportPdfMenu: Cherry.createMenuHook("导出PDF", {
       onClick: () => {
@@ -22,24 +24,35 @@ export const ExportMenu = function () {
       },
     }),
     exportHtml: async () => {
-      const mdHtml = cherryInstance.getHtml();
-      const fileHandle = await getSaveFileHandle({
-        types: [
-          {
-            description: "Html file",
-            // @ts-ignore
-            accept: {
-              "text/html": [".html"],
+      const mdHtml = cherryInstance.getHtml()
+      if (window.showSaveFilePicker) {
+        const fileHandle = await getSaveFileHandle({
+          types: [
+            {
+              description: "Html file",
+              // @ts-ignore
+              accept: {
+                "text/html": [".html"],
+              },
             },
-          },
-        ],
-      });
-      await writeFile(fileHandle, mdHtml);
+          ],
+        })
+        await writeFile(fileHandle, mdHtml)
+      } else {
+        const htmlBase64 = btoa(String.fromCharCode(...stringToBinaryArray(mdHtml)))
+
+        const doc = new file.File()
+        doc.Bytes = htmlBase64
+        doc.DisplayName = "Html file"
+        doc.Pattern = "*.html"
+        await SaveFile(doc)
+      }
+
     },
     exportHtmlMenu: Cherry.createMenuHook("导出Html", {
       onClick: async () => {
         await this.exportHtml()
       },
     }),
-  };
-};
+  }
+}

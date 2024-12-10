@@ -1,40 +1,77 @@
 import Cherry from "cherry-markdown";
 import { getOpenFileHandle, getSaveFileHandle, writeFile } from "./io";
+import { file } from "../../wailsjs/go/models";
+import { SaveFile, OpenFile } from "../../wailsjs/go/main/App";
+import { stringToBinaryArray } from "./blob";
 
 export const FileMenu = function () {
-  let fileHandle;
-  let cherryInstance;
+  let fileHandle
+  let cherryInstance
   return {
     /**
      *
      * @param {Cherry} cherry
      */
     setCherry: (cherry) => {
-      cherryInstance = cherry;
+      cherryInstance = cherry
     },
     fileMenu: Cherry.createMenuHook("文件", {}),
+    openFile: async () => {
+      if (window.showOpenFilePicker) {
+        fileHandle = await getOpenFileHandle()
+        const fileData = await fileHandle.getFile()
+        cherryInstance.setMarkdown(await fileData.text())
+      } else {
+        await OpenFile()
+      }
+    },
     openFileMenu: Cherry.createMenuHook("打开", {
       onClick: async () => {
-        fileHandle = await getOpenFileHandle();
-        const fileData = await fileHandle.getFile();
-        cherryInstance.setMarkdown(await fileData.text());
+        await this.openFile()
       },
     }),
     saveAsFile: async () => {
-      const savefileHandle = await getSaveFileHandle();
-      writeFile(savefileHandle, cherryInstance.getMarkdown());
+      if (window.showSaveFilePicker) {
+        const savefileHandle = await getSaveFileHandle()
+        writeFile(savefileHandle, cherryInstance.getMarkdown())
+        alert("保存成功")
+      } else {
+        const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
+
+        const doc = new file.File()
+        doc.Bytes = mdBase64
+
+        await SaveFile(doc)
+      }
     },
     saveAsFileMenu: Cherry.createMenuHook("另存为", {
       onClick: async () => {
         await this.saveAsFile()
       },
     }),
-    saveFile: async () => {
-      if (fileHandle) {
-        writeFile(fileHandle, cherryInstance.getMarkdown());
+    /**
+     * 
+     * @param {file.File|undefined|null} doc 
+     */
+    saveFile: async (doc) => {
+
+      if (window.showSaveFilePicker) {
+        if (fileHandle) {
+          writeFile(fileHandle, cherryInstance.getMarkdown())
+        } else {
+          const savefileHandle = await getSaveFileHandle()
+          writeFile(savefileHandle, cherryInstance.getMarkdown())
+        }
+        alert("保存成功")
       } else {
-        const savefileHandle = await getSaveFileHandle();
-        writeFile(savefileHandle, cherryInstance.getMarkdown());
+        const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
+        if (doc) {
+          doc.Bytes = mdBase64
+        } else {
+          doc = new file.File()
+          doc.Bytes = mdBase64
+        }
+        await SaveFile(doc)
       }
     },
     saveFileMenu: Cherry.createMenuHook("保存", {
@@ -42,7 +79,6 @@ export const FileMenu = function () {
         await this.saveFile()
       },
     }),
-
-  };
-};
+  }
+}
 

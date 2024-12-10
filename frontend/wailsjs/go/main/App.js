@@ -18,8 +18,16 @@ export function OpenFile() {
   return window['go']['main']['App']['OpenFile']();
 }
 
+export function OpenFileEvent() {
+  return window['go']['main']['App']['OpenFileEvent']();
+}
+
 export function SaveAsFileEvent() {
   return window['go']['main']['App']['SaveAsFileEvent']();
+}
+
+export function SaveFile(arg1) {
+  return window['go']['main']['App']['SaveFile'](arg1);
 }
 
 export function SaveFileEvent() {

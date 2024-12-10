@@ -5,9 +5,11 @@ import (
 )
 
 type File struct {
-	Name  string
-	Path  string
-	Bytes []byte
+	DisplayName string
+	Pattern     string
+	Name        string
+	Path        string
+	Bytes       []byte
 }
 
 var filech chan *File

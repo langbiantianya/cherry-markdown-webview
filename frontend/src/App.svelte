@@ -4,7 +4,7 @@
   import Cherry from "cherry-markdown";
   import { FileMenu } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
-  import { arrayToBlob, blobToString, base64ToString } from "./utils/blob";
+  import { base64ToString } from "./utils/blob";
   import { AssociateOpen } from "../wailsjs/go/main/App";
   import { Circle2 } from "svelte-loading-spinners";
   import { EventsOn } from "../wailsjs/runtime";
@@ -125,8 +125,11 @@
       cherryInstance = newCherry();
     }
     loding = false;
+    EventsOn("openFileEvent", (event) => {
+      fileMenu.openFile();
+    });
     EventsOn("saveFileEvent", (event) => {
-      fileMenu.saveFile();
+      fileMenu.saveFile(assciateOpenFile);
     });
     EventsOn("saveAsFileEvent", (event) => {
       fileMenu.saveAsFile();

@@ -10,7 +10,7 @@ import (
 func init() {
 	fileMenu := appMenu.AddSubmenu("文件")
 	fileMenu.AddText("打开", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
-		menuFunc.OpenFile()
+		menuFunc.OpenFileEvent()
 	})
 
 	fileMenu.AddText("保存", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {

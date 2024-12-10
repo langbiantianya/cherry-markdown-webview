@@ -10,6 +10,10 @@ export function ExportPdfEvent():Promise<void>;
 
 export function OpenFile():Promise<void>;
 
+export function OpenFileEvent():Promise<void>;
+
 export function SaveAsFileEvent():Promise<void>;
+
+export function SaveFile(arg1:file.File):Promise<void>;
 
 export function SaveFileEvent():Promise<void>;

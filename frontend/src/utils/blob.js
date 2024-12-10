@@ -34,3 +34,12 @@ export async function blobToString(blob) {
 		reader.readAsText(blob);
 	});
 }
+/**
+ * 
+ * @param {string} str 
+ * 
+ */
+export function stringToBinaryArray(str) {
+	const encoder = new TextEncoder();
+	return encoder.encode(str);
+}

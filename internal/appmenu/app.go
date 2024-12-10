@@ -5,7 +5,7 @@ import (
 )
 
 type AppMenuFunc interface {
-	OpenFile()
+	OpenFileEvent()
 	SaveFileEvent()
 	SaveAsFileEvent()
 	ExportPdfEvent()
