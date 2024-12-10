@@ -20,21 +20,29 @@ export const FileMenu = function () {
         cherryInstance.setMarkdown(await fileData.text());
       },
     }),
+    saveAsFile: async () => {
+      const savefileHandle = await getSaveFileHandle();
+      writeFile(savefileHandle, cherryInstance.getMarkdown());
+    },
     saveAsFileMenu: Cherry.createMenuHook("另存为", {
       onClick: async () => {
+        await this.saveAsFile()
+      },
+    }),
+    saveFile: async () => {
+      if (fileHandle) {
+        writeFile(fileHandle, cherryInstance.getMarkdown());
+      } else {
         const savefileHandle = await getSaveFileHandle();
         writeFile(savefileHandle, cherryInstance.getMarkdown());
-      },
-    }),
+      }
+    },
     saveFileMenu: Cherry.createMenuHook("保存", {
       onClick: async () => {
-        if (fileHandle) {
-          writeFile(fileHandle, cherryInstance.getMarkdown());
-        } else {
-          const savefileHandle = await getSaveFileHandle();
-          writeFile(savefileHandle, cherryInstance.getMarkdown());
-        }
+        await this.saveFile()
       },
     }),
+
   };
 };
+

@@ -25,7 +25,9 @@ func AsynLoadingToRam(filePath string) {
 			}
 		}()
 	} else {
-		close(filech)
+		if filech != nil {
+			close(filech)
+		}
 	}
 }
 

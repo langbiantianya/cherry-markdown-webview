@@ -13,6 +13,7 @@ export async function getOpenFileHandle(
   option = {
     types: [
       {
+        description: "Markdown file",
         accept: {
           "text/plain": [".md", ".mdx"],
         },

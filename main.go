@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cherry-markdown-webview/internal/appmenu"
 	"cherry-markdown-webview/internal/file"
 	"embed"
 	"os"
@@ -32,7 +33,6 @@ func main() {
 	}
 	// Create an instance of the app structure
 	app := NewApp()
-
 	// Create application with options
 	err := wails.Run(&options.App{
 		Windows: &windows.Options{
@@ -40,8 +40,9 @@ func main() {
 		},
 
 		Title:  "cherry-markdown-webview",
-		Width:  1024,
+		Width:  800,
 		Height: 600,
+		Menu:   appmenu.NewAppMenu(app),
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -56,7 +57,6 @@ func main() {
 			app,
 		},
 	})
-
 	if err != nil {
 		println("Error:", err.Error())
 	}

@@ -6,27 +6,26 @@
   import { ExportMenu } from "./utils/exportMenu";
   import { arrayToBlob, blobToString, base64ToString } from "./utils/blob";
   import { AssociateOpen } from "../wailsjs/go/main/App";
-
   import { Circle2 } from "svelte-loading-spinners";
-
+  import { EventsOn } from "../wailsjs/runtime";
   const fileMenu = FileMenu();
   const exportMenu = ExportMenu();
   let loding = $state(true);
-  onMount(async () => {
+  function newCherry(mdStr = "") {
     const cherryInstance = new Cherry({
       id: "markdown-container",
-      value: "",
+      value: mdStr,
       toolbars: {
         // 定义顶部工具栏
         toolbar: [
           "undo",
           "redo",
-          "|",
-          { fileMenu: ["openFileMenu", "saveFileMenu", "saveAsFileMenu"] },
-          {
-            exportMenu: ["exportPdfMenu", "exportHtmlMenu"],
-          },
-          "|",
+          // "|",
+          // { fileMenu: ["openFileMenu", "saveFileMenu", "saveAsFileMenu"] },
+          // {
+          //   exportMenu: ["exportPdfMenu", "exportHtmlMenu"],
+          // },
+          // "|",
           // 把字体样式类按钮都放在加粗按钮下面
           {
             bold: [
@@ -91,13 +90,13 @@
         // 定义光标出现在行首位置时出现的“提示工具栏”，默认为 ['h1', 'h2', 'h3', '|', 'checklist', 'quote', 'table', 'code']
         float: ["table", "code", "graph"],
         customMenu: {
-          fileMenu: fileMenu.fileMenu,
-          openFileMenu: fileMenu.openFileMenu,
-          saveFileMenu: fileMenu.saveFileMenu,
-          saveAsFileMenu: fileMenu.saveAsFileMenu,
-          exportMenu: exportMenu.exportMenu,
-          exportPdfMenu: exportMenu.exportPdfMenu,
-          exportHtmlMenu: exportMenu.exportHtmlMenu,
+          // fileMenu: fileMenu.fileMenu,
+          // openFileMenu: fileMenu.openFileMenu,
+          // saveFileMenu: fileMenu.saveFileMenu,
+          // saveAsFileMenu: fileMenu.saveAsFileMenu,
+          // exportMenu: exportMenu.exportMenu,
+          // exportPdfMenu: exportMenu.exportPdfMenu,
+          // exportHtmlMenu: exportMenu.exportHtmlMenu,
         },
         toc: {
           updateLocationHash: false, // 要不要更新URL的hash
@@ -107,6 +106,10 @@
     });
     fileMenu.setCherry(cherryInstance);
     exportMenu.setCherry(cherryInstance);
+    return cherryInstance;
+  }
+  onMount(async () => {
+    let cherryInstance;
     const assciateOpenFile = await AssociateOpen();
     if (
       assciateOpenFile &&
@@ -115,16 +118,25 @@
     ) {
       if (typeof assciateOpenFile.Bytes === "string") {
         const mdStr = base64ToString(assciateOpenFile.Bytes);
-        cherryInstance.setMarkdown(mdStr);
-      } else if (typeof assciateOpenFile.Bytes === "object") {
-        const mdStr = await blobToString(arrayToBlob(assciateOpenFile.Bytes));
-        cherryInstance.setMarkdown(mdStr);
-        loding = false;
+        cherryInstance && cherryInstance.destroy();
+        cherryInstance = newCherry(mdStr);
       }
     } else {
-      loding = false;
+      cherryInstance = newCherry();
     }
     loding = false;
+    EventsOn("saveFileEvent", (event) => {
+      fileMenu.saveFile();
+    });
+    EventsOn("saveAsFileEvent", (event) => {
+      fileMenu.saveAsFile();
+    });
+    EventsOn("exportPdfEvent", (event) => {
+      exportMenu.exportPdf();
+    });
+    EventsOn("exportHtmlEvent", (event) => {
+      exportMenu.exportHtml();
+    });
   });
 </script>
 
