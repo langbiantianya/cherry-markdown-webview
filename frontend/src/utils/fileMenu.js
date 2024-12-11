@@ -15,7 +15,7 @@ export const FileMenu = function () {
     setCherry: (cherry) => {
       cherryInstance = cherry
     },
-    fileMenu: Cherry.createMenuHook("文件", {}),
+    // fileMenu: Cherry.createMenuHook("文件", {}),
     openFile: async () => {
       if (window.showOpenFilePicker) {
         fileHandle = await getOpenFileHandle()
@@ -25,11 +25,11 @@ export const FileMenu = function () {
         await OpenFile()
       }
     },
-    openFileMenu: Cherry.createMenuHook("打开", {
-      onClick: async () => {
-        await this.openFile()
-      },
-    }),
+    // openFileMenu: Cherry.createMenuHook("打开", {
+    //   onClick: async () => {
+    //     await this.openFile()
+    //   },
+    // }),
     saveAsFile: async () => {
       if (window.showSaveFilePicker) {
         const savefileHandle = await getSaveFileHandle()
@@ -44,11 +44,11 @@ export const FileMenu = function () {
         await SaveFile(doc)
       }
     },
-    saveAsFileMenu: Cherry.createMenuHook("另存为", {
-      onClick: async () => {
-        await this.saveAsFile()
-      },
-    }),
+    // saveAsFileMenu: Cherry.createMenuHook("另存为", {
+    //   onClick: async () => {
+    //     await this.saveAsFile()
+    //   },
+    // }),
     /**
      * 
      * @param {file.File|undefined|null} doc 
@@ -74,11 +74,11 @@ export const FileMenu = function () {
         await SaveFile(doc)
       }
     },
-    saveFileMenu: Cherry.createMenuHook("保存", {
-      onClick: async () => {
-        await this.saveFile()
-      },
-    }),
+    // saveFileMenu: Cherry.createMenuHook("保存", {
+    //   onClick: async () => {
+    //     await this.saveFile()
+    //   },
+    // }),
   }
 }
 

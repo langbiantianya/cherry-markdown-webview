@@ -14,15 +14,15 @@ export const ExportMenu = function () {
     setCherry: (cherry) => {
       cherryInstance = cherry
     },
-    exportMenu: Cherry.createMenuHook("导出", {}),
+    // exportMenu: Cherry.createMenuHook("导出", {}),
     exportPdf: () => {
       cherryInstance.export()
     },
-    exportPdfMenu: Cherry.createMenuHook("导出PDF", {
-      onClick: () => {
-        this.exportPdf()
-      },
-    }),
+    // exportPdfMenu: Cherry.createMenuHook("导出PDF", {
+    //   onClick: () => {
+    //     this.exportPdf()
+    //   },
+    // }),
     exportHtml: async () => {
       const mdHtml = cherryInstance.getHtml()
       if (window.showSaveFilePicker) {
@@ -49,10 +49,10 @@ export const ExportMenu = function () {
       }
 
     },
-    exportHtmlMenu: Cherry.createMenuHook("导出Html", {
-      onClick: async () => {
-        await this.exportHtml()
-      },
-    }),
+    // exportHtmlMenu: Cherry.createMenuHook("导出Html", {
+    //   onClick: async () => {
+    //     await this.exportHtml()
+    //   },
+    // }),
   }
 }

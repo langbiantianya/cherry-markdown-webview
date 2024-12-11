@@ -8,8 +8,11 @@
   import { AssociateOpen } from "../wailsjs/go/main/App";
   import { Circle2 } from "svelte-loading-spinners";
   import { EventsOn } from "../wailsjs/runtime";
+  import { BubbleExtInit, BubbleExtMenu } from "./utils/rightClickBubble";
+
   const fileMenu = FileMenu();
   const exportMenu = ExportMenu();
+  const bubbleExtMenu = BubbleExtMenu();
   let loding = $state(true);
   function newCherry(mdStr = "") {
     const cherryInstance = new Cherry({
@@ -71,6 +74,9 @@
         toolbarRight: ["togglePreview"],
         // 定义选中文字时弹出的“悬浮工具栏”，默认为 ['bold', 'italic', 'underline', 'strikethrough', 'sub', 'sup', 'quote', '|', 'size', 'color']
         bubble: [
+          "copyMenu",
+          "pasteMenu",
+          "|",
           "color",
           "size",
           "|",
@@ -78,18 +84,15 @@
           "italic",
           "underline",
           "strikethrough",
-          "sub",
-          "sup",
           "|",
           "quote",
           "header",
-          "ul",
-          "ol",
-          "checklist",
         ],
         // 定义光标出现在行首位置时出现的“提示工具栏”，默认为 ['h1', 'h2', 'h3', '|', 'checklist', 'quote', 'table', 'code']
         float: ["table", "code", "graph"],
         customMenu: {
+          copyMenu: bubbleExtMenu.copyMenu,
+          pasteMenu: bubbleExtMenu.pasteMenu,
           // fileMenu: fileMenu.fileMenu,
           // openFileMenu: fileMenu.openFileMenu,
           // saveFileMenu: fileMenu.saveFileMenu,
@@ -106,9 +109,15 @@
     });
     fileMenu.setCherry(cherryInstance);
     exportMenu.setCherry(cherryInstance);
+    bubbleExtMenu.setCherry(cherryInstance);
+    BubbleExtInit(cherryInstance);
     return cherryInstance;
   }
   onMount(async () => {
+    /**
+     * 初始化 Cherry Markdown 编辑器实例
+     * @type {Cherry}
+     */
     let cherryInstance;
     const assciateOpenFile = await AssociateOpen();
     if (
@@ -124,6 +133,7 @@
     } else {
       cherryInstance = newCherry();
     }
+
     loding = false;
     EventsOn("openFileEvent", (event) => {
       fileMenu.openFile();
