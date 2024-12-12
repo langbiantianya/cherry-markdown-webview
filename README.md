@@ -34,9 +34,7 @@
 - [ ] 个性化选项
 
 ## download
-
-[这里]([Releases · Tencent/cherry-markdown](https://github.com/Tencent/cherry-markdown/releases))
-
+[这里下载](https://github.com/langbiantianya/cherry-markdown-webview/releases)
 ## screenshot
 
 ![截图](https://github.com/langbiantianya/cherry-markdown-webview/raw/refs/heads/main/screenshot/1.png)
