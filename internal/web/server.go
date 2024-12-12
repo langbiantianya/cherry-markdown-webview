@@ -46,12 +46,12 @@ func StartServer() {
 		parsedURI, err := utils.ParsedURI(uriValue)
 		if err != nil {
 			logs.Logger.Error(err.Error())
-
+			w.Write(make([]byte, 0))
 		}
 		localFile, err := file.ReadFile(parsedURI.Path[1:])
 		if err != nil {
 			logs.Logger.Error(err.Error())
-
+			w.Write(make([]byte, 0))
 		}
 
 		w.Header().Set("Content-Type", localFile.Mime)

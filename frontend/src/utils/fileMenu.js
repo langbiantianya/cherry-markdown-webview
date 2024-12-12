@@ -54,16 +54,7 @@ export const FileMenu = function () {
      * @param {file.File|undefined|null} doc 
      */
     saveFile: async (doc) => {
-
-      if (window.showSaveFilePicker || !doc || doc.Path === "" || doc.Bytes.length === 0) {
-        if (fileHandle) {
-          writeFile(fileHandle, cherryInstance.getMarkdown())
-        } else {
-          const savefileHandle = await getSaveFileHandle()
-          writeFile(savefileHandle, cherryInstance.getMarkdown())
-        }
-        alert("保存成功")
-      } else {
+      if ((doc && doc.Path && doc.Bytes.length > 0) || !window.showSaveFilePicker) {
         const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
         if (doc) {
           doc.Bytes = mdBase64
@@ -72,6 +63,14 @@ export const FileMenu = function () {
           doc.Bytes = mdBase64
         }
         await SaveFile(doc)
+      } else {
+        if (fileHandle) {
+          await writeFile(fileHandle, cherryInstance.getMarkdown())
+        } else {
+          const savefileHandle = await getSaveFileHandle()
+          await writeFile(savefileHandle, cherryInstance.getMarkdown())
+        }
+        alert("保存成功")
       }
     },
     // saveFileMenu: Cherry.createMenuHook("保存", {

@@ -121,20 +121,9 @@
      * @type {Cherry}
      */
     let cherryInstance;
-    const assciateOpenFile = await AssociateOpen();
-    if (
-      assciateOpenFile &&
-      assciateOpenFile.Path !== "" &&
-      assciateOpenFile.Bytes.length > 0
-    ) {
-      if (typeof assciateOpenFile.Bytes === "string") {
-        const mdStr = base64ToString(assciateOpenFile.Bytes);
-        cherryInstance && cherryInstance.destroy();
-        cherryInstance = newCherry(mdStr);
-      }
-    } else {
-      cherryInstance = newCherry();
-    }
+    let assciateOpenFile = await AssociateOpen();
+    cherryInstance && cherryInstance.destroy();
+    cherryInstance = newCherry();
     cherryInstance.on("beforeImageMounted", function (srcProp, src) {
       let url = new URL(src);
       if (url.protocol === "file:") {
@@ -145,11 +134,23 @@
       }
       return { srcProp, src };
     });
+    if (
+      assciateOpenFile &&
+      assciateOpenFile.Path !== "" &&
+      assciateOpenFile.Bytes.length > 0
+    ) {
+      if (typeof assciateOpenFile.Bytes === "string") {
+        const mdStr = base64ToString(assciateOpenFile.Bytes);
+        cherryInstance.setMarkdown(mdStr);
+      }
+    }
+
     loding = false;
     EventsOn("openFileEvent", (event) => {
       fileMenu.openFile();
+      assciateOpenFile = undefined;
     });
-    EventsOn("saveFileEvent", (event) => {
+    EventsOn("saveFileEvent", async (event) => {
       fileMenu.saveFile(assciateOpenFile);
     });
     EventsOn("saveAsFileEvent", (event) => {
