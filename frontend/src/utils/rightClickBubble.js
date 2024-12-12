@@ -14,11 +14,6 @@ export const BubbleExtInit = function (cherryInstance) {
 			} else {
 				hooks["copyMenu"].hide()
 			}
-			if (await ClipboardGetText()) {
-				hooks["pasteMenu"].show()
-			} else {
-				hooks["pasteMenu"].hide()
-			}
 		})
 		// document.getElementById("markdown-container").addEventListener("mouseup", async function (event) {
 		// 	const hooks = cherryInstance.bubble.menus.hooks
