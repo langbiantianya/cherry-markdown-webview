@@ -1,7 +1,7 @@
 # README
 
 ## About
-一个功能丰富且支持`windows` `macos` `linux`的Markdown编辑器，目前暂时只支持中文，待基础功能完善后会添加更多的语言支持,由于我没有mac所以有些问题是无法发现的，如有发现问题欢迎提issues。
+一个功能丰富且支持`windows` `macos` `linux(龙芯也支持)`的Markdown编辑器，目前暂时只支持中文，待基础功能完善后会添加更多的语言支持,由于我没有mac所以有些问题是无法发现的，如有发现问题欢迎提issues。
 待后期想好名字后会迁移到新仓库并加一个图标。
 ## todo 画饼个
 - [x] cherry-markdown
@@ -19,7 +19,7 @@
 		- [x] amd64
 		- [x] arm64
 		- [ ] armf
-		- [ ] loong64
+		- [x] loong64
 	- [x]  mac
 		- [x] arm64
 		- [x] amd64
