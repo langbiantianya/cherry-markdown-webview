@@ -14,12 +14,20 @@ export function ExportPdfEvent() {
   return window['go']['main']['App']['ExportPdfEvent']();
 }
 
+export function GetWebServerPort() {
+  return window['go']['main']['App']['GetWebServerPort']();
+}
+
 export function OpenFile() {
   return window['go']['main']['App']['OpenFile']();
 }
 
 export function OpenFileEvent() {
   return window['go']['main']['App']['OpenFileEvent']();
+}
+
+export function ReadLocalFile(arg1) {
+  return window['go']['main']['App']['ReadLocalFile'](arg1);
 }
 
 export function SaveAsFileEvent() {

@@ -8,9 +8,13 @@ export function ExportHtmlEvent():Promise<void>;
 
 export function ExportPdfEvent():Promise<void>;
 
+export function GetWebServerPort():Promise<number>;
+
 export function OpenFile():Promise<void>;
 
 export function OpenFileEvent():Promise<void>;
+
+export function ReadLocalFile(arg1:string):Promise<file.File>;
 
 export function SaveAsFileEvent():Promise<void>;
 

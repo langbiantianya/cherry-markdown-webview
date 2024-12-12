@@ -3,6 +3,8 @@ package file
 import (
 	"io"
 	"os"
+
+	"github.com/wailsapp/mimetype"
 )
 
 func ReadFileToByteArray(filePath string) ([]byte, error) {
@@ -31,9 +33,19 @@ func ReadFile(filePath string) (*File, error) {
 
 		return nil, err
 	}
-	return &File{
+
+	f := File{
 		Name:  fileInfo.Name(),
 		Path:  filePath,
 		Bytes: bytes,
-	}, nil
+	}
+
+	mtype, err := mimetype.DetectFile(filePath)
+
+	if err == nil {
+		f.DisplayName = mtype.String()
+		f.Pattern = mtype.Extension()
+		f.Mime = mtype.String()
+	}
+	return &f, nil
 }

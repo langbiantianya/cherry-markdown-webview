@@ -5,6 +5,7 @@ import (
 )
 
 type File struct {
+	Mime        string
 	DisplayName string
 	Pattern     string
 	Name        string

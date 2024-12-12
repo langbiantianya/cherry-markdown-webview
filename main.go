@@ -3,6 +3,7 @@ package main
 import (
 	"cherry-markdown-webview/internal/appmenu"
 	"cherry-markdown-webview/internal/file"
+	"cherry-markdown-webview/internal/web"
 	"embed"
 	"os"
 	"runtime"
@@ -18,6 +19,9 @@ import (
 var assets embed.FS
 
 func main() {
+	// Create an instance of the app structure
+	web.StartServer()
+	app := NewApp()
 	switch runtime.GOOS {
 	case "linux":
 		argsWithoutProg := os.Args[1:]
@@ -31,8 +35,6 @@ func main() {
 			file.AsynLoadingToRam(argsWithoutProg[0])
 		}
 	}
-	// Create an instance of the app structure
-	app := NewApp()
 	// Create application with options
 	err := wails.Run(&options.App{
 		Windows: &windows.Options{

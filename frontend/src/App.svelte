@@ -5,7 +5,7 @@
   import { FileMenu } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
   import { base64ToString } from "./utils/blob";
-  import { AssociateOpen } from "../wailsjs/go/main/App";
+  import { AssociateOpen, GetWebServerPort } from "../wailsjs/go/main/App";
   import { Circle2 } from "svelte-loading-spinners";
   import { EventsOn } from "../wailsjs/runtime";
   import { BubbleExtInit, BubbleExtMenu } from "./utils/rightClickBubble";
@@ -14,6 +14,7 @@
   const exportMenu = ExportMenu();
   const bubbleExtMenu = BubbleExtMenu();
   let loding = $state(true);
+
   function newCherry(mdStr = "") {
     const cherryInstance = new Cherry({
       id: "markdown-container",
@@ -114,6 +115,7 @@
     return cherryInstance;
   }
   onMount(async () => {
+    let webServerPort = await GetWebServerPort();
     /**
      * 初始化 Cherry Markdown 编辑器实例
      * @type {Cherry}
@@ -133,7 +135,16 @@
     } else {
       cherryInstance = newCherry();
     }
-
+    cherryInstance.on("beforeImageMounted", function (srcProp, src) {
+      let url = new URL(src);
+      if (url.protocol === "file:") {
+        return {
+          srcProp,
+          src: `http://127.0.0.1:${webServerPort}/file?uri=${src}`,
+        };
+      }
+      return { srcProp, src };
+    });
     loding = false;
     EventsOn("openFileEvent", (event) => {
       fileMenu.openFile();

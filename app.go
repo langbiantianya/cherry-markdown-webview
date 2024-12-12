@@ -1,8 +1,10 @@
 package main
 
 import (
+	"cherry-markdown-webview/internal/config"
 	"cherry-markdown-webview/internal/file"
-	"cherry-markdown-webview/internal/log"
+	"cherry-markdown-webview/internal/logs"
+	"cherry-markdown-webview/public/utils"
 
 	"context"
 
@@ -66,7 +68,7 @@ func (a *App) OpenFile() {
 		CanCreateDirectories: true,
 	})
 	if err != nil {
-		log.Logger.Error(err.Error())
+		logs.Logger.Error(err.Error())
 		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
 			Type:    "error",
 			Title:   "错误",
@@ -100,7 +102,7 @@ func (a *App) SaveFile(doc file.File) {
 			},
 		})
 		if err != nil {
-			log.Logger.Error(err.Error())
+			logs.Logger.Error(err.Error())
 			wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
 				Type:    "error",
 				Title:   "错误",
@@ -112,7 +114,7 @@ func (a *App) SaveFile(doc file.File) {
 	// 保存
 	err := file.WriteFile(doc)
 	if err != nil {
-		log.Logger.Error(err.Error())
+		logs.Logger.Error(err.Error())
 		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
 			Type:    "error",
 			Title:   "错误",
@@ -125,4 +127,23 @@ func (a *App) SaveFile(doc file.File) {
 		Message: "保存成功",
 	})
 
+}
+
+func (a *App) ReadLocalFile(uri string) file.File {
+	parsedURI, err := utils.ParsedURI(uri)
+	if err != nil {
+		logs.Logger.Error(err.Error())
+		return file.File{}
+	}
+	localFile, err := file.ReadFile(parsedURI.Path[1:])
+	if err != nil {
+		logs.Logger.Error(err.Error())
+		return file.File{}
+	}
+	return *localFile
+
+}
+
+func (a *App) GetWebServerPort() int {
+	return config.GetConfig().Web.GetPort()
 }
