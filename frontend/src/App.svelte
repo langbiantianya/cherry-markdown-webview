@@ -122,7 +122,7 @@
     const assciateOpenFile = await AssociateOpen();
     if (
       assciateOpenFile &&
-      assciateOpenFile.Name !== "" &&
+      assciateOpenFile.Path !== "" &&
       assciateOpenFile.Bytes.length > 0
     ) {
       if (typeof assciateOpenFile.Bytes === "string") {

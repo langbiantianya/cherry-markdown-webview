@@ -55,7 +55,7 @@ export const FileMenu = function () {
      */
     saveFile: async (doc) => {
 
-      if (window.showSaveFilePicker && doc.Name === "") {
+      if (window.showSaveFilePicker || !doc || doc.Path === "" || doc.Bytes.length === 0) {
         if (fileHandle) {
           writeFile(fileHandle, cherryInstance.getMarkdown())
         } else {
