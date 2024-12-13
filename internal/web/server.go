@@ -13,7 +13,7 @@ func StartServer() {
 
 	port := 8100
 	// 尝试监听端口
-	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	ln, err := net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", port))
 
 	for countTry := 50; err != nil && countTry > 0; countTry-- {
 		port++
