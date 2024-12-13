@@ -79,7 +79,7 @@ func (a *App) OpenFile() {
 	}
 	file.AsynLoadingToRam(filePath)
 	time.Sleep(1000 * time.Nanosecond)
-	wailsRuntime.WindowReloadApp(a.ctx)
+	wailsRuntime.WindowReload(a.ctx)
 }
 
 func (a *App) SaveFile(doc file.File) {
