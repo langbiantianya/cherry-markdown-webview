@@ -62,9 +62,9 @@ func main() {
 				file.AsynLoadingToRam(filePaths)
 			},
 		},
-		Linux: &linux.Options{
+		// Linux: &linux.Options{
 			// WindowIsTranslucent: true,
-		},
+		// },
 		OnStartup: app.startup,
 		Bind: []interface{}{
 			app,
