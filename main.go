@@ -52,7 +52,7 @@ func main() {
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		Mac: &mac.Options{
 			About: &mac.AboutInfo{
-				Title:   "CherryMarkDowmOnWebView",
+				Title:   "CherryMarkdowmOnWebView",
 				Message: "© 2024 lbty",
 			},
 			// TitleBar:             mac.TitleBarHiddenInset(),
