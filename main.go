@@ -63,7 +63,7 @@ func main() {
 			},
 		},
 		Linux: &linux.Options{
-			WindowIsTranslucent: true,
+			// WindowIsTranslucent: true,
 		},
 		OnStartup: app.startup,
 		Bind: []interface{}{
