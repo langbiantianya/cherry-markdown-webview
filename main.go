@@ -11,6 +11,7 @@ import (
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/linux"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
@@ -39,8 +40,9 @@ func main() {
 	err := wails.Run(&options.App{
 		Windows: &windows.Options{
 			IsZoomControlEnabled: false,
+			WebviewIsTransparent: true,
+			BackdropType:         windows.Auto,
 		},
-
 		Title:  "cherry-markdown-webview",
 		Width:  800,
 		Height: 600,
@@ -50,9 +52,18 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		Mac: &mac.Options{
+			About: &mac.AboutInfo{
+				Title:   "CherryMarkDowmOnWebView",
+				Message: "© 2024 lbty",
+			},
+			TitleBar:             mac.TitleBarHiddenInset(),
+			WebviewIsTransparent: true,
 			OnFileOpen: func(filePaths string) {
 				file.AsynLoadingToRam(filePaths)
 			},
+		},
+		Linux: &linux.Options{
+			WindowIsTranslucent: true,
 		},
 		OnStartup: app.startup,
 		Bind: []interface{}{
