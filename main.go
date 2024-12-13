@@ -55,7 +55,7 @@ func main() {
 				Title:   "CherryMarkDowmOnWebView",
 				Message: "© 2024 lbty",
 			},
-			TitleBar:             mac.TitleBarHiddenInset(),
+			// TitleBar:             mac.TitleBarHiddenInset(),
 			WebviewIsTransparent: true,
 			OnFileOpen: func(filePaths string) {
 				file.AsynLoadingToRam(filePaths)
