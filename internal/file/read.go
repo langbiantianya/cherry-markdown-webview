@@ -3,6 +3,7 @@ package file
 import (
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/wailsapp/mimetype"
 )
@@ -20,6 +21,12 @@ func ReadFileToByteArray(filePath string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+func JoinAbsPath(basePath string, elem ...string) string {
+	dir, _ := filepath.Split(basePath)
+
+	return filepath.Join(dir, filepath.Join(elem...))
 }
 
 func ReadFile(filePath string) (*File, error) {

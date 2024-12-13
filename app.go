@@ -5,6 +5,7 @@ import (
 	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
 	"cherry-markdown-webview/public/utils"
+	"time"
 
 	"context"
 
@@ -77,6 +78,7 @@ func (a *App) OpenFile() {
 		return
 	}
 	file.AsynLoadingToRam(filePath)
+	time.Sleep(1000 * time.Nanosecond)
 	wailsRuntime.WindowReloadApp(a.ctx)
 }
 

@@ -29,7 +29,10 @@ func AsynLoadingToRam(filePath string) {
 		}()
 	} else {
 		if filech != nil {
-			close(filech)
+			_, ok := <-filech
+			if ok {
+				close(filech)
+			}
 		}
 	}
 }

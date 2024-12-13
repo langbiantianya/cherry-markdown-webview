@@ -2,9 +2,7 @@ package web
 
 import (
 	"cherry-markdown-webview/internal/config"
-	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
-	"cherry-markdown-webview/public/utils"
 	"fmt"
 	"net"
 
@@ -37,29 +35,7 @@ func StartServer() {
 
 	mux := http.NewServeMux()
 
-	handlerFile := func(w http.ResponseWriter, r *http.Request) {
-
-		queryParams := r.URL.Query()
-
-		uriValue := queryParams.Get("uri")
-
-		parsedURI, err := utils.ParsedURI(uriValue)
-		if err != nil {
-			logs.Logger.Error(err.Error())
-			w.Write(make([]byte, 0))
-		}
-		localFile, err := file.ReadFile(parsedURI.Path[1:])
-		if err != nil {
-			logs.Logger.Error(err.Error())
-			w.Write(make([]byte, 0))
-		}
-
-		w.Header().Set("Content-Type", localFile.Mime)
-		w.Write(localFile.Bytes)
-
-	}
-
-	mux.HandleFunc("/file", handlerFile)
+	registerRouter(mux)
 
 	logs.Logger.Info(fmt.Sprintf("127.0.0.1:%d", port))
 	go func() {

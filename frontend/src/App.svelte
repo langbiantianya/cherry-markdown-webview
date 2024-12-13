@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import "cherry-markdown/dist/cherry-markdown.css";
   import Cherry from "cherry-markdown";
-  import { FileMenu, isLocalFilePath } from "./utils/fileMenu";
+  import { FileMenu, isRelativePath } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
   import { base64ToString } from "./utils/blob";
   import { AssociateOpen, GetWebServerPort } from "../wailsjs/go/main/App";
@@ -14,7 +14,11 @@
   const exportMenu = ExportMenu();
   const bubbleExtMenu = BubbleExtMenu();
   let loding = $state(true);
-
+  /**
+   * 初始化 Cherry Markdown 编辑器实例
+   * @type {Cherry}
+   */
+  let cherryInstance;
   function newCherry(mdStr = "") {
     const cherryInstance = new Cherry({
       id: "markdown-container",
@@ -117,29 +121,43 @@
 
   async function init() {
     let webServerPort = await GetWebServerPort();
-    /**
-     * 初始化 Cherry Markdown 编辑器实例
-     * @type {Cherry}
-     */
-    let cherryInstance;
     let assciateOpenFile = await AssociateOpen();
-    cherryInstance && cherryInstance.destroy();
+    if (cherryInstance) {
+      cherryInstance.destroy();
+    }
     cherryInstance = newCherry();
     /**
      * 将渲染的img的src指向本地文件服务
      */
-    cherryInstance.on("beforeImageMounted", function (srcProp, src) {
-      let url = new URL(src);
-      if (url.protocol === "file:") {
-        console.log("url", src);
-        return {
-          srcProp,
-          src: `http://127.0.0.1:${webServerPort}/file?uri=${url.href}`,
-        };
-      }
+    cherryInstance.on(
+      "beforeImageMounted",
+      /**
+       *
+       * @param {string} srcProp
+       * @param {string} src
+       */
+      function (srcProp, src) {
+        try {
+          let url = new URL(src);
+          console.log("url", src);
+          if (url.protocol === "file:") {
+            return {
+              srcProp,
+              src: `http://127.0.0.1:${webServerPort}/file?uri=${url.href}`,
+            };
+          }
+        } catch (e) {
+          if (e instanceof TypeError && isRelativePath(src)) {
+            return {
+              srcProp,
+              src: `http://127.0.0.1:${webServerPort}/file?absPath=${src}&docPath=${assciateOpenFile.Path}`,
+            };
+          }
+        }
 
-      return { srcProp, src };
-    });
+        return { srcProp, src };
+      }
+    );
     if (
       assciateOpenFile &&
       assciateOpenFile.Path !== "" &&

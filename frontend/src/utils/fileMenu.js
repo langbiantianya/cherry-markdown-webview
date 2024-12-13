@@ -86,6 +86,6 @@ export const FileMenu = function () {
  * @param {string} path 
  * 
  */
-export function isLocalFilePath(path) {
-
+export function isRelativePath(path) {
+  return /^\.\/|^\.\.\//.test(path);
 }
