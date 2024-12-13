@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import "cherry-markdown/dist/cherry-markdown.css";
   import Cherry from "cherry-markdown";
-  import { FileMenu } from "./utils/fileMenu";
+  import { FileMenu, isLocalFilePath } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
   import { base64ToString } from "./utils/blob";
   import { AssociateOpen, GetWebServerPort } from "../wailsjs/go/main/App";
@@ -126,12 +126,15 @@
     cherryInstance = newCherry();
     cherryInstance.on("beforeImageMounted", function (srcProp, src) {
       let url = new URL(src);
+      
       if (url.protocol === "file:") {
+        console.log("url",src);
         return {
           srcProp,
-          src: `http://127.0.0.1:${webServerPort}/file?uri=${src}`,
+          src: `http://127.0.0.1:${webServerPort}/file?uri=${url.href}`,
         };
-      }
+      } 
+
       return { srcProp, src };
     });
     if (

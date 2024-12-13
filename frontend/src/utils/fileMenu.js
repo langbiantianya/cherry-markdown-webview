@@ -81,3 +81,11 @@ export const FileMenu = function () {
   }
 }
 
+/**
+ * 
+ * @param {string} path 
+ * 
+ */
+export function isLocalFilePath(path) {
+
+}
