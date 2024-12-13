@@ -114,7 +114,8 @@
     BubbleExtInit(cherryInstance);
     return cherryInstance;
   }
-  onMount(async () => {
+
+  async function init() {
     let webServerPort = await GetWebServerPort();
     /**
      * 初始化 Cherry Markdown 编辑器实例
@@ -124,16 +125,18 @@
     let assciateOpenFile = await AssociateOpen();
     cherryInstance && cherryInstance.destroy();
     cherryInstance = newCherry();
+    /**
+     * 将渲染的img的src指向本地文件服务
+     */
     cherryInstance.on("beforeImageMounted", function (srcProp, src) {
       let url = new URL(src);
-      
       if (url.protocol === "file:") {
-        console.log("url",src);
+        console.log("url", src);
         return {
           srcProp,
           src: `http://127.0.0.1:${webServerPort}/file?uri=${url.href}`,
         };
-      } 
+      }
 
       return { srcProp, src };
     });
@@ -151,10 +154,10 @@
     loding = false;
     EventsOn("openFileEvent", (event) => {
       fileMenu.openFile();
-      assciateOpenFile = undefined;
+      // assciateOpenFile = undefined;
     });
     EventsOn("saveFileEvent", async (event) => {
-      fileMenu.saveFile(assciateOpenFile);
+      await fileMenu.saveFile(assciateOpenFile);
     });
     EventsOn("saveAsFileEvent", (event) => {
       fileMenu.saveAsFile();
@@ -162,9 +165,13 @@
     EventsOn("exportPdfEvent", (event) => {
       exportMenu.exportPdf();
     });
-    EventsOn("exportHtmlEvent", (event) => {
-      exportMenu.exportHtml();
+    EventsOn("exportHtmlEvent", async (event) => {
+      await exportMenu.exportHtml();
     });
+  }
+
+  onMount(() => {
+    init();
   });
 </script>
 

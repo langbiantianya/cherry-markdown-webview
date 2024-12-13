@@ -2,9 +2,13 @@ import Cherry from "cherry-markdown";
 import { getSaveFileHandle, writeFile } from "./io";
 import { SaveFile } from "../../wailsjs/go/main/App";
 import { file } from "../../wailsjs/go/models";
+import { stringToBinaryArray } from "./blob";
 
 export const ExportMenu = function () {
   //   let fileHandle
+  /**
+   * @type {Cherry}
+   */
   let cherryInstance
   return {
     /**
@@ -25,28 +29,29 @@ export const ExportMenu = function () {
     // }),
     exportHtml: async () => {
       const mdHtml = cherryInstance.getHtml()
-      if (window.showSaveFilePicker) {
-        const fileHandle = await getSaveFileHandle({
-          types: [
-            {
-              description: "Html file",
-              // @ts-ignore
-              accept: {
-                "text/html": [".html"],
-              },
-            },
-          ],
-        })
-        await writeFile(fileHandle, mdHtml)
-      } else {
-        const htmlBase64 = btoa(String.fromCharCode(...stringToBinaryArray(mdHtml)))
+      // if (window.showSaveFilePicker) {
+      //   const fileHandle = await getSaveFileHandle({
+      //     types: [
+      //       {
+      //         description: "Html file",
+      //         // @ts-ignore
+      //         accept: {
+      //           "text/html": [".html"],
+      //         },
+      //       },
+      //     ],
+      //   })
+      //   await writeFile(fileHandle, mdHtml)
+      // } else {
+      debugger
+      const htmlBase64 = btoa(String.fromCharCode(...stringToBinaryArray(mdHtml)))
 
-        const doc = new file.File()
-        doc.Bytes = htmlBase64
-        doc.DisplayName = "Html file"
-        doc.Pattern = "*.html"
-        await SaveFile(doc)
-      }
+      const doc = new file.File()
+      doc.Bytes = htmlBase64
+      doc.DisplayName = "Html file"
+      doc.Pattern = "*.html"
+      await SaveFile(doc)
+      // }
 
     },
     // exportHtmlMenu: Cherry.createMenuHook("导出Html", {
