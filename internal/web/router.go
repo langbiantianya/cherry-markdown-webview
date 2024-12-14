@@ -29,8 +29,14 @@ func registerRouter(mux *http.ServeMux) {
 			if err != nil {
 				logs.Logger.Error(err.Error())
 				w.Write(make([]byte, 0))
+				return
 			}
-			fileUri = parsedURI.Path[1:]
+			if len(parsedURI.Path) > 1 && parsedURI.Path[1:] != "" {
+				fileUri = parsedURI.Path[1:]
+			} else {
+				w.Write(make([]byte, 0))
+				return
+			}
 
 		}
 		absPath := queryParams.Get("absPath")
@@ -44,6 +50,7 @@ func registerRouter(mux *http.ServeMux) {
 		if err != nil {
 			logs.Logger.Error(err.Error())
 			w.Write(make([]byte, 0))
+			return
 		}
 
 		w.Header().Set("Content-Type", localFile.Mime)

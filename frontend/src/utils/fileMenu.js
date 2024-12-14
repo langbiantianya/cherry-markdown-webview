@@ -89,3 +89,14 @@ export const FileMenu = function () {
 export function isRelativePath(path) {
   return /^\.\/|^\.\.\//.test(path);
 }
+
+/**
+ * 
+ * @param {string} path 
+ * 
+ */
+export function isRootDirectory(path) {
+  const unixRegex = /^\//;
+  const windowsRegex = /^([a-zA-Z]:\\)/;
+  return unixRegex.test(path) || windowsRegex.test(path);
+}

@@ -24,6 +24,11 @@ func ReadFileToByteArray(filePath string) ([]byte, error) {
 }
 
 func JoinAbsPath(basePath string, elem ...string) string {
+	_, err := os.Stat(basePath)
+	if err != nil {
+
+		return ""
+	}
 	dir, _ := filepath.Split(basePath)
 
 	return filepath.Join(dir, filepath.Join(elem...))

@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import "cherry-markdown/dist/cherry-markdown.css";
   import Cherry from "cherry-markdown";
-  import { FileMenu, isRelativePath } from "./utils/fileMenu";
+  import { FileMenu, isRelativePath,isRootDirectory } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
   import { base64ToString } from "./utils/blob";
   import { AssociateOpen, GetWebServerPort } from "../wailsjs/go/main/App";
@@ -151,6 +151,11 @@
             return {
               srcProp,
               src: `http://127.0.0.1:${webServerPort}/file?absPath=${src}&docPath=${assciateOpenFile.Path}`,
+            };
+          }else if(e instanceof TypeError && isRootDirectory(src)){
+            return {
+              srcProp,
+              src: `http://127.0.0.1:${webServerPort}/file?uri=file:///${src}`,
             };
           }
         }
