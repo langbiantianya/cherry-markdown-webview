@@ -2,17 +2,19 @@
   import { onMount } from "svelte";
   import "cherry-markdown/dist/cherry-markdown.css";
   import Cherry from "cherry-markdown";
-  import { FileMenu, isRelativePath,isRootDirectory } from "./utils/fileMenu";
+  import { FileMenu, isRelativePath, isRootDirectory } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
   import { base64ToString } from "./utils/blob";
   import { AssociateOpen, GetWebServerPort } from "../wailsjs/go/main/App";
   import { Circle2 } from "svelte-loading-spinners";
   import { EventsOn } from "../wailsjs/runtime";
   import { BubbleExtInit, BubbleExtMenu } from "./utils/rightClickBubble";
-
+  import { hookbeforeImageMounted, hookFileUpload } from "./utils/fileAnalysis";
+  import { InsertMenu } from "./utils/InsertMenu";
   const fileMenu = FileMenu();
   const exportMenu = ExportMenu();
   const bubbleExtMenu = BubbleExtMenu();
+  const insertMenu = InsertMenu();
   let loding = $state(true);
   /**
    * 初始化 Cherry Markdown 编辑器实例
@@ -57,6 +59,7 @@
           // 把插入类按钮都放在插入按钮下面
           {
             insert: [
+              "localImageMenu",
               "image",
               // "audio",
               // "video",
@@ -98,6 +101,7 @@
         customMenu: {
           copyMenu: bubbleExtMenu.copyMenu,
           pasteMenu: bubbleExtMenu.pasteMenu,
+          localImageMenu: insertMenu.localImageMenu,
           // fileMenu: fileMenu.fileMenu,
           // openFileMenu: fileMenu.openFileMenu,
           // saveFileMenu: fileMenu.saveFileMenu,
@@ -115,54 +119,19 @@
     fileMenu.setCherry(cherryInstance);
     exportMenu.setCherry(cherryInstance);
     bubbleExtMenu.setCherry(cherryInstance);
+    insertMenu.setCherry(cherryInstance);
     BubbleExtInit(cherryInstance);
     return cherryInstance;
   }
 
   async function init() {
-    let webServerPort = await GetWebServerPort();
     let assciateOpenFile = await AssociateOpen();
     if (cherryInstance) {
       cherryInstance.destroy();
     }
     cherryInstance = newCherry();
-    /**
-     * 将渲染的img的src指向本地文件服务
-     */
-    cherryInstance.on(
-      "beforeImageMounted",
-      /**
-       *
-       * @param {string} srcProp
-       * @param {string} src
-       */
-      function (srcProp, src) {
-        try {
-          let url = new URL(src);
-          console.log("url", src);
-          if (url.protocol === "file:") {
-            return {
-              srcProp,
-              src: `http://127.0.0.1:${webServerPort}/file?uri=${url.href}`,
-            };
-          }
-        } catch (e) {
-          if (e instanceof TypeError && isRelativePath(src)) {
-            return {
-              srcProp,
-              src: `http://127.0.0.1:${webServerPort}/file?absPath=${src}&docPath=${assciateOpenFile.Path}`,
-            };
-          }else if(e instanceof TypeError && isRootDirectory(src)){
-            return {
-              srcProp,
-              src: `http://127.0.0.1:${webServerPort}/file?uri=file:///${src}`,
-            };
-          }
-        }
-
-        return { srcProp, src };
-      }
-    );
+    hookbeforeImageMounted(assciateOpenFile, cherryInstance);
+    hookFileUpload(cherryInstance);
     if (
       assciateOpenFile &&
       assciateOpenFile.Path !== "" &&

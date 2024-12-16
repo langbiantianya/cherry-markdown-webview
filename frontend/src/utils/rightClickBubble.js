@@ -28,26 +28,31 @@ export const BubbleExtInit = function (cherryInstance) {
 		// 		hooks["pasteMenu"].hide()
 		// 	}
 		// })
-		cherryInstance.getCodeMirror().on("mousedown", async (instance, event) => {
+		cherryInstance.getCodeMirror().on("mousedown", (instance, event) => {
 			const hooks = cherryInstance.bubble.menus.hooks
 			if (cherryInstance.getCodeMirror().getSelection()) {
 				hooks["copyMenu"].show()
 			} else {
 				hooks["copyMenu"].hide()
 			}
-			if (await ClipboardGetText()) {
-				hooks["pasteMenu"].show()
-			} else {
+			ClipboardGetText().then(cpstr => {
+				if (cpstr) {
+					hooks["pasteMenu"].show()
+				} else {
+					hooks["pasteMenu"].hide()
+				}
+			}).catch(err => {
 				hooks["pasteMenu"].hide()
-			}
+			})
+
 			if (event.button === 2) {
 				// 鼠标右键事件
 				cherryInstance.bubble.showBubble(
 					event.pageY < 57 * 2 ? event.pageY - 57 : event.pageY - 57,
 					event.pageX
-				);
+				)
 			}
-		});
+		})
 	}
 	(function init() {
 		listenEvent()

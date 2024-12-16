@@ -110,6 +110,7 @@ func (a *App) SaveFile(doc file.File) {
 				Title:   "错误",
 				Message: err.Error(),
 			})
+			return
 		}
 		doc.Path = filePath
 	}
@@ -122,6 +123,7 @@ func (a *App) SaveFile(doc file.File) {
 			Title:   "错误",
 			Message: err.Error(),
 		})
+		return
 	}
 	wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
 		Type:    "info",
@@ -148,4 +150,41 @@ func (a *App) ReadLocalFile(uri string) file.File {
 
 func (a *App) GetWebServerPort() int {
 	return config.GetConfig().Web.GetPort()
+}
+
+func (a *App) SelectLocalFile(doc file.File) file.File {
+	displayName := "Markdown file"
+	pattern := "*.md;*.mdx"
+	if doc.Pattern != "" {
+		pattern = doc.Pattern
+	}
+	if doc.DisplayName != "" {
+		displayName = doc.DisplayName
+	}
+
+	filePath, err := wailsRuntime.OpenFileDialog(a.ctx, wailsRuntime.OpenDialogOptions{
+		Title: "选择文件",
+		Filters: []wailsRuntime.FileFilter{
+			{
+				DisplayName: displayName,
+				Pattern:     pattern,
+			},
+		},
+		CanCreateDirectories: true,
+	})
+	if err != nil {
+		logs.Logger.Error(err.Error())
+		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+			Type:    "error",
+			Title:   "错误",
+			Message: err.Error(),
+		})
+		return file.File{}
+	}
+	localFile, err := file.ReadFile(filePath)
+	if err != nil {
+		logs.Logger.Error(err.Error())
+		return file.File{}
+	}
+	return *localFile
 }

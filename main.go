@@ -3,7 +3,9 @@ package main
 import (
 	"cherry-markdown-webview/internal/appmenu"
 	"cherry-markdown-webview/internal/file"
+	"cherry-markdown-webview/internal/logs"
 	"cherry-markdown-webview/internal/web"
+
 	"embed"
 	"os"
 	"runtime"
@@ -70,6 +72,6 @@ func main() {
 		},
 	})
 	if err != nil {
-		println("Error:", err.Error())
+		logs.Logger.Fatal(err.Error())
 	}
 }

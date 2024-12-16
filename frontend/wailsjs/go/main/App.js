@@ -41,3 +41,7 @@ export function SaveFile(arg1) {
 export function SaveFileEvent() {
   return window['go']['main']['App']['SaveFileEvent']();
 }
+
+export function SelectLocalFile(arg1) {
+  return window['go']['main']['App']['SelectLocalFile'](arg1);
+}

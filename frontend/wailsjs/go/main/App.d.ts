@@ -21,3 +21,5 @@ export function SaveAsFileEvent():Promise<void>;
 export function SaveFile(arg1:file.File):Promise<void>;
 
 export function SaveFileEvent():Promise<void>;
+
+export function SelectLocalFile(arg1:file.File):Promise<file.File>;
