@@ -5,9 +5,18 @@ import (
 )
 
 type AppMenuFunc interface {
+	FileMenu
+	ExportMenu
+}
+
+type FileMenu interface {
 	OpenFileEvent()
 	SaveFileEvent()
 	SaveAsFileEvent()
+	Quit()
+}
+
+type ExportMenu interface {
 	ExportPdfEvent()
 	ExportHtmlEvent()
 }

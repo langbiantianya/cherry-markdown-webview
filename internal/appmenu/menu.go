@@ -21,6 +21,10 @@ func init() {
 		menuFunc.SaveAsFileEvent()
 	})
 
+	fileMenu.AddText("退出", keys.CmdOrCtrl("q"), func(cd *menu.CallbackData) {
+		menuFunc.Quit()
+	})
+
 	exportMenu := appMenu.AddSubmenu("导出")
 
 	exportMenu.AddText("导出pdf", nil, func(cd *menu.CallbackData) {

@@ -5,9 +5,14 @@
   import { FileMenu, isRelativePath, isRootDirectory } from "./utils/fileMenu";
   import { ExportMenu } from "./utils/exportMenu";
   import { base64ToString } from "./utils/blob";
-  import { AssociateOpen, GetWebServerPort } from "../wailsjs/go/main/App";
+  import {
+    AssociateOpen,
+    GetWebServerPort,
+    SetSaved,
+    GetSaved,
+  } from "../wailsjs/go/main/App";
   import { Circle2 } from "svelte-loading-spinners";
-  import { EventsOn } from "../wailsjs/runtime";
+  import { EventsOn, Quit } from "../wailsjs/runtime";
   import { BubbleExtInit, BubbleExtMenu } from "./utils/rightClickBubble";
   import { hookbeforeImageMounted, hookFileUpload } from "./utils/fileAnalysis";
   import { InsertMenu } from "./utils/InsertMenu";
@@ -159,6 +164,18 @@
     });
     EventsOn("exportHtmlEvent", async (event) => {
       await exportMenu.exportHtml();
+    });
+    EventsOn("quitEvent", async (event) => {
+      if (
+        cherryInstance.getMarkdown() &&
+        !(await GetSaved()) &&
+        confirm("是否保存当前文件？")
+      ) {
+        await fileMenu.saveFile(assciateOpenFile);
+      } else {
+        await SetSaved(true);
+      }
+      Quit();
     });
   }
 

@@ -14,6 +14,10 @@ export function ExportPdfEvent() {
   return window['go']['main']['App']['ExportPdfEvent']();
 }
 
+export function GetSaved() {
+  return window['go']['main']['App']['GetSaved']();
+}
+
 export function GetWebServerPort() {
   return window['go']['main']['App']['GetWebServerPort']();
 }
@@ -24,6 +28,14 @@ export function OpenFile() {
 
 export function OpenFileEvent() {
   return window['go']['main']['App']['OpenFileEvent']();
+}
+
+export function Quit() {
+  return window['go']['main']['App']['Quit']();
+}
+
+export function QuitEvent() {
+  return window['go']['main']['App']['QuitEvent']();
 }
 
 export function ReadLocalFile(arg1) {
@@ -44,4 +56,8 @@ export function SaveFileEvent() {
 
 export function SelectLocalFile(arg1) {
   return window['go']['main']['App']['SelectLocalFile'](arg1);
+}
+
+export function SetSaved(arg1) {
+  return window['go']['main']['App']['SetSaved'](arg1);
 }

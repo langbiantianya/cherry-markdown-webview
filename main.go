@@ -4,7 +4,9 @@ import (
 	"cherry-markdown-webview/internal/appmenu"
 	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
+	"cherry-markdown-webview/internal/quitext"
 	"cherry-markdown-webview/internal/web"
+	"context"
 
 	"embed"
 	"os"
@@ -24,6 +26,7 @@ func main() {
 	// Create an instance of the app structure
 	web.StartServer()
 	app := NewApp()
+
 	switch runtime.GOOS {
 	case "linux":
 		argsWithoutProg := os.Args[1:]
@@ -67,6 +70,11 @@ func main() {
 		// WindowIsTranslucent: true,
 		// },
 		OnStartup: app.startup,
+		OnBeforeClose: func(ctx context.Context) (prevent bool) {
+			app.QuitEvent()
+			//询问是否保存
+			return !quitext.Saved
+		},
 		Bind: []interface{}{
 			app,
 		},
