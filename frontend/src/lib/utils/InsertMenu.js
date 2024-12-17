@@ -1,8 +1,8 @@
 // 参考 https://github.com/Tencent/cherry-markdown/blob/963951e5013e50749c9c2a92f05089465f27af77/src/toolbars/hooks/Image.js#L21
 
 import Cherry from "cherry-markdown"
-import { SelectLocalFile } from "../../wailsjs/go/main/App"
-import { file } from "../../wailsjs/go/models"
+import { SelectLocalFile } from "../wailsjs/go/main/App"
+import { file } from "../wailsjs/go/models"
 
 export function InsertMenu() {
 	/**

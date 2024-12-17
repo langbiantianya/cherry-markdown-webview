@@ -1,5 +1,5 @@
 import Cherry from "cherry-markdown"
-import { ClipboardSetText, ClipboardGetText } from "../../wailsjs/runtime"
+import { ClipboardSetText, ClipboardGetText } from "../wailsjs/runtime"
 /**
  * 
  * @param {Cherry} cherryInstance 
@@ -7,6 +7,7 @@ import { ClipboardSetText, ClipboardGetText } from "../../wailsjs/runtime"
 export const BubbleExtInit = function (cherryInstance) {
 	function listenEvent() {
 
+		// @ts-ignore
 		document.getElementById("markdown-container").addEventListener("mousemove", async function (event) {
 			const hooks = cherryInstance.bubble.menus.hooks
 			if (cherryInstance.getCodeMirror().getSelection()) {
@@ -41,7 +42,7 @@ export const BubbleExtInit = function (cherryInstance) {
 				} else {
 					hooks["pasteMenu"].hide()
 				}
-			}).catch(err => {
+			}).catch(() => {
 				hooks["pasteMenu"].hide()
 			})
 
