@@ -18,9 +18,9 @@
   import mermaid from "mermaid";
   import echarts from "echarts";
   import echartsEngine from "cherry-markdown/dist/addons/advance/cherry-table-echarts-plugin";
-
   Cherry.usePlugin(mermaidPlugin, { mermaid });
   Cherry.usePlugin(echartsEngine, { echarts });
+
   const fileMenu = FileMenu();
   const exportMenu = ExportMenu();
   const bubbleExtMenu = BubbleExtMenu();
@@ -159,10 +159,7 @@
     });
     EventsOn("saveFileEvent", async (event) => {
       const res = await fileMenu.saveFile(assciateOpenFile);
-      console.log(res);
-      
       res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
-
       await SetSaved(true);
     });
     EventsOn("saveAsFileEvent", async (event) => {
@@ -187,6 +184,7 @@
       }
       Quit();
     });
+
   }
 
   onMount(() => {
@@ -194,7 +192,9 @@
   });
 </script>
 
-<div id="markdown-container" class="h-full"></div>
+<div class="h-full">
+  <div id="markdown-container" class="h-full"></div>
+</div>
 
 <style>
 </style>

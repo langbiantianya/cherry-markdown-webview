@@ -19,38 +19,58 @@ type App struct {
 	ctx context.Context
 }
 
-// ExportHtml implements appmenu.AppMenuFunc.
+// ExportHtmlEvent implements appmenu.ExportMenu.
 func (a *App) ExportHtmlEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "exportHtmlEvent")
 }
 
-// ExportPdf implements appmenu.AppMenuFunc.
+// ExportPdfEvent implements appmenu.ExportMenu.
 func (a *App) ExportPdfEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "exportPdfEvent")
 }
 
-// SaveAsFile implements appmenu.AppMenuFunc.
+// SaveAsFileEvent implements appmenu.FileMenu.
 func (a *App) SaveAsFileEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "saveAsFileEvent")
 }
 
-// SaveFile implements appmenu.AppMenuFunc.
+// SaveFileEvent implements appmenu.FileMenu.
 func (a *App) SaveFileEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "saveFileEvent")
 }
 
-// OpenFileEvent implements appmenu.AppMenuFunc.
+// OpenFileEvent implements appmenu.FileMenu.
 func (a *App) OpenFileEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "openFileEvent")
 }
 
-func (a *App) QuitEvent() {
-	wailsRuntime.EventsEmit(a.ctx, "quitEvent")
-}
-
-// Quit implements appmenu.AppMenuFunc.
+// Quit implements appmenu.FileMenu.
 func (a *App) Quit() {
 	wailsRuntime.Quit(a.ctx)
+}
+
+// OptionsEvent implements appmenu.SettingsMenu.
+func (a *App) OptionsEvent() {
+	wailsRuntime.EventsEmit(a.ctx, "optionsEvent")
+}
+
+// PersonalizaEvent implements appmenu.SettingsMenu.
+func (a *App) PersonalizaEvent() {
+	wailsRuntime.EventsEmit(a.ctx, "personalizaEvent")
+}
+
+// AboutEvent implements appmenu.HelpMenu.
+func (a *App) AboutEvent() {
+	wailsRuntime.EventsEmit(a.ctx, "aboutEvent")
+}
+
+// IssuesEvent implements appmenu.HelpMenu.
+func (a *App) IssuesEvent() {
+	wailsRuntime.BrowserOpenURL(a.ctx, "https://github.com/langbiantianya/cherry-markdown-webview/issues")
+}
+
+func (a *App) QuitEvent() {
+	wailsRuntime.EventsEmit(a.ctx, "quitEvent")
 }
 
 func (a *App) SetSaved(save bool) {

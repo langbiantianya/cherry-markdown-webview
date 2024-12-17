@@ -1,40 +1,46 @@
 package appmenu
 
 import (
-	"runtime"
-
 	"github.com/wailsapp/wails/v2/pkg/menu"
-	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 )
 
-func init() {
-	fileMenu := appMenu.AddSubmenu("文件")
-	fileMenu.AddText("打开", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
-		menuFunc.OpenFileEvent()
-	})
+type AppMenuFunc interface {
+	FileMenu
+	ExportMenu
+	SettingsMenu
+	HelpMenu
+}
 
-	fileMenu.AddText("保存", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
-		menuFunc.SaveFileEvent()
-	})
+type FileMenu interface {
+	OpenFileEvent()
+	SaveFileEvent()
+	SaveAsFileEvent()
+	Quit()
+}
 
-	fileMenu.AddText("另存为", keys.Combo("s", keys.ControlKey, keys.ShiftKey), func(cd *menu.CallbackData) {
-		menuFunc.SaveAsFileEvent()
-	})
+type ExportMenu interface {
+	ExportPdfEvent()
+	ExportHtmlEvent()
+}
 
-	fileMenu.AddText("退出", keys.CmdOrCtrl("q"), func(cd *menu.CallbackData) {
-		menuFunc.Quit()
-	})
+type SettingsMenu interface {
+	OptionsEvent()
+	PersonalizaEvent()
+}
 
-	exportMenu := appMenu.AddSubmenu("导出")
+type HelpMenu interface {
+	AboutEvent()
+	IssuesEvent()
+}
 
-	exportMenu.AddText("导出pdf", nil, func(cd *menu.CallbackData) {
-		menuFunc.ExportPdfEvent()
-	})
-	exportMenu.AddText("导出html", nil, func(cd *menu.CallbackData) {
-		menuFunc.ExportHtmlEvent()
-	})
+var appMenu = menu.NewMenu()
+var appMenuFunc AppMenuFunc
 
-	if runtime.GOOS == "darwin" {
-		appMenu.Append(menu.EditMenu()) // on macos platform, we should append EditMenu to enable Cmd+C,Cmd+V,Cmd+Z... shortcut
-	}
+func NewAppMenu(_appMenuFunc AppMenuFunc) *menu.Menu {
+	appMenuFunc = _appMenuFunc
+	initFile(appMenuFunc)
+	initExport(appMenuFunc)
+	initSettings(appMenuFunc)
+	initHelp(appMenuFunc)
+	return appMenu
 }
