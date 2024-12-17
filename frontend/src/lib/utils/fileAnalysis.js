@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import Cherry from "cherry-markdown"
-import { GetWebServerPort } from "../../wailsjs/go/main/App"
+import { GetWebServerPort } from "../wailsjs/go/main/App"
 import { isRelativePath, isRootDirectory } from "./fileMenu"
-import { file } from "../../wailsjs/go/models"
+// eslint-disable-next-line no-unused-vars
+import { file } from "../wailsjs/go/models"
 
 /**
  * 

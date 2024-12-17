@@ -1,7 +1,6 @@
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-import routify from '@roxi/routify/vite-plugin'
-// https://vitejs.dev/config/
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
 export default defineConfig({
-  plugins: [svelte(), routify({ csr: { enable: true } })]
-})
+	plugins: [sveltekit()]
+});

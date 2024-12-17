@@ -7,6 +7,7 @@
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
+  "wailsjsdir": "./frontend/src/lib",
   "author": {
     "name": "快醒醒你只是条单身汪",
     "email": "langbiantianya@outlook.com"
