@@ -35,8 +35,6 @@
 	},
 	"dependencies": {
 		"cherry-markdown": "^0.8.55",
-		"echarts": "4.6.0",
-		"mermaid": "9.4.3",
 		"svelte-loading-spinners": "^0.3.6"
 	}
 }
