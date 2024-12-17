@@ -24,7 +24,7 @@ export function ReadLocalFile(arg1:string):Promise<file.File>;
 
 export function SaveAsFileEvent():Promise<void>;
 
-export function SaveFile(arg1:file.File):Promise<void>;
+export function SaveFile(arg1:file.File):Promise<file.File>;
 
 export function SaveFileEvent():Promise<void>;
 

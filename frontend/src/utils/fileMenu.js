@@ -22,7 +22,7 @@ export const FileMenu = function () {
       //   const fileData = await fileHandle.getFile()
       //   cherryInstance.setMarkdown(await fileData.text())
       // } else {
-        await OpenFile()
+      await OpenFile()
       // }
     },
     // openFileMenu: Cherry.createMenuHook("打开", {
@@ -36,12 +36,12 @@ export const FileMenu = function () {
       //   writeFile(savefileHandle, cherryInstance.getMarkdown())
       //   alert("保存成功")
       // } else {
-        const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
+      const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
 
-        const doc = new file.File()
-        doc.Bytes = mdBase64
+      const doc = new file.File()
+      doc.Bytes = mdBase64
 
-        await SaveFile(doc)
+      await SaveFile(doc)
       // }
     },
     // saveAsFileMenu: Cherry.createMenuHook("另存为", {
@@ -55,14 +55,14 @@ export const FileMenu = function () {
      */
     saveFile: async (doc) => {
       // if ((doc && doc.Path && doc.Bytes.length > 0) || !window.showSaveFilePicker) {
-        const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
-        if (doc) {
-          doc.Bytes = mdBase64
-        } else {
-          doc = new file.File()
-          doc.Bytes = mdBase64
-        }
-        await SaveFile(doc)
+      const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
+      if (doc) {
+        doc.Bytes = mdBase64
+      } else {
+        doc = new file.File()
+        doc.Bytes = mdBase64
+      }
+      return await SaveFile(doc)
       // } else {
       //   if (fileHandle) {
       //     await writeFile(fileHandle, cherryInstance.getMarkdown())

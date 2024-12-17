@@ -6,6 +6,7 @@ import (
 	"cherry-markdown-webview/internal/logs"
 	"cherry-markdown-webview/internal/quitext"
 	"cherry-markdown-webview/public/utils"
+	"path/filepath"
 	"time"
 
 	"context"
@@ -101,7 +102,7 @@ func (a *App) OpenFile() {
 	wailsRuntime.WindowReload(a.ctx)
 }
 
-func (a *App) SaveFile(doc file.File) {
+func (a *App) SaveFile(doc file.File) *file.File {
 	if doc.Path == "" {
 		// 打开选项框
 		displayName := "Markdown file"
@@ -129,7 +130,7 @@ func (a *App) SaveFile(doc file.File) {
 				Title:   "错误",
 				Message: err.Error(),
 			})
-			return
+			return nil
 		}
 		doc.Path = filePath
 	}
@@ -142,7 +143,7 @@ func (a *App) SaveFile(doc file.File) {
 			Title:   "错误",
 			Message: err.Error(),
 		})
-		return
+		return nil
 	}
 	wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
 		Type:    "info",
@@ -150,6 +151,10 @@ func (a *App) SaveFile(doc file.File) {
 		Message: "保存成功",
 	})
 	quitext.Saved = true
+	if doc.Name == "" {
+		doc.Name = filepath.Base(doc.Path)
+	}
+	return &doc
 }
 
 func (a *App) ReadLocalFile(uri string) file.File {

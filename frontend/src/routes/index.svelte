@@ -6,7 +6,7 @@
   import { ExportMenu } from "../utils/exportMenu";
   import { base64ToString } from "../utils/blob";
   import { AssociateOpen, SetSaved, GetSaved } from "../../wailsjs/go/main/App";
-  import { EventsOn, Quit } from "../../wailsjs/runtime";
+  import { EventsOn, Quit, WindowSetTitle } from "../../wailsjs/runtime";
   import { BubbleExtInit, BubbleExtMenu } from "../utils/rightClickBubble";
   import {
     hookbeforeImageMounted,
@@ -147,6 +147,7 @@
       assciateOpenFile.Bytes.length > 0
     ) {
       if (typeof assciateOpenFile.Bytes === "string") {
+        WindowSetTitle(assciateOpenFile.Name);
         const mdStr = base64ToString(assciateOpenFile.Bytes);
         cherryInstance.setMarkdown(mdStr);
       }
@@ -157,10 +158,16 @@
       // assciateOpenFile = undefined;
     });
     EventsOn("saveFileEvent", async (event) => {
-      await fileMenu.saveFile(assciateOpenFile);
+      const res = await fileMenu.saveFile(assciateOpenFile);
+      console.log(res);
+      
+      res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
+
+      await SetSaved(true);
     });
-    EventsOn("saveAsFileEvent", (event) => {
-      fileMenu.saveAsFile();
+    EventsOn("saveAsFileEvent", async (event) => {
+      await fileMenu.saveAsFile();
+      await SetSaved(true);
     });
     EventsOn("exportPdfEvent", (event) => {
       exportMenu.exportPdf();
