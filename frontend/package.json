@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
-    "@tailwindcss/typography": "^0.5.14",
+    "@types/echarts": "4.9.15",
     "autoprefixer": "^10.4.20",
     "svelte": "^5.2.7",
     "svelte-loading-spinners": "^0.3.6",
@@ -18,8 +18,9 @@
     "vite": "^6.0.1"
   },
   "dependencies": {
+    "@roxi/routify": "3.0.0-next.243",
     "cherry-markdown": "^0.8.52",
-    "echarts": "^4.6.0",
+    "echarts": "4.6.0",
     "mermaid": "^9.4.3"
   }
 }
