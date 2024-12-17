@@ -11,12 +11,6 @@
 	import { hookbeforeImageMounted, hookFileUpload } from '../lib/utils/fileAnalysis';
 	import { globalState } from '../lib/store';
 	import { InsertMenu } from '../lib/utils/InsertMenu';
-	import mermaidPlugin from 'cherry-markdown/dist/addons/cherry-code-block-mermaid-plugin';
-	import mermaid from 'mermaid';
-	import echarts from 'echarts';
-	import echartsEngine from 'cherry-markdown/dist/addons/advance/cherry-table-echarts-plugin';
-	Cherry.usePlugin(mermaidPlugin, { mermaid });
-	Cherry.usePlugin(echartsEngine, { echarts });
 
 	const fileMenu = FileMenu();
 	const exportMenu = ExportMenu();
@@ -28,6 +22,7 @@
 	 */
 	let cherryInstance;
 	function newCherry(mdStr = '') {
+
 		const cherryInstance = new Cherry({
 			id: 'markdown-container',
 			value: mdStr,
@@ -36,12 +31,6 @@
 				toolbar: [
 					'undo',
 					'redo',
-					// "|",
-					// { fileMenu: ["openFileMenu", "saveFileMenu", "saveAsFileMenu"] },
-					// {
-					//   exportMenu: ["exportPdfMenu", "exportHtmlMenu"],
-					// },
-					// "|",
 					// 把字体样式类按钮都放在加粗按钮下面
 					{
 						bold: ['bold', 'italic', 'underline', 'strikethrough', 'sub', 'sup']
@@ -101,13 +90,6 @@
 					copyMenu: bubbleExtMenu.copyMenu,
 					pasteMenu: bubbleExtMenu.pasteMenu,
 					localImageMenu: insertMenu.localImageMenu
-					// fileMenu: fileMenu.fileMenu,
-					// openFileMenu: fileMenu.openFileMenu,
-					// saveFileMenu: fileMenu.saveFileMenu,
-					// saveAsFileMenu: fileMenu.saveAsFileMenu,
-					// exportMenu: exportMenu.exportMenu,
-					// exportPdfMenu: exportMenu.exportPdfMenu,
-					// exportHtmlMenu: exportMenu.exportHtmlMenu,
 				},
 				toc: {
 					updateLocationHash: false, // 要不要更新URL的hash
