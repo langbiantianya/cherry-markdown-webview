@@ -1,4 +1,4 @@
-import Cherry from "cherry-markdown";
+import Cherry from "cherry-markdown"
 import { ClipboardSetText, ClipboardGetText } from "../../wailsjs/runtime"
 /**
  * 

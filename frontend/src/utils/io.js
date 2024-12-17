@@ -4,9 +4,9 @@
  * @param {string|Blob|File} contents
  */
 export async function writeFile(fileHandle, contents) {
-  const writable = await fileHandle.createWritable();
-  await writable.write(contents);
-  await writable.close();
+  const writable = await fileHandle.createWritable()
+  await writable.write(contents)
+  await writable.close()
 }
 
 export async function getOpenFileHandle(
@@ -22,8 +22,8 @@ export async function getOpenFileHandle(
     multiple: false,
   }
 ) {
-  const [fileHandle] = await window.showOpenFilePicker(option);
-  return fileHandle;
+  const [fileHandle] = await window.showOpenFilePicker(option)
+  return fileHandle
 }
 
 export async function getSaveFileHandle(
@@ -38,5 +38,5 @@ export async function getSaveFileHandle(
     ],
   }
 ) {
-  return await window.showSaveFilePicker(option);
+  return await window.showSaveFilePicker(option)
 }

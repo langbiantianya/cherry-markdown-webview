@@ -4,6 +4,7 @@ import (
 	"cherry-markdown-webview/internal/config"
 	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
+	"cherry-markdown-webview/internal/quitext"
 	"cherry-markdown-webview/public/utils"
 	"time"
 
@@ -42,6 +43,23 @@ func (a *App) OpenFileEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "openFileEvent")
 }
 
+func (a *App) QuitEvent() {
+	wailsRuntime.EventsEmit(a.ctx, "quitEvent")
+}
+
+// Quit implements appmenu.AppMenuFunc.
+func (a *App) Quit() {
+	wailsRuntime.Quit(a.ctx)
+}
+
+func (a *App) SetSaved(save bool) {
+	quitext.Saved = save
+}
+
+func (a *App) GetSaved() bool {
+	return quitext.Saved
+}
+
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{}
@@ -58,6 +76,7 @@ func (a *App) AssociateOpen() file.File {
 }
 
 func (a *App) OpenFile() {
+	quitext.Saved = false
 	filePath, err := wailsRuntime.OpenFileDialog(a.ctx, wailsRuntime.OpenDialogOptions{
 		Title: "选择文件",
 		Filters: []wailsRuntime.FileFilter{
@@ -130,7 +149,7 @@ func (a *App) SaveFile(doc file.File) {
 		Title:   "成功",
 		Message: "保存成功",
 	})
-
+	quitext.Saved = true
 }
 
 func (a *App) ReadLocalFile(uri string) file.File {

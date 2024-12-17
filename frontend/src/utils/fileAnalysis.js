@@ -1,7 +1,7 @@
-import Cherry from "cherry-markdown";
-import { GetWebServerPort } from "../../wailsjs/go/main/App";
-import { isRelativePath, isRootDirectory } from "./fileMenu";
-import { file } from "../../wailsjs/go/models";
+import Cherry from "cherry-markdown"
+import { GetWebServerPort } from "../../wailsjs/go/main/App"
+import { isRelativePath, isRootDirectory } from "./fileMenu"
+import { file } from "../../wailsjs/go/models"
 
 /**
  * 
@@ -9,7 +9,7 @@ import { file } from "../../wailsjs/go/models";
  * @param {file.File} assciateOpenFile 
  */
 export async function hookbeforeImageMounted(assciateOpenFile, cherryInstance) {
-	let webServerPort = await GetWebServerPort();
+	let webServerPort = await GetWebServerPort()
 	/**
  * 将渲染的img的src指向本地文件服务
  */
@@ -22,31 +22,31 @@ export async function hookbeforeImageMounted(assciateOpenFile, cherryInstance) {
 		 */
 		function (srcProp, src) {
 			try {
-				let url = new URL(src);
-				console.log("url", src);
+				let url = new URL(src)
+				console.log("url", src)
 				if (url.protocol === "file:") {
 					return {
 						srcProp,
 						src: `http://127.0.0.1:${webServerPort}/file?uri=${url.href}`,
-					};
+					}
 				}
 			} catch (e) {
 				if (e instanceof TypeError && isRelativePath(src)) {
 					return {
 						srcProp,
 						src: `http://127.0.0.1:${webServerPort}/file?absPath=${src}&docPath=${assciateOpenFile.Path}`,
-					};
+					}
 				} else if (e instanceof TypeError && isRootDirectory(src)) {
 					return {
 						srcProp,
 						src: `http://127.0.0.1:${webServerPort}/file?uri=file:///${src}`,
-					};
+					}
 				}
 			}
 
-			return { srcProp, src };
+			return { srcProp, src }
 		}
-	);
+	)
 }
 
 /**
@@ -67,11 +67,11 @@ export function hookFileUpload(cherryInstance) {
 				}
 				// 如果上传的是图片，则默认回显base64内容（因为没有图床）
 				// 创建 FileReader 对象
-				const reader = new FileReader();
+				const reader = new FileReader()
 				// 读取文件内容
 				reader.onload = (event) => {
 					// 获取 base64 内容
-					const base64Content = event.target.result;
+					const base64Content = event.target.result
 					callback(base64Content, {
 						name: `${file.name.replace(/\.[^.]+$/, '')}`,
 						isShadow: true,
@@ -79,11 +79,11 @@ export function hookFileUpload(cherryInstance) {
 						// width: '30%',
 						width: 'auto',
 						height: 'auto',
-					});
-				};
-				reader.readAsDataURL(file);
+					})
+				}
+				reader.readAsDataURL(file)
 			} else {
-				callback('images/demo-dog.png');
+				callback('images/demo-dog.png')
 			}
 		})
 }

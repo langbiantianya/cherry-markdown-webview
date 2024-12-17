@@ -1,8 +1,8 @@
-import Cherry from "cherry-markdown";
-import { getOpenFileHandle, getSaveFileHandle, writeFile } from "./io";
-import { file } from "../../wailsjs/go/models";
-import { SaveFile, OpenFile } from "../../wailsjs/go/main/App";
-import { stringToBinaryArray } from "./blob";
+import Cherry from "cherry-markdown"
+import { getOpenFileHandle, getSaveFileHandle, writeFile } from "./io"
+import { file } from "../../wailsjs/go/models"
+import { SaveFile, OpenFile } from "../../wailsjs/go/main/App"
+import { stringToBinaryArray } from "./blob"
 
 export const FileMenu = function () {
   let fileHandle
@@ -87,7 +87,7 @@ export const FileMenu = function () {
  * 
  */
 export function isRelativePath(path) {
-  return /^\.\/|^\.\.\//.test(path);
+  return /^\.\/|^\.\.\//.test(path)
 }
 
 /**
@@ -96,7 +96,7 @@ export function isRelativePath(path) {
  * 
  */
 export function isRootDirectory(path) {
-  const unixRegex = /^\//;
-  const windowsRegex = /^([a-zA-Z]:\\)/;
-  return unixRegex.test(path) || windowsRegex.test(path);
+  const unixRegex = /^\//
+  const windowsRegex = /^([a-zA-Z]:\\)/
+  return unixRegex.test(path) || windowsRegex.test(path)
 }

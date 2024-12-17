@@ -1,7 +1,7 @@
-import Cherry from "cherry-markdown";
-import { SaveFile } from "../../wailsjs/go/main/App";
-import { file } from "../../wailsjs/go/models";
-import { stringToBinaryArray } from "./blob";
+import Cherry from "cherry-markdown"
+import { SaveFile } from "../../wailsjs/go/main/App"
+import { file } from "../../wailsjs/go/models"
+import { stringToBinaryArray } from "./blob"
 
 export const ExportMenu = function () {
   //   let fileHandle
