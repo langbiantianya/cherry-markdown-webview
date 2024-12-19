@@ -77,3 +77,7 @@ export function SelectLocalFile(arg1) {
 export function SetSaved(arg1) {
   return window['go']['main']['App']['SetSaved'](arg1);
 }
+
+export function UpsertOss(arg1) {
+  return window['go']['main']['App']['UpsertOss'](arg1);
+}

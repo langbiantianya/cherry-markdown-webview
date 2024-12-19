@@ -34,6 +34,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@fluentui/web-components": "^3.0.0-beta.74",
 		"cherry-markdown": "^0.8.55",
 		"svelte-loading-spinners": "^0.3.6"
 	}

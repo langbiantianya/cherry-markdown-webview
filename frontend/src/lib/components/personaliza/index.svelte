@@ -1,10 +1,10 @@
 <script>
-	import { globalState } from '../../../lib/store';
+	import { globalState } from '$lib/store';
 	import { goto } from '$app/navigation';
 	$globalState.loading = false;
 
 	function goBack() {
-		goto('/', { replaceState: true });
+		// goto('/', { replaceState: true });
 	}
 </script>
 

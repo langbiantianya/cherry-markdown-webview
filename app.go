@@ -19,6 +19,17 @@ type App struct {
 	ctx context.Context
 }
 
+// NewApp creates a new App application struct
+func NewApp() *App {
+	return &App{}
+}
+
+// startup is called when the app starts. The context is saved
+// so we can call the runtime methods
+func (a *App) startup(ctx context.Context) {
+	a.ctx = ctx
+}
+
 // ExportHtmlEvent implements appmenu.ExportMenu.
 func (a *App) ExportHtmlEvent() {
 	wailsRuntime.EventsEmit(a.ctx, "exportHtmlEvent")
@@ -79,17 +90,6 @@ func (a *App) SetSaved(save bool) {
 
 func (a *App) GetSaved() bool {
 	return quitext.Saved
-}
-
-// NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
-}
-
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
-func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
 }
 
 func (a *App) AssociateOpen() file.File {
@@ -231,4 +231,8 @@ func (a *App) SelectLocalFile(doc file.File) file.File {
 		return file.File{}
 	}
 	return *localFile
+}
+
+func (a *App) UpsertOss(oss config.OSS) {
+	config.GetConfig().UpsertOss(oss)
 }
