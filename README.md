@@ -34,7 +34,9 @@
 - [ ] 个性化选项
 
 ## download
+
 [这里下载](https://github.com/langbiantianya/cherry-markdown-webview/releases)
+
 ## screenshot
 
 ![截图](https://github.com/langbiantianya/cherry-markdown-webview/raw/refs/heads/main/screenshot/1.png)
@@ -47,9 +49,9 @@
 
 ## Depends
 
-- [cherry-markdown]([Tencent/cherry-markdown: ✨ A Markdown Editor](https://github.com/Tencent/cherry-markdown))
-- [Wails]([The Wails Project | Wails](https://wails.io/zh-Hans/))
-- []
+- [Tencent/cherry-markdown: ✨ A Markdown Editor](https://github.com/Tencent/cherry-markdown)
+- [The Wails Project | Wails](https://wails.io/zh-Hans/)
+- [bytedance/iconpark](https://github.com/bytedance/iconpark)
 
 ## Live Development
 
