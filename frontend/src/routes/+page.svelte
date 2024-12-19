@@ -6,7 +6,7 @@
 	import { ExportMenu } from '../lib/utils/exportMenu';
 	import { base64ToString } from '../lib/utils/blob';
 	import { AssociateOpen, SetSaved, GetSaved } from '../lib/wailsjs/go/main/App';
-	import { EventsOn, Quit, WindowSetTitle } from '../lib/wailsjs/runtime';
+	import { EventsOn, Quit, WindowSetTitle, EventsOff } from '../lib/wailsjs/runtime';
 	import { BubbleExtInit, BubbleExtMenu } from '../lib/utils/rightClickBubble';
 	import { hookbeforeImageMounted, hookFileUpload } from '../lib/utils/fileAnalysis';
 	import { globalState } from '../lib/store';
@@ -22,7 +22,6 @@
 	 */
 	let cherryInstance;
 	function newCherry(mdStr = '') {
-
 		const cherryInstance = new Cherry({
 			id: 'markdown-container',
 			value: mdStr,
@@ -107,47 +106,54 @@
 
 	async function init() {
 		let assciateOpenFile = await AssociateOpen();
-		if (cherryInstance) {
-			cherryInstance.destroy();
-		}
-		cherryInstance = newCherry();
-		hookbeforeImageMounted(assciateOpenFile, cherryInstance);
-		hookFileUpload(cherryInstance);
-		if (assciateOpenFile && assciateOpenFile.Path !== '' && assciateOpenFile.Bytes.length > 0) {
-			if (typeof assciateOpenFile.Bytes === 'string') {
-				WindowSetTitle(assciateOpenFile.Name);
-				const mdStr = base64ToString(assciateOpenFile.Bytes);
-				cherryInstance.setMarkdown(mdStr);
+		if (!cherryInstance) {
+			cherryInstance = newCherry();
+			hookbeforeImageMounted(assciateOpenFile, cherryInstance);
+			hookFileUpload(cherryInstance);
+			if (assciateOpenFile && assciateOpenFile.Path !== '' && assciateOpenFile.Bytes.length > 0) {
+				if (typeof assciateOpenFile.Bytes === 'string') {
+					WindowSetTitle(assciateOpenFile.Name);
+					const mdStr = base64ToString(assciateOpenFile.Bytes);
+					cherryInstance.setMarkdown(mdStr);
+				}
 			}
-		}
-		$globalState.loading = false;
-		EventsOn('openFileEvent', (event) => {
-			fileMenu.openFile();
-			// assciateOpenFile = undefined;
-		});
-		EventsOn('saveFileEvent', async (event) => {
-			const res = await fileMenu.saveFile(assciateOpenFile);
-			res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
-			await SetSaved(true);
-		});
-		EventsOn('saveAsFileEvent', async (event) => {
-			await fileMenu.saveAsFile();
-			await SetSaved(true);
-		});
-		EventsOn('exportPdfEvent', (event) => {
-			exportMenu.exportPdf();
-		});
-		EventsOn('exportHtmlEvent', async (event) => {
-			await exportMenu.exportHtml();
-		});
-		EventsOn('quitEvent', async (event) => {
-			if (cherryInstance.getMarkdown() && !(await GetSaved()) && confirm('是否保存当前文件？')) {
-				await fileMenu.saveFile(assciateOpenFile);
-			} else {
+			$globalState.loading = false;
+			EventsOff(
+				'openFileEvent',
+				'saveFileEvent',
+				'saveAsFileEvent',
+				'exportPdfEvent',
+				'exportHtmlEvent',
+				'quitEvent'
+			);
+			EventsOn('openFileEvent', (event) => {
+				fileMenu.openFile();
+				// assciateOpenFile = undefined;
+			});
+			EventsOn('saveFileEvent', async (event) => {
+				const res = await fileMenu.saveFile(assciateOpenFile);
+				res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
 				await SetSaved(true);
-			}
-			Quit();
-		});
+			});
+			EventsOn('saveAsFileEvent', async (event) => {
+				await fileMenu.saveAsFile();
+				await SetSaved(true);
+			});
+			EventsOn('exportPdfEvent', (event) => {
+				exportMenu.exportPdf();
+			});
+			EventsOn('exportHtmlEvent', async (event) => {
+				await exportMenu.exportHtml();
+			});
+			EventsOn('quitEvent', async (event) => {
+				if (cherryInstance.getMarkdown() && !(await GetSaved()) && confirm('是否保存当前文件？')) {
+					await fileMenu.saveFile(assciateOpenFile);
+				} else {
+					await SetSaved(true);
+				}
+				Quit();
+			});
+		}
 	}
 
 	onMount(() => {

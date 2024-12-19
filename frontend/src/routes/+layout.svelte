@@ -4,15 +4,22 @@
 	import { Circle2 } from 'svelte-loading-spinners';
 	import { globalState } from '../lib/store';
 	import { EventsOn } from '../lib/wailsjs/runtime';
+	import { setTheme } from '@fluentui/web-components';
+	import { webLightTheme } from '@fluentui/tokens';
 
+	setTheme(webLightTheme);
 	/** @type {{children: import('svelte').Snippet}} */
 	let { children } = $props();
-	EventsOn('optionsEvent', (event) => {
-		goto('/settings/options', { replaceState: true });
-	});
-	EventsOn('personalizaEvent', (event) => {
-		goto('/settings/personaliza', { replaceState: true });
-	});
+	try {
+		EventsOn('optionsEvent', (event) => {
+			goto('/settings/options');
+		});
+		EventsOn('personalizaEvent', (event) => {
+			goto('/settings/personaliza');
+		});
+	} catch (error) {
+		console.error(error);
+	}
 </script>
 
 <div class="app h-full">

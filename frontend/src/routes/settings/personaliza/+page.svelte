@@ -4,7 +4,7 @@
 	$globalState.loading = false;
 
 	function goBack() {
-		goto('/', { replaceState: true });
+		window.history.back();
 	}
 </script>
 
