@@ -8,8 +8,7 @@
 	import '@fluentui/web-components/accordion-item.js';
 	import '@fluentui/web-components/text-input.js';
 	import '@fluentui/web-components/label.js';
-	import '@fluentui/web-components/drawer.js';
-	// import '@fluentui/web-components/drawer-body.js';
+	import '@fluentui/web-components/drawer.js';	
 	import help from '$lib/icon/help.svg';
 	import { BrowserOpenURL } from '$lib/wailsjs/runtime';
 	/**
