@@ -118,41 +118,49 @@
 				}
 			}
 			$globalState.loading = false;
-			EventsOff(
-				'openFileEvent',
-				'saveFileEvent',
-				'saveAsFileEvent',
-				'exportPdfEvent',
-				'exportHtmlEvent',
-				'quitEvent'
-			);
-			EventsOn('openFileEvent', (event) => {
-				fileMenu.openFile();
-				// assciateOpenFile = undefined;
-			});
-			EventsOn('saveFileEvent', async (event) => {
-				const res = await fileMenu.saveFile(assciateOpenFile);
-				res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
-				await SetSaved(true);
-			});
-			EventsOn('saveAsFileEvent', async (event) => {
-				await fileMenu.saveAsFile();
-				await SetSaved(true);
-			});
-			EventsOn('exportPdfEvent', (event) => {
-				exportMenu.exportPdf();
-			});
-			EventsOn('exportHtmlEvent', async (event) => {
-				await exportMenu.exportHtml();
-			});
-			EventsOn('quitEvent', async (event) => {
-				if (cherryInstance.getMarkdown() && !(await GetSaved()) && confirm('是否保存当前文件？')) {
-					await fileMenu.saveFile(assciateOpenFile);
-				} else {
+			try {
+				EventsOff(
+					'openFileEvent',
+					'saveFileEvent',
+					'saveAsFileEvent',
+					'exportPdfEvent',
+					'exportHtmlEvent',
+					'quitEvent'
+				);
+				EventsOn('openFileEvent', (event) => {
+					fileMenu.openFile();
+					// assciateOpenFile = undefined;
+				});
+				EventsOn('saveFileEvent', async (event) => {
+					const res = await fileMenu.saveFile(assciateOpenFile);
+					res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
 					await SetSaved(true);
-				}
-				Quit();
-			});
+				});
+				EventsOn('saveAsFileEvent', async (event) => {
+					await fileMenu.saveAsFile();
+					await SetSaved(true);
+				});
+				EventsOn('exportPdfEvent', (event) => {
+					exportMenu.exportPdf();
+				});
+				EventsOn('exportHtmlEvent', async (event) => {
+					await exportMenu.exportHtml();
+				});
+				EventsOn('quitEvent', async (event) => {
+					if (
+						cherryInstance.getMarkdown() &&
+						!(await GetSaved()) &&
+						confirm('是否保存当前文件？')
+					) {
+						await fileMenu.saveFile(assciateOpenFile);
+					} else {
+						await SetSaved(true);
+					}
+					Quit();
+				});
+			} catch (error) {
+				console.error(error);
+			}
 		}
 	}
 
