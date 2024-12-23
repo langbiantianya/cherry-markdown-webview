@@ -19,17 +19,14 @@ export const FileMenu = function () {
     },
 
     openFile: async () => {
-      
+
       await OpenFile()
 
     },
-  
+
     saveAsFile: async () => {
-
-      const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
-
       const doc = new file.File()
-      doc.Bytes = mdBase64
+      doc.StrData = cherryInstance.getMarkdown()
       await SaveFile(doc)
 
     },
@@ -38,16 +35,13 @@ export const FileMenu = function () {
      * @param {file.File|undefined|null} doc 
      */
     saveFile: async (doc) => {
-
-      const mdBase64 = btoa(String.fromCharCode(...stringToBinaryArray(cherryInstance.getMarkdown())))
       if (doc) {
-        doc.Bytes = mdBase64
+        doc.StrData = cherryInstance.getMarkdown()
       } else {
         doc = new file.File()
-        doc.Bytes = mdBase64
+        doc.StrData = cherryInstance.getMarkdown()
       }
       return await SaveFile(doc)
-     
     },
   }
 }

@@ -34,7 +34,7 @@ func StartServer() {
 	conf.Web.SetPort(port)
 
 	mux := http.NewServeMux()
-
+	
 	registerRouter(mux)
 
 	logs.Logger.Info(fmt.Sprintf("127.0.0.1:%d", port))

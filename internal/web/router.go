@@ -1,6 +1,7 @@
 package web
 
 import (
+	"cherry-markdown-webview/internal/config"
 	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
 	"cherry-markdown-webview/public/utils"
@@ -10,6 +11,28 @@ import (
 	"path/filepath"
 )
 
+func CorsInterceptor(next func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//resolve the cross origin[解决预请求]
+		//w3c规范要求，当浏览器判定请求为复杂请求时，会在真实携带数据发送请求前，多一个预处理请求：
+		//1. 请求方法不是get head post
+		//2. post 的content-type不是application/x-www-form-urlencode,multipart/form-data,text/plain [也就是把content-type设置成"application/json"]
+		//3. 请求设置了自定义的header字段: 比如业务需求，传一个字段，方面后端获取，不需要每个接口都传
+		if r.Method == "OPTIONS" {
+			//handle the preflight request
+			w.Header().Set("Access-Control-Allow-Origin", fmt.Sprintf("127.0.0.1:%d", config.GetConfig().Web.GetPort()))
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Accept,yi-token")
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Accept,yi-token")
+		http.HandlerFunc(next).ServeHTTP(w, r)
+	}
+}
+
 func registerRouter(mux *http.ServeMux) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -18,7 +41,7 @@ func registerRouter(mux *http.ServeMux) {
 		}
 	}()
 
-	mux.HandleFunc("/file", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/file", CorsInterceptor(func(w http.ResponseWriter, r *http.Request) {
 
 		queryParams := r.URL.Query()
 
@@ -56,5 +79,5 @@ func registerRouter(mux *http.ServeMux) {
 		w.Header().Set("Content-Type", localFile.Mime)
 		w.Write(localFile.Bytes)
 
-	})
+	}))
 }

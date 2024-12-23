@@ -11,6 +11,7 @@ type File struct {
 	Name        string
 	Path        string
 	Bytes       []byte
+	StrData     string
 }
 
 var filech chan *File

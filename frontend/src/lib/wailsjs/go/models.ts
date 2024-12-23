@@ -82,6 +82,7 @@ export namespace file {
 	    Name: string;
 	    Path: string;
 	    Bytes: number[];
+	    StrData: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new File(source);
@@ -95,6 +96,7 @@ export namespace file {
 	        this.Name = source["Name"];
 	        this.Path = source["Path"];
 	        this.Bytes = source["Bytes"];
+	        this.StrData = source["StrData"];
 	    }
 	}
 
