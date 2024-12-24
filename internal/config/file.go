@@ -41,7 +41,10 @@ func init() {
 		// 生成默认配置文件
 		conf = &Config{
 			Web: Web{},
-			OSS: OSS{},
+			PicBed: PicBed{
+				BasePath:  "/cherrymarkdown",
+				Activated: Base64,
+			},
 		}
 		conf.UpsertConfigFile()
 	} else if err != nil {
@@ -62,13 +65,13 @@ func init() {
 			return
 		}
 
-		config := &Config{}
-		err = json.Unmarshal(confJsondata, config)
+		config := Config{}
+		err = json.Unmarshal(confJsondata, &config)
 		if err != nil {
 			logs.Logger.Fatal(fmt.Sprintf("Failed unmarshal JSON: %s", err.Error()))
 			return
 		}
-		conf = config
+		conf = &config
 	}
 
 }
