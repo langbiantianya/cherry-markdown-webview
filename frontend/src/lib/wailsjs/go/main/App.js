@@ -18,6 +18,10 @@ export function ExportPdfEvent() {
   return window['go']['main']['App']['ExportPdfEvent']();
 }
 
+export function GetPicBed() {
+  return window['go']['main']['App']['GetPicBed']();
+}
+
 export function GetSaved() {
   return window['go']['main']['App']['GetSaved']();
 }
@@ -78,6 +82,6 @@ export function SetSaved(arg1) {
   return window['go']['main']['App']['SetSaved'](arg1);
 }
 
-export function UpsertOss(arg1) {
-  return window['go']['main']['App']['UpsertOss'](arg1);
+export function UpsertPicBed(arg1) {
+  return window['go']['main']['App']['UpsertPicBed'](arg1);
 }

@@ -69,10 +69,7 @@ export function hookFileUpload(cherryInstance) {
 				// 读取文件内容
 				reader.onload = () => {
 					// 获取 base64 内容
-					const base64 = reader.result
-					console.log(base64);
-					console.log(typeof base64);
-
+					const base64 = reader.result;
 					callback(base64, {
 						name: `${file.name.replace(/\.[^.]+$/, '')}`,
 						isShadow: true,

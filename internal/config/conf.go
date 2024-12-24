@@ -27,8 +27,8 @@ func (w *Web) SetPort(port int) {
 }
 
 type Config struct {
-	Web Web `json:"-"`
-	OSS OSS `json:"oss"`
+	Web    Web    `json:"-"`
+	PicBed PicBed `json:"picBed"`
 }
 
 func (conf *Config) UpsertConfigFile() {
@@ -51,8 +51,8 @@ func (conf *Config) UpsertConfigFile() {
 	logs.Logger.Info("Config.json upsert successfully: " + ConfigFilePath())
 }
 
-func (conf *Config) UpsertOss(oss OSS) {
-	conf.OSS = oss
+func (conf *Config) UpsertPicBed(picBed PicBed) {
+	conf.PicBed = picBed
 	conf.UpsertConfigFile()
 }
 
@@ -61,22 +61,30 @@ type Web struct {
 	port int        `json:"-"`
 }
 
-type OSS struct {
-	BasePath     string        `json:"basePath"`
-	Aliyun       *Aliyun       `json:"aliyun"`
-	TencentCloud *TencentCloud `json:"tencentCloud"`
+type PicBedType string
+
+const (
+	Base64 PicBedType = "Base64"
+	OSS    PicBedType = "OSS"
+	COS    PicBedType = "COS"
+)
+
+type PicBed struct {
+	BasePath  string           `json:"basePath"`
+	Activated PicBedType       `json:"activated"`
+	OSS       *AliyunOSS       `json:"oss"`
+	COS       *TencentCloudCOS `json:"cos"`
 }
 
-type Aliyun struct {
+type AliyunOSS struct {
 	AccessKeyID     string `json:"accessKeyID"`
 	AccessKeySecret string `json:"accessKeySecret"`
-	Endpoint        string `json:"endpoint"`
+	Region          string `json:"region"`
 	BucketName      string `json:"bucketName"`
 }
 
-type TencentCloud struct {
-	SecretID   string `json:"secretID"`
-	SecretKey  string `json:"secretKey"`
-	Region     string `json:"region"`
-	BucketName string `json:"bucketName"`
+type TencentCloudCOS struct {
+	SecretID  string `json:"secretID"`
+	SecretKey string `json:"secretKey"`
+	BucketURL string `json:"bucketURL"`
 }

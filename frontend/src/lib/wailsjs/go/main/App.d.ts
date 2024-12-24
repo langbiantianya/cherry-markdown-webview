@@ -11,6 +11,8 @@ export function ExportHtmlEvent():Promise<void>;
 
 export function ExportPdfEvent():Promise<void>;
 
+export function GetPicBed():Promise<config.PicBed>;
+
 export function GetSaved():Promise<boolean>;
 
 export function GetWebServerPort():Promise<number>;
@@ -41,4 +43,4 @@ export function SelectLocalFile(arg1:file.File):Promise<file.File>;
 
 export function SetSaved(arg1:boolean):Promise<void>;
 
-export function UpsertOss(arg1:config.OSS):Promise<void>;
+export function UpsertPicBed(arg1:config.PicBed):Promise<void>;

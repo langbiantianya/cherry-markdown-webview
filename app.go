@@ -233,6 +233,9 @@ func (a *App) SelectLocalFile(doc file.File) file.File {
 	return *localFile
 }
 
-func (a *App) UpsertOss(oss config.OSS) {
-	config.GetConfig().UpsertOss(oss)
+func (a *App) UpsertPicBed(picBed config.PicBed) {
+	config.GetConfig().UpsertPicBed(picBed)
+}
+func (a *App) GetPicBed() config.PicBed {
+	return config.GetConfig().PicBed
 }

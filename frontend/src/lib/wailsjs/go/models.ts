@@ -1,55 +1,55 @@
 export namespace config {
 	
-	export class Aliyun {
+	export class AliyunOSS {
 	    accessKeyID: string;
 	    accessKeySecret: string;
-	    endpoint: string;
+	    region: string;
 	    bucketName: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new Aliyun(source);
+	        return new AliyunOSS(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.accessKeyID = source["accessKeyID"];
 	        this.accessKeySecret = source["accessKeySecret"];
-	        this.endpoint = source["endpoint"];
+	        this.region = source["region"];
 	        this.bucketName = source["bucketName"];
 	    }
 	}
-	export class TencentCloud {
+	export class TencentCloudCOS {
 	    secretID: string;
 	    secretKey: string;
-	    region: string;
-	    bucketName: string;
+	    bucketURL: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new TencentCloud(source);
+	        return new TencentCloudCOS(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.secretID = source["secretID"];
 	        this.secretKey = source["secretKey"];
-	        this.region = source["region"];
-	        this.bucketName = source["bucketName"];
+	        this.bucketURL = source["bucketURL"];
 	    }
 	}
-	export class OSS {
+	export class PicBed {
 	    basePath: string;
-	    aliyun?: Aliyun;
-	    tencentCloud?: TencentCloud;
+	    activated: string;
+	    oss?: AliyunOSS;
+	    cos?: TencentCloudCOS;
 	
 	    static createFrom(source: any = {}) {
-	        return new OSS(source);
+	        return new PicBed(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.basePath = source["basePath"];
-	        this.aliyun = this.convertValues(source["aliyun"], Aliyun);
-	        this.tencentCloud = this.convertValues(source["tencentCloud"], TencentCloud);
+	        this.activated = source["activated"];
+	        this.oss = this.convertValues(source["oss"], AliyunOSS);
+	        this.cos = this.convertValues(source["cos"], TencentCloudCOS);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
