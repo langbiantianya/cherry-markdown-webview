@@ -4,6 +4,7 @@ import (
 	"cherry-markdown-webview/internal/config"
 	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
+	"cherry-markdown-webview/internal/picbed"
 	"cherry-markdown-webview/internal/quitext"
 	"cherry-markdown-webview/public/utils"
 	"path/filepath"
@@ -238,4 +239,20 @@ func (a *App) UpsertPicBed(picBed config.PicBed) {
 }
 func (a *App) GetPicBed() config.PicBed {
 	return config.GetConfig().PicBed
+}
+
+func (a *App) UploadPicbed(sourceFile file.File) string {
+	url, err := picbed.GetPicbed().Upload(sourceFile)
+	if err != nil {
+		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+			Type:    "error",
+			Title:   "错误",
+			Message: err.Error(),
+		})
+		return ""
+	}
+	if url != nil {
+		return url.String()
+	}
+	return ""
 }

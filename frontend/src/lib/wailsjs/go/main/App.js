@@ -82,6 +82,10 @@ export function SetSaved(arg1) {
   return window['go']['main']['App']['SetSaved'](arg1);
 }
 
+export function UploadPicbed(arg1) {
+  return window['go']['main']['App']['UploadPicbed'](arg1);
+}
+
 export function UpsertPicBed(arg1) {
   return window['go']['main']['App']['UpsertPicBed'](arg1);
 }

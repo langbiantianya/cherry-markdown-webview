@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import Cherry from "cherry-markdown"
-import { GetWebServerPort } from "../wailsjs/go/main/App"
+import { GetPicBed, GetWebServerPort, UploadPicbed } from "../wailsjs/go/main/App"
 import { isRelativePath, isRootDirectory } from "./fileMenu"
 // eslint-disable-next-line no-unused-vars
-import { file } from "../wailsjs/go/models"
+import { config, file } from "../wailsjs/go/models"
 
 /**
  * 
@@ -60,9 +60,11 @@ export function hookFileUpload(cherryInstance) {
 	cherryInstance.on('fileUpload',
 		/**
 		* 文件上传逻辑（涉及到文件上传均会调用此处）
+		* @param {File} sourcesFile 文件对象
+		* @param {Function} callback 回调函数，用于回显图片
 		*/
-		function (file, callback) {
-			if (/image/i.test(file.type)) {
+		function (sourcesFile, callback) {
+			if (/image/i.test(sourcesFile.type)) {
 				// 如果上传的是图片，则默认回显base64内容（因为没有图床）
 				// 创建 FileReader 对象
 				const reader = new FileReader();
@@ -70,15 +72,36 @@ export function hookFileUpload(cherryInstance) {
 				reader.onload = () => {
 					// 获取 base64 内容
 					const base64 = reader.result;
-					callback(base64, {
-						name: `${file.name.replace(/\.[^.]+$/, '')}`,
-						isShadow: true,
-						isRadius: false,
-						width: '30%',
-						height: 'auto',
-					});
+					GetPicBed().then((conf) => {
+						if (conf.activated === "Base64") {
+							callback(base64, {
+								name: `${sourcesFile.name.replace(/\.[^.]+$/, '')}`,
+								isShadow: true,
+								isRadius: false,
+								width: 'auto',
+								height: 'auto',
+							});
+						} else {
+
+							return UploadPicbed(file.File.createFrom({
+								Mime: sourcesFile.type,
+								Name: decodeURIComponent(sourcesFile.name),
+								Bytes: base64.split(',')[1],
+							}))
+						}
+
+					}).then((fileUrl) => {
+						callback(fileUrl, {
+							name: `${sourcesFile.name.replace(/\.[^.]+$/, '')}`,
+							isShadow: true,
+							isRadius: false,
+							width: 'auto',
+							height: 'auto',
+						})
+					})
+
 				};
-				reader.readAsDataURL(file);
+				reader.readAsDataURL(sourcesFile);
 			}
 		})
 }
