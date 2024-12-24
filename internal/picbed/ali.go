@@ -78,7 +78,7 @@ func (aliOSS AliOSS) Upload(sourceFile file.File) (*url.URL, error) {
 	// 打印上传结果
 	logs.Logger.Info(fmt.Sprintf("Upload successfully: %v", result))
 
-	u, err := url.Parse(fmt.Sprintf("https://%s.%s.aliyuncs.com/%s", config.GetConfig().PicBed.OSS.BucketName, config.GetConfig().PicBed.OSS.Region, fileKey[1:]))
+	u, err := url.Parse(fmt.Sprintf("https://%s.oss-%s.aliyuncs.com/%s", config.GetConfig().PicBed.OSS.BucketName, config.GetConfig().PicBed.OSS.Region, fileKey[1:]))
 	if err != nil {
 		return nil, err
 	}
