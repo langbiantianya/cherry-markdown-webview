@@ -15,7 +15,6 @@
 	import { GetPicBed, UpsertPicBed } from '$lib/wailsjs/go/main/App';
 	import { config } from '$lib/wailsjs/go/models';
 	import { TextInput } from '@fluentui/web-components';
-
 	/**
 	 * @type {{heid:function():void}}
 	 */

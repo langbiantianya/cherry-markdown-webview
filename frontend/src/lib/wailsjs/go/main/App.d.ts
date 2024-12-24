@@ -43,4 +43,6 @@ export function SelectLocalFile(arg1:file.File):Promise<file.File>;
 
 export function SetSaved(arg1:boolean):Promise<void>;
 
+export function UploadPicbed(arg1:file.File):Promise<string>;
+
 export function UpsertPicBed(arg1:config.PicBed):Promise<void>;

@@ -37,7 +37,7 @@ func (conf *Config) UpsertConfigFile() {
 		logs.Logger.Fatal(fmt.Sprintf("Failed marshaling JSON: %s", err.Error()))
 		return
 	}
-	confFile, err := os.OpenFile(ConfigFilePath(), os.O_CREATE|os.O_WRONLY, 0644)
+	confFile, err := os.OpenFile(ConfigFilePath(), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		logs.Logger.Fatal(fmt.Sprintf("Failed open File %s", err.Error()))
 		return
