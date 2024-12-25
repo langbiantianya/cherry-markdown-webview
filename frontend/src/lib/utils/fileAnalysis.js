@@ -78,8 +78,6 @@ export function hookFileUpload(cherryInstance) {
 								name: `${sourcesFile.name.replace(/\.[^.]+$/, '')}`,
 								isShadow: true,
 								isRadius: false,
-								width: 'auto',
-								height: 'auto',
 							});
 						} else {
 
@@ -95,8 +93,6 @@ export function hookFileUpload(cherryInstance) {
 							name: `${sourcesFile.name.replace(/\.[^.]+$/, '')}`,
 							isShadow: true,
 							isRadius: false,
-							width: 'auto',
-							height: 'auto',
 						})
 					})
 
