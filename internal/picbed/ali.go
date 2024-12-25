@@ -21,9 +21,7 @@ type AliOSS struct {
 	*oss.Client
 }
 
-var ossClient *AliOSS
-
-func NewOSSClient() {
+func NewOSSClient() *AliOSS {
 	var (
 		// 以从环境变量中获取访问凭证为例
 		provider credentials.CredentialsProvider = credentials.NewStaticCredentialsProvider(
@@ -39,7 +37,7 @@ func NewOSSClient() {
 
 	// 创建OSS客户端
 	client := oss.NewClient(cfg)
-	ossClient = &AliOSS{client}
+	return &AliOSS{client}
 }
 
 func (aliOSS AliOSS) Upload(sourceFile file.File) (*url.URL, error) {

@@ -55,9 +55,10 @@
 	 * @param {Event} event
 	 */
 	function basePathInput(event) {
-		picBedConf.basePath =
+		picBedConf.basePath = (
 			(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
-			picBedConf.basePath;
+			picBedConf.basePath
+		).trim();
 		updatePicConf();
 	}
 	/**
@@ -69,8 +70,10 @@
 			secretKey: '',
 			bucketURL: '',
 			...picBedConf.cos,
-			secretID:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			secretID: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}
@@ -83,8 +86,10 @@
 			secretID: '',
 			bucketURL: '',
 			...picBedConf.cos,
-			secretKey:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			secretKey: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}
@@ -97,8 +102,10 @@
 			secretID: '',
 			secretKey: '',
 			...picBedConf.cos,
-			bucketURL:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			bucketURL: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}
@@ -113,8 +120,10 @@
 			region: '',
 			bucketName: '',
 			...picBedConf.oss,
-			accessKeyID:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			accessKeyID: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}
@@ -128,8 +137,10 @@
 			region: '',
 			bucketName: '',
 			...picBedConf.oss,
-			accessKeySecret:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			accessKeySecret: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}
@@ -143,8 +154,10 @@
 			accessKeyID: '',
 			bucketName: '',
 			...picBedConf.oss,
-			region:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			region: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}
@@ -158,8 +171,10 @@
 			accessKeySecret: '',
 			accessKeyID: '',
 			...picBedConf.oss,
-			bucketName:
-				(event.target && event.target instanceof TextInput && event.target['currentValue']) || ''
+			bucketName: (
+				(event.target && event.target instanceof TextInput && event.target['currentValue']) ||
+				''
+			).trim()
 		};
 		updatePicConf();
 	}

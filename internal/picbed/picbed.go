@@ -14,15 +14,9 @@ type Picbed interface {
 func GetPicbed() Picbed {
 	switch config.GetConfig().PicBed.Activated {
 	case config.COS:
-		if cosClient == nil {
-			NewCOSClient()
-		}
-		return cosClient
+		return NewCOSClient()
 	case config.OSS:
-		if ossClient == nil {
-			NewOSSClient()
-		}
-		return ossClient
+		return NewOSSClient()
 	default:
 		return nil
 	}
