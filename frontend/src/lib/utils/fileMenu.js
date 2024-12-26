@@ -2,7 +2,6 @@
 import Cherry from "cherry-markdown"
 import { file } from "../wailsjs/go/models"
 import { SaveFile, OpenFile } from "../wailsjs/go/main/App"
-import { stringToBinaryArray } from "./blob"
 
 export const FileMenu = function () {
   /**
@@ -36,7 +35,13 @@ export const FileMenu = function () {
      */
     saveFile: async (doc) => {
       if (doc) {
-        doc.StrData = cherryInstance.getMarkdown()
+        const _doc = new file.File()
+        _doc.DisplayName = doc.DisplayName
+        _doc.Path = doc.Path
+        _doc.Mime = doc.Mime
+        _doc.Name = doc.Name
+        _doc.StrData = cherryInstance.getMarkdown()
+        doc = _doc
       } else {
         doc = new file.File()
         doc.StrData = cherryInstance.getMarkdown()
