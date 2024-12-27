@@ -185,15 +185,15 @@
 	$globalState.loading = false;
 </script>
 
-<div class="m-0 p-0">
-	<div part="header" class="bg-defaultToolBar h-12 w-full px-4">
+<div class="bg-base m-0 p-0">
+	<div part="header" class="bg-toolBar h-12 w-full px-4 shadow">
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
-		<div class="flex h-12 w-full flex-nowrap items-center justify-between text-white">
+		<div class="text-toolBar flex h-12 w-full flex-nowrap items-center justify-between">
 			<h1 class="text-2xl">首选项</h1>
 			<!-- svelte-ignore event_directive_deprecated -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<fluent-button
-				class="hover:bg-defaultButtonHover bg-defaultToolBar h-9 rounded-none leading-9 text-white"
+				class="hover:bg-buttonHover hover:text-buttonHover bg-button text-button h-9 rounded-none leading-9"
 				on:click={goBack}>返回</fluent-button
 			>
 		</div>
@@ -204,7 +204,7 @@
 			<fluent-tab-panel id="ossPanel">
 				<fluent-accordion>
 					<fluent-accordion-item class="w-full" size="large">
-						<span slot="heading">默认配置</span>
+						<span slot="heading" class="accordion-item-head">默认配置</span>
 						<div class="panel">
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="basePath" hidden={picBedConf.activated === 'Base64'}
@@ -225,7 +225,7 @@
 								value={picBedConf.activated}
 								name="activated"
 								id="activated"
-								class="border-coolGray-300 h-8 w-full rounded border px-1 leading-8"
+								class="bg-input border-0.1 border-select text-input h-8 w-full appearance-none rounded px-1 leading-8 outline-0"
 							>
 								<option value="Base64">base64</option>
 								<option value="COS">腾讯COS</option>
@@ -235,26 +235,16 @@
 					</fluent-accordion-item>
 
 					<fluent-accordion-item class="" size="large">
-						<span slot="heading">腾讯COS </span>
+						<span slot="heading" class="accordion-item-head">腾讯COS </span>
 
 						<div class="panel">
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={tencentCosHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={tencentCosHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
-							<fluent-label htmlFor="SecretID"
-								>SecretID <img
-									slot="start"
-									class="rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-									src={help}
-									alt="help"
-								/></fluent-label
-							>
+							<fluent-label htmlFor="SecretID">SecretID</fluent-label>
 							<fluent-text-input
 								on:input={cosSecretIDInput}
 								initialValue={picBedConf.cos?.secretID}
@@ -263,12 +253,9 @@
 							></fluent-text-input>
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={tencentCosHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={tencentCosHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="SecretKey">SecretKey</fluent-label>
 							<fluent-text-input
@@ -279,12 +266,9 @@
 							></fluent-text-input>
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={tencentCosHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={tencentCosHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="BucketURL">BucketURL</fluent-label>
 							<fluent-text-input
@@ -297,16 +281,13 @@
 						</div>
 					</fluent-accordion-item>
 					<fluent-accordion-item class="" size="large">
-						<span slot="heading">阿里OSS</span>
+						<span slot="heading" class="accordion-item-head">阿里OSS</span>
 						<div class="panel">
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={aliOssHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="AccessKeyID">AccessKeyID</fluent-label>
 							<fluent-text-input
@@ -317,12 +298,9 @@
 							></fluent-text-input>
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={aliOssHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="AccessKeySecret">AccessKeySecret</fluent-label>
 							<fluent-text-input
@@ -334,12 +312,9 @@
 
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={aliOssHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="Region">Region</fluent-label>
 							<fluent-text-input
@@ -352,12 +327,9 @@
 
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<img
-								on:click={aliOssHelp}
-								class="inline rounded p-0.5 text-gray-500 hover:bg-slate-200 hover:text-black"
-								src={help}
-								alt="help"
-							/>
+							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
+								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
+							</span>
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="BucketName">BucketName</fluent-label>
 							<fluent-text-input
@@ -377,10 +349,15 @@
 
 <style>
 	/* 重写 select 选项的样式 */
-	select option {
-		border-radius: 4px;
+	.accordion-item-head {
+		color: var(--color-text-base);
 	}
-
+	fluent-tab {
+		color: var(--color-text-base);
+	}
+	fluent-label {
+		color: var(--color-text-base);
+	}
 	.drawer-content {
 		height: calc(100vh - 3.2rem);
 	}

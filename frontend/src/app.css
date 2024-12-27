@@ -3,20 +3,61 @@
 @import 'tailwindcss/utilities';
 
 :root {
-	background-color: white;
+	/* color-scheme: default-theme dark-theme; */
+}
 
-	/* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
-	/* line-height: 1.5;
-	font-weight: 400; */
+.default-theme {
+	--color-bg-base: #ffffff;
+	--color-bg-toolBar: #20304b;
+	--color-bg-button: #20304b;
+	--color-bg-button-hover: #37455d;
+	--color-text-toolBar: #ffffff;
+	--color-text-button: #ffffff;
+	--color-text-base: #000000;
+	--color-text-input: #000000;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #ffffff;
+}
 
-	/* color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424; */
-/* 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale; */
+.dark-theme {
+	--color-bg-base: #333333;
+	--color-bg-toolBar: #3c3c3c;
+	--color-bg-button: #3c3c3c;
+	--color-bg-button-hover: #454646;
+	--color-text-toolBar: #ffffff;
+	--color-text-button: #ffffff;
+	--color-text-base: #ffffff;
+	--color-text-input: #ffffff;
+	--color-border-select: #686868;
+	--color-bg-input: #292929;
+}
+
+.light-theme {
+	--color-bg-base: #ffffff;
+	--color-bg-toolBar: #ffffff;
+	--color-bg-button: #ffffff;
+	--color-bg-button-hover: #ebf3ff;
+	--color-text-toolBar: #3f4a56;
+	--color-text-button: #3f4a56;
+	--color-text-button-hover: #5d9bfc;
+	--color-text-base: #3f4a56;
+	--color-text-input: #3f4a56;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #ffffff;
+}
+
+.green-theme {
+	--color-bg-base: #ffffff;
+	--color-bg-toolBar: #ffffff;
+	--color-bg-button: #ffffff;
+	--color-bg-button-hover: #51cf66;
+	--color-text-toolBar: #2b8a3e;
+	--color-text-button: #2b8a3e;
+	--color-text-button-hover: #ffffff;
+	--color-text-base: #2b8a3e;
+	--color-text-input: #2b8a3e;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #ffffff;
 }
 
 a {

@@ -11,7 +11,8 @@
 	import { hookbeforeImageMounted, hookFileUpload } from '$lib/utils/fileAnalysis';
 	import { globalState } from '$lib/store';
 	import { InsertMenu } from '$lib/utils/InsertMenu';
-
+	import { setTheme } from '@fluentui/web-components';
+	import { webLightTheme, webDarkTheme } from '@fluentui/tokens';
 	const fileMenu = FileMenu();
 	const exportMenu = ExportMenu();
 	const bubbleExtMenu = BubbleExtMenu();
@@ -93,6 +94,34 @@
 				toc: {
 					updateLocationHash: false, // 要不要更新URL的hash
 					defaultModel: 'pure' // pure: 精简模式/缩略模式，只有一排小点； full: 完整模式，会展示所有标题
+				}
+			},
+
+			event: {
+				changeMainTheme: (theme) => {
+					alert(theme);
+					switch (theme) {
+						case 'dark':
+							setTheme(webDarkTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('dark-theme');
+							break;
+						case 'light':
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('light-theme');
+							break;
+						case 'green':
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('green-theme');
+							break;
+						default:
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('default-theme');
+							break;
+					}
 				}
 			}
 		});
