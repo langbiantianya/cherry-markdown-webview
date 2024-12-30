@@ -11,6 +11,8 @@ export function ExportHtmlEvent():Promise<void>;
 
 export function ExportPdfEvent():Promise<void>;
 
+export function GetActivatedTheme():Promise<string>;
+
 export function GetPicBed():Promise<config.PicBed>;
 
 export function GetSaved():Promise<boolean>;
@@ -40,6 +42,8 @@ export function SaveFile(arg1:file.File):Promise<file.File>;
 export function SaveFileEvent():Promise<void>;
 
 export function SelectLocalFile(arg1:file.File):Promise<file.File>;
+
+export function SetActivatedTheme(arg1:string):Promise<void>;
 
 export function SetSaved(arg1:boolean):Promise<void>;
 

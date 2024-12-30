@@ -29,6 +29,16 @@ func (w *Web) SetPort(port int) {
 type Config struct {
 	Web    Web    `json:"-"`
 	PicBed PicBed `json:"picBed"`
+	Theme  Theme  `json:"theme"`
+}
+
+func (conf *Config) SetActivatedTheme(theme string) {
+	conf.Theme.Activated = theme
+	conf.UpsertConfigFile()
+}
+
+func (conf *Config) GetActivatedTheme() string {
+	return conf.Theme.Activated
 }
 
 func (conf *Config) UpsertConfigFile() {
@@ -54,6 +64,10 @@ func (conf *Config) UpsertConfigFile() {
 func (conf *Config) UpsertPicBed(picBed PicBed) {
 	conf.PicBed = picBed
 	conf.UpsertConfigFile()
+}
+
+type Theme struct {
+	Activated string `json:"activated"`
 }
 
 type Web struct {

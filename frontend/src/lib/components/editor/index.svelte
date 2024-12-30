@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import 'cherry-markdown/dist/cherry-markdown.css';
 	import Cherry from 'cherry-markdown';
-	import { FileMenu, isRelativePath, isRootDirectory } from '$lib/utils/fileMenu';
+	import { FileMenu } from '$lib/utils/fileMenu';
 	import { ExportMenu } from '$lib/utils/exportMenu';
 	import { base64ToString } from '$lib/utils/blob';
 	import {
@@ -10,8 +10,8 @@
 		SetSaved,
 		GetSaved,
 		GetWebServerPort,
-		GetPicBed,
-		UploadPicbed
+		GetActivatedTheme,
+		SetActivatedTheme
 	} from '$lib/wailsjs/go/main/App';
 	import { EventsOn, Quit, WindowSetTitle, EventsOff } from '$lib/wailsjs/runtime';
 	import { BubbleExtInit, BubbleExtMenu } from '$lib/utils/rightClickBubble';
@@ -21,7 +21,7 @@
 	import { setTheme } from '@fluentui/web-components';
 	import { webLightTheme, webDarkTheme } from '@fluentui/tokens';
 	import { file } from '$lib/wailsjs/go/models';
-	import { handlers } from 'svelte/legacy';
+
 	const fileMenu = FileMenu();
 	const exportMenu = ExportMenu();
 	const bubbleExtMenu = BubbleExtMenu();
@@ -35,6 +35,7 @@
 	 *
 	 * @param mdStr
 	 * @param {file.File|undefined|null} assciateOpenFile
+	 * @param {import('cherry-markdown/types/cherry').EditorMode} model
 	 */
 	async function newCherry(mdStr = '', assciateOpenFile = null, model = 'edit&preview') {
 		let webServerPort = await GetWebServerPort();
@@ -130,6 +131,7 @@
 			},
 			event: {
 				changeMainTheme: (theme) => {
+					SetActivatedTheme(theme);
 					switch (theme) {
 						case 'dark':
 							setTheme(webDarkTheme);
@@ -171,7 +173,23 @@
 					}
 				}
 			},
-			previewer: {}
+			previewer: {},
+			themeSettings: {
+				// 主题列表，用于切换主题
+				themeList: [
+					{ className: 'default', label: '默认' },
+					{ className: 'dark', label: '暗黑' },
+					{ className: 'light', label: '明亮' },
+					{ className: 'green', label: '清新' },
+					{ className: 'red', label: '热情' },
+					{ className: 'violet', label: '淡雅' },
+					{ className: 'blue', label: '清幽' }
+				],
+				mainTheme: 'default',
+				codeBlockTheme: 'default',
+				inlineCodeTheme: 'red', // red or black
+				toolbarTheme: 'dark' // light or dark 优先级低于mainTheme
+			}
 		});
 		fileMenu.setCherry(cherryInstance);
 		exportMenu.setCherry(cherryInstance);
@@ -217,6 +235,7 @@
 		} else {
 			cherryInstance = await newCherry();
 		}
+		cherryInstance.setTheme((await GetActivatedTheme()) || 'default');
 		try {
 			EventsOff(
 				'openFileEvent',
