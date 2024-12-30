@@ -2,10 +2,17 @@
 	import { onMount } from 'svelte';
 	import 'cherry-markdown/dist/cherry-markdown.css';
 	import Cherry from 'cherry-markdown';
-	import { FileMenu } from '$lib/utils/fileMenu';
+	import { FileMenu, isRelativePath, isRootDirectory } from '$lib/utils/fileMenu';
 	import { ExportMenu } from '$lib/utils/exportMenu';
 	import { base64ToString } from '$lib/utils/blob';
-	import { AssociateOpen, SetSaved, GetSaved } from '$lib/wailsjs/go/main/App';
+	import {
+		AssociateOpen,
+		SetSaved,
+		GetSaved,
+		GetWebServerPort,
+		GetPicBed,
+		UploadPicbed
+	} from '$lib/wailsjs/go/main/App';
 	import { EventsOn, Quit, WindowSetTitle, EventsOff } from '$lib/wailsjs/runtime';
 	import { BubbleExtInit, BubbleExtMenu } from '$lib/utils/rightClickBubble';
 	import { hookbeforeImageMounted, hookFileUpload } from '$lib/utils/fileAnalysis';
@@ -13,18 +20,29 @@
 	import { InsertMenu } from '$lib/utils/InsertMenu';
 	import { setTheme } from '@fluentui/web-components';
 	import { webLightTheme, webDarkTheme } from '@fluentui/tokens';
+	import { file } from '$lib/wailsjs/go/models';
+	import { handlers } from 'svelte/legacy';
 	const fileMenu = FileMenu();
 	const exportMenu = ExportMenu();
 	const bubbleExtMenu = BubbleExtMenu();
 	const insertMenu = InsertMenu();
-	/**
+	/**DF
 	 * 初始化 Cherry Markdown 编辑器实例
 	 * @type {Cherry}
 	 */
 	let cherryInstance;
-	function newCherry(mdStr = '') {
+	/**
+	 *
+	 * @param mdStr
+	 * @param {file.File|undefined|null} assciateOpenFile
+	 */
+	async function newCherry(mdStr = '', assciateOpenFile = null, model = 'edit&preview') {
+		let webServerPort = await GetWebServerPort();
 		const cherryInstance = new Cherry({
 			id: 'markdown-container',
+			editor: {
+				defaultModel: model
+			},
 			value: mdStr,
 			toolbars: {
 				// 定义顶部工具栏
@@ -96,7 +114,20 @@
 					defaultModel: 'pure' // pure: 精简模式/缩略模式，只有一排小点； full: 完整模式，会展示所有标题
 				}
 			},
-
+			callback: {
+				/**
+				 *
+				 * @param {string} srcProp
+				 * @param {string} src
+				 */
+				beforeImageMounted: await hookbeforeImageMounted(assciateOpenFile),
+				/**
+				 * 文件上传逻辑（涉及到文件上传均会调用此处）
+				 * @param {File} sourcesFile 文件对象
+				 * @param {Function} callback 回调函数，用于回显图片
+				 */
+				fileUpload: hookFileUpload()
+			},
 			event: {
 				changeMainTheme: (theme) => {
 					switch (theme) {
@@ -139,7 +170,8 @@
 							break;
 					}
 				}
-			}
+			},
+			previewer: {}
 		});
 		fileMenu.setCherry(cherryInstance);
 		exportMenu.setCherry(cherryInstance);
@@ -148,65 +180,83 @@
 		BubbleExtInit(cherryInstance);
 		return cherryInstance;
 	}
-
+	/**
+	 * 计算文本的行数
+	 * @param {string} text - 要计算行数的文本
+	 * @returns {number} - 文本的行数
+	 */
+	function countLines(text) {
+		const lineCount = (text.match(/\n/g) || []).length + 1;
+		return lineCount;
+	}
 	async function init() {
 		let assciateOpenFile = await AssociateOpen();
-		if (!cherryInstance) {
-			cherryInstance = newCherry();
-			hookbeforeImageMounted(assciateOpenFile, cherryInstance);
-			hookFileUpload(cherryInstance);
-			if (assciateOpenFile && assciateOpenFile.Path !== '' && assciateOpenFile.Bytes.length > 0) {
-				if (typeof assciateOpenFile.Bytes === 'string') {
-					WindowSetTitle(assciateOpenFile.Name);
-					const mdStr = base64ToString(assciateOpenFile.Bytes);
+		// if (!cherryInstance) {
+		// 	cherryInstance = await newCherry();
+		// 	// hookbeforeImageMounted(assciateOpenFile, cherryInstance);
+		// 	hookFileUpload(cherryInstance);
+		// }
+		cherryInstance && cherryInstance.destroy();
+		if (assciateOpenFile && assciateOpenFile.Path !== '' && assciateOpenFile.Bytes.length > 0) {
+			if (typeof assciateOpenFile.Bytes === 'string') {
+				WindowSetTitle(assciateOpenFile.Name);
+				const mdStr = base64ToString(assciateOpenFile.Bytes);
+				const lines = countLines(mdStr);
+				if (lines > 50000) {
+					alert('文件过大,使用异步加载会导致撤销变成空白！！！');
+					if (confirm('文件过大，是否仅使用编辑模式？')) {
+						cherryInstance = await newCherry('', null, 'editOnly');
+					} else {
+						cherryInstance = await newCherry();
+					}
 					cherryInstance.setMarkdown(mdStr);
+				} else {
+					cherryInstance = await newCherry(mdStr, assciateOpenFile);
 				}
 			}
-			$globalState.loading = false;
-			try {
-				EventsOff(
-					'openFileEvent',
-					'saveFileEvent',
-					'saveAsFileEvent',
-					'exportPdfEvent',
-					'exportHtmlEvent',
-					'quitEvent'
-				);
-				EventsOn('openFileEvent', (event) => {
-					fileMenu.openFile();
-					// assciateOpenFile = undefined;
-				});
-				EventsOn('saveFileEvent', async (event) => {
-					const res = await fileMenu.saveFile(assciateOpenFile);
-					res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
-					await SetSaved(true);
-				});
-				EventsOn('saveAsFileEvent', async (event) => {
-					await fileMenu.saveAsFile();
-					await SetSaved(true);
-				});
-				EventsOn('exportPdfEvent', (event) => {
-					exportMenu.exportPdf();
-				});
-				EventsOn('exportHtmlEvent', async (event) => {
-					await exportMenu.exportHtml();
-				});
-				EventsOn('quitEvent', async (event) => {
-					if (
-						cherryInstance.getMarkdown() &&
-						!(await GetSaved()) &&
-						confirm('是否保存当前文件？')
-					) {
-						await fileMenu.saveFile(assciateOpenFile);
-					} else {
-						await SetSaved(true);
-					}
-					Quit();
-				});
-			} catch (error) {
-				console.error(error);
-			}
+		} else {
+			cherryInstance = await newCherry();
 		}
+		try {
+			EventsOff(
+				'openFileEvent',
+				'saveFileEvent',
+				'saveAsFileEvent',
+				'exportPdfEvent',
+				'exportHtmlEvent',
+				'quitEvent'
+			);
+			EventsOn('openFileEvent', (event) => {
+				fileMenu.openFile();
+				// assciateOpenFile = undefined;
+			});
+			EventsOn('saveFileEvent', async (event) => {
+				const res = await fileMenu.saveFile(assciateOpenFile);
+				res && (assciateOpenFile = res) && WindowSetTitle(assciateOpenFile.Name);
+				await SetSaved(true);
+			});
+			EventsOn('saveAsFileEvent', async (event) => {
+				await fileMenu.saveAsFile();
+				await SetSaved(true);
+			});
+			EventsOn('exportPdfEvent', (event) => {
+				exportMenu.exportPdf();
+			});
+			EventsOn('exportHtmlEvent', async (event) => {
+				await exportMenu.exportHtml();
+			});
+			EventsOn('quitEvent', async (event) => {
+				if (cherryInstance.getMarkdown() && !(await GetSaved()) && confirm('是否保存当前文件？')) {
+					await fileMenu.saveFile(assciateOpenFile);
+				} else {
+					await SetSaved(true);
+				}
+				Quit();
+			});
+		} catch (error) {
+			console.error(error);
+		}
+		$globalState.loading = false;
 	}
 
 	onMount(() => {

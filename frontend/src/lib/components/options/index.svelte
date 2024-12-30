@@ -179,7 +179,6 @@
 		picBedConf = await GetPicBed();
 		picBedConfBackup = JSON.parse(JSON.stringify(picBedConf));
 	});
-	$globalState.loading = false;
 </script>
 
 <div class="bg-base m-0 p-0">
