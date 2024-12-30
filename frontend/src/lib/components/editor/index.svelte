@@ -99,7 +99,6 @@
 
 			event: {
 				changeMainTheme: (theme) => {
-					alert(theme);
 					switch (theme) {
 						case 'dark':
 							setTheme(webDarkTheme);
@@ -116,6 +115,23 @@
 							document.body.classList.remove(...document.body.classList.values());
 							document.body.classList.toggle('green-theme');
 							break;
+						case 'red':
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('red-theme');
+							break;
+						case 'violet':
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('violet-theme');
+							break;
+
+						case 'blue':
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('blue-theme');
+							break;
+
 						default:
 							setTheme(webLightTheme);
 							document.body.classList.remove(...document.body.classList.values());

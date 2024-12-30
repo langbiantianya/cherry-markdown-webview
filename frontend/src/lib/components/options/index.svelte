@@ -9,8 +9,7 @@
 	import '@fluentui/web-components/text-input.js';
 	import '@fluentui/web-components/label.js';
 	import '@fluentui/web-components/drawer.js';
-	import help from '$lib/icon/help.svg';
-	import { BrowserOpenURL } from '$lib/wailsjs/runtime';
+	import Help from '$lib/components/help/index.svelte';
 	import { onMount } from 'svelte';
 	import { GetPicBed, UpsertPicBed } from '$lib/wailsjs/go/main/App';
 	import { config } from '$lib/wailsjs/go/models';
@@ -31,12 +30,10 @@
 	 */
 	let picBedConfBackup;
 
-	function tencentCosHelp() {
-		BrowserOpenURL('https://cloud.tencent.com/document/product/436/56390');
-	}
-	function aliOssHelp() {
-		BrowserOpenURL('https://cloud.tencent.com/document/product/436/56390');
-	}
+	const tencentCosHelp = 'https://cloud.tencent.com/document/product/436/56390';
+	const aliOssHelp =
+		'https://help.aliyun.com/zh/oss/developer-reference/quick-start-for-oss-go-sdk-v2?spm=a2c4g.11186623.0.0.363e78b3LyiJ7Z';
+
 	async function updatePicConf() {
 		await UpsertPicBed(config.PicBed.createFrom($state.snapshot(picBedConf)));
 	}
@@ -186,7 +183,7 @@
 </script>
 
 <div class="bg-base m-0 p-0">
-	<div part="header" class="bg-toolBar h-12 w-full px-4 shadow">
+	<div part="header" class="bg-toolBar h-12 w-full px-4 shadow-sm">
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<div class="text-toolBar flex h-12 w-full flex-nowrap items-center justify-between">
 			<h1 class="text-2xl">首选项</h1>
@@ -238,11 +235,7 @@
 						<span slot="heading" class="accordion-item-head">腾讯COS </span>
 
 						<div class="panel">
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={tencentCosHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={tencentCosHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="SecretID">SecretID</fluent-label>
 							<fluent-text-input
@@ -251,11 +244,7 @@
 								id="SecretID"
 								appearance="outline"
 							></fluent-text-input>
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={tencentCosHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={tencentCosHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="SecretKey">SecretKey</fluent-label>
 							<fluent-text-input
@@ -264,11 +253,7 @@
 								id="SecretKey"
 								appearance="outline"
 							></fluent-text-input>
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={tencentCosHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={tencentCosHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="BucketURL">BucketURL</fluent-label>
 							<fluent-text-input
@@ -283,11 +268,7 @@
 					<fluent-accordion-item class="" size="large">
 						<span slot="heading" class="accordion-item-head">阿里OSS</span>
 						<div class="panel">
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={aliOssHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="AccessKeyID">AccessKeyID</fluent-label>
 							<fluent-text-input
@@ -296,11 +277,7 @@
 								id="AccessKeyID"
 								appearance="outline"
 							></fluent-text-input>
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={aliOssHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="AccessKeySecret">AccessKeySecret</fluent-label>
 							<fluent-text-input
@@ -310,11 +287,7 @@
 								appearance="outline"
 							></fluent-text-input>
 
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={aliOssHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="Region">Region</fluent-label>
 							<fluent-text-input
@@ -325,11 +298,7 @@
 								placeholder="cn-hangzhou"
 							></fluent-text-input>
 
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-							<span class="hover:bg-buttonHover rounded p-0.5 pt-0">
-								<img on:click={aliOssHelp} class="inline h-5 pb-0.5" src={help} alt="help" />
-							</span>
+							<Help url={aliOssHelp} />
 							<!-- svelte-ignore attribute_invalid_property_name -->
 							<fluent-label htmlFor="BucketName">BucketName</fluent-label>
 							<fluent-text-input
@@ -358,6 +327,18 @@
 	fluent-label {
 		color: var(--color-text-base);
 	}
+	fluent-tab {
+		--colorCompoundBrandStroke: var(--color-text-base);
+	}
+	fluent-text-input {
+		--colorNeutralForeground1: var(--color-text-base);
+		--colorCompoundBrandStroke: var(--color-text-base);
+		--colorCompoundBrandStrokePressed: var(--color-text-base);
+		--colorNeutralBackground1: var(--color-bg-input);
+	}
+	/* .control {
+		color: var(--color-text-base);
+	} */
 	.drawer-content {
 		height: calc(100vh - 3.2rem);
 	}

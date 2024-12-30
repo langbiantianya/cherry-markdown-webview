@@ -13,6 +13,7 @@
 	--color-bg-button-hover: #37455d;
 	--color-text-toolBar: #ffffff;
 	--color-text-button: #ffffff;
+	--color-text-button-hover: #ffffff;
 	--color-text-base: #000000;
 	--color-text-input: #000000;
 	--color-border-select: #c5c5c5;
@@ -26,6 +27,7 @@
 	--color-bg-button-hover: #454646;
 	--color-text-toolBar: #ffffff;
 	--color-text-button: #ffffff;
+	--color-text-button-hover: #ffffff;
 	--color-text-base: #ffffff;
 	--color-text-input: #ffffff;
 	--color-border-select: #686868;
@@ -58,6 +60,48 @@
 	--color-text-input: #2b8a3e;
 	--color-border-select: #c5c5c5;
 	--color-bg-input: #ffffff;
+}
+
+.red-theme {
+	--color-bg-base: #fff0f6;
+	--color-bg-toolBar: #ffdeeb;
+	--color-bg-button: #ffdeeb;
+	--color-bg-button-hover: #f06595;
+	--color-text-toolBar: #c2255c;
+	--color-text-button: #c2255c;
+	--color-text-button-hover: #fff0f6;
+	--color-text-base: #c2255c;
+	--color-text-input: #c2255c;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #fff0f6;
+}
+
+.violet-theme {
+	--color-bg-base: #ffffff;
+	--color-bg-toolBar: #ffffff;
+	--color-bg-button: #ffffff;
+	--color-bg-button-hover: #845ef7;
+	--color-text-toolBar: #5f3dc4;
+	--color-text-button: #5f3dc4;
+	--color-text-button-hover: #f3f0ff;
+	--color-text-base: #5f3dc4;
+	--color-text-input: #5f3dc4;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #ffffff;
+}
+
+.blue-theme {
+	--color-bg-base: #f4f0ff;
+	--color-bg-toolBar: #ede7f6;
+	--color-bg-button: #ede7f6;
+	--color-bg-button-hover: #b39ddb;
+	--color-text-toolBar: #3949ab;
+	--color-text-button: #3949ab;
+	--color-text-button-hover: #edf2ff;
+	--color-text-base: #3949ab;
+	--color-text-input: #3949ab;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #f4f0ff;
 }
 
 a {
