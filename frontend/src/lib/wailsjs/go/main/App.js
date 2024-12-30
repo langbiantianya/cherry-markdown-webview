@@ -18,6 +18,10 @@ export function ExportPdfEvent() {
   return window['go']['main']['App']['ExportPdfEvent']();
 }
 
+export function GetActivatedTheme() {
+  return window['go']['main']['App']['GetActivatedTheme']();
+}
+
 export function GetPicBed() {
   return window['go']['main']['App']['GetPicBed']();
 }
@@ -76,6 +80,10 @@ export function SaveFileEvent() {
 
 export function SelectLocalFile(arg1) {
   return window['go']['main']['App']['SelectLocalFile'](arg1);
+}
+
+export function SetActivatedTheme(arg1) {
+  return window['go']['main']['App']['SetActivatedTheme'](arg1);
 }
 
 export function SetSaved(arg1) {

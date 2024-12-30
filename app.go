@@ -258,3 +258,11 @@ func (a *App) UploadPicbed(sourceFile file.File) string {
 	}
 	return ""
 }
+
+func (a *App) GetActivatedTheme() string {
+	return config.GetConfig().GetActivatedTheme()
+}
+
+func (a *App) SetActivatedTheme(theme string) {
+	config.GetConfig().SetActivatedTheme(theme)
+}

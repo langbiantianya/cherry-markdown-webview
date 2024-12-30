@@ -14,8 +14,8 @@
 	}
 </script>
 
-<div class="flex h-40 flex-wrap content-between justify-center">
-	<h2 class="w-full text-center text-xl font-bold">Cherry Markdown On WebView</h2>
+<div class="bg-base flex h-40 flex-wrap content-between justify-center">
+	<h2 class="w-full text-center text-base text-xl font-bold">Cherry Markdown On WebView</h2>
 
 	<p class="w-full text-center">
 		<span class="text-sm">

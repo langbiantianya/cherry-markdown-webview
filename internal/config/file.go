@@ -45,6 +45,9 @@ func init() {
 				BasePath:  "/cherrymarkdown",
 				Activated: Base64,
 			},
+			Theme: Theme{
+				Activated: "default",
+			},
 		}
 		conf.UpsertConfigFile()
 	} else if err != nil {
