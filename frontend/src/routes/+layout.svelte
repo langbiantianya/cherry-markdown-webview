@@ -5,13 +5,14 @@
 	import { globalState } from '$lib/store';
 	import { EventsOn, EventsOff } from '$lib/wailsjs/runtime';
 	import { setTheme } from '@fluentui/web-components';
-	import { webLightTheme } from '@fluentui/tokens';
+	import { webLightTheme, webDarkTheme } from '@fluentui/tokens';
 	import '@fluentui/web-components/drawer.js';
 	import '@fluentui/web-components/button.js';
 	import '@fluentui/web-components/dialog.js';
 	import Options from '$lib/components/options/index.svelte';
 	import About from '$lib/components/about/index.svelte';
 	setTheme(webLightTheme);
+	document.body.classList.toggle('default-theme');
 	/** @type {{children: import('svelte').Snippet}} */
 	let { children } = $props();
 	/** @type {import('@fluentui/web-components').Drawer} */

@@ -118,9 +118,11 @@ func (a *App) OpenFile() {
 		})
 		return
 	}
-	file.AsynLoadingToRam(filePath)
-	time.Sleep(1000 * time.Nanosecond)
-	wailsRuntime.WindowReload(a.ctx)
+	if filePath != "" {
+		file.AsynLoadingToRam(filePath)
+		time.Sleep(1000 * time.Nanosecond)
+		wailsRuntime.WindowReload(a.ctx)
+	}
 }
 
 func (a *App) SaveFile(doc file.File) *file.File {
