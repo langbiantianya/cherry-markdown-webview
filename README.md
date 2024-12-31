@@ -52,6 +52,7 @@
 - [Tencent/cherry-markdown: ✨ A Markdown Editor](https://github.com/Tencent/cherry-markdown)
 - [The Wails Project | Wails](https://wails.io/zh-Hans/)
 - [bytedance/iconpark](https://github.com/bytedance/iconpark)
+- [zimg](https://github.com/lkzc19/zimg)
 
 ## Live Development
 

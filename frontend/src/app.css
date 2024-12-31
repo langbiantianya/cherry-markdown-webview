@@ -104,6 +104,19 @@
 	--color-bg-input: #f4f0ff;
 }
 
+.orange-theme {
+	--color-bg-base: #ffffff;
+	--color-bg-toolBar: #ffffff;
+	--color-bg-button: #ffffff;
+	--color-bg-button-hover: #ff922b;
+	--color-text-toolBar: #d9480f;
+	--color-text-button: #d9480f;
+	--color-text-button-hover: #fff4e6;
+	--color-text-base: #d9480f;
+	--color-text-input: #d9480f;
+	--color-border-select: #c5c5c5;
+	--color-bg-input: #ffffff;
+}
 a {
 	font-weight: 500;
 	color: #646cff;

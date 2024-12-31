@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import 'cherry-markdown/dist/cherry-markdown.css';
+	// import '$lib/theme/orange.scss';
+	import { loadDefaultExtTheme } from '$lib/theme';
 	import Cherry from 'cherry-markdown';
 	import { FileMenu } from '$lib/utils/fileMenu';
 	import { ExportMenu } from '$lib/utils/exportMenu';
@@ -86,7 +88,7 @@
 				// 定义侧边栏，默认为空
 				sidebar: ['theme', 'mobilePreview', 'copy'],
 				// 定义顶部右侧工具栏，默认为空
-				toolbarRight: ['togglePreview'],
+				toolbarRight: ['togglePreview', 'codeTheme'],
 				// 定义选中文字时弹出的“悬浮工具栏”，默认为 ['bold', 'italic', 'underline', 'strikethrough', 'sub', 'sup', 'quote', '|', 'size', 'color']
 				bubble: [
 					'copyMenu',
@@ -164,7 +166,11 @@
 							document.body.classList.remove(...document.body.classList.values());
 							document.body.classList.toggle('blue-theme');
 							break;
-
+						case 'orange':
+							setTheme(webLightTheme);
+							document.body.classList.remove(...document.body.classList.values());
+							document.body.classList.toggle('orange-theme');
+							break;
 						default:
 							setTheme(webLightTheme);
 							document.body.classList.remove(...document.body.classList.values());
@@ -183,7 +189,8 @@
 					{ className: 'green', label: '清新' },
 					{ className: 'red', label: '热情' },
 					{ className: 'violet', label: '淡雅' },
-					{ className: 'blue', label: '清幽' }
+					{ className: 'blue', label: '清幽' },
+					{ className: 'orange', label: 'citrus' }
 				],
 				mainTheme: 'default',
 				codeBlockTheme: 'default',
@@ -279,6 +286,7 @@
 	}
 
 	onMount(() => {
+		loadDefaultExtTheme();
 		init();
 	});
 </script>
