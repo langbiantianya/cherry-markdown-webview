@@ -1,25 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
 	import 'cherry-markdown/dist/cherry-markdown.css';
+	import { changeMainThemeEvent, loadDefaultExtTheme, themeList } from '$lib/theme';
 	import Cherry from 'cherry-markdown';
 	import { FileMenu } from '$lib/utils/fileMenu';
 	import { ExportMenu } from '$lib/utils/exportMenu';
 	import { base64ToString } from '$lib/utils/blob';
-	import {
-		AssociateOpen,
-		SetSaved,
-		GetSaved,
-		GetWebServerPort,
-		GetActivatedTheme,
-		SetActivatedTheme
-	} from '$lib/wailsjs/go/main/App';
+	import { AssociateOpen, SetSaved, GetSaved, GetActivatedTheme } from '$lib/wailsjs/go/main/App';
 	import { EventsOn, Quit, WindowSetTitle, EventsOff } from '$lib/wailsjs/runtime';
 	import { BubbleExtInit, BubbleExtMenu } from '$lib/utils/rightClickBubble';
 	import { hookbeforeImageMounted, hookFileUpload } from '$lib/utils/fileAnalysis';
 	import { globalState } from '$lib/store';
 	import { InsertMenu } from '$lib/utils/InsertMenu';
-	import { setTheme } from '@fluentui/web-components';
-	import { webLightTheme, webDarkTheme } from '@fluentui/tokens';
 	import { file } from '$lib/wailsjs/go/models';
 
 	const fileMenu = FileMenu();
@@ -38,7 +30,6 @@
 	 * @param {import('cherry-markdown/types/cherry').EditorMode} model
 	 */
 	async function newCherry(mdStr = '', assciateOpenFile = null, model = 'edit&preview') {
-		let webServerPort = await GetWebServerPort();
 		const cherryInstance = new Cherry({
 			id: 'markdown-container',
 			editor: {
@@ -46,6 +37,11 @@
 			},
 			value: mdStr,
 			toolbars: {
+				// shortcutKeySettings: {
+				// 	/** 是否替换已有的快捷键, true: 替换默认快捷键； false： 会追加到默认快捷键里，相同的shortcutKey会覆盖默认的 */
+				// 	isReplace: false,
+				// 	shortcutKeyMap: {}
+				// },
 				// 定义顶部工具栏
 				toolbar: [
 					'undo',
@@ -86,7 +82,7 @@
 				// 定义侧边栏，默认为空
 				sidebar: ['theme', 'mobilePreview', 'copy'],
 				// 定义顶部右侧工具栏，默认为空
-				toolbarRight: ['togglePreview'],
+				toolbarRight: ['togglePreview', 'codeTheme', 'shortcutKey'],
 				// 定义选中文字时弹出的“悬浮工具栏”，默认为 ['bold', 'italic', 'underline', 'strikethrough', 'sub', 'sup', 'quote', '|', 'size', 'color']
 				bubble: [
 					'copyMenu',
@@ -130,67 +126,19 @@
 				fileUpload: hookFileUpload()
 			},
 			event: {
-				changeMainTheme: (theme) => {
-					SetActivatedTheme(theme);
-					switch (theme) {
-						case 'dark':
-							setTheme(webDarkTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('dark-theme');
-							break;
-						case 'light':
-							setTheme(webLightTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('light-theme');
-							break;
-						case 'green':
-							setTheme(webLightTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('green-theme');
-							break;
-						case 'red':
-							setTheme(webLightTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('red-theme');
-							break;
-						case 'violet':
-							setTheme(webLightTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('violet-theme');
-							break;
-
-						case 'blue':
-							setTheme(webLightTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('blue-theme');
-							break;
-
-						default:
-							setTheme(webLightTheme);
-							document.body.classList.remove(...document.body.classList.values());
-							document.body.classList.toggle('default-theme');
-							break;
-					}
-				}
+				changeMainTheme: changeMainThemeEvent
 			},
 			previewer: {},
 			themeSettings: {
 				// 主题列表，用于切换主题
-				themeList: [
-					{ className: 'default', label: '默认' },
-					{ className: 'dark', label: '暗黑' },
-					{ className: 'light', label: '明亮' },
-					{ className: 'green', label: '清新' },
-					{ className: 'red', label: '热情' },
-					{ className: 'violet', label: '淡雅' },
-					{ className: 'blue', label: '清幽' }
-				],
+				themeList: themeList(),
 				mainTheme: 'default',
 				codeBlockTheme: 'default',
-				inlineCodeTheme: 'red', // red or black
+				inlineCodeTheme: 'black', // red or black
 				toolbarTheme: 'dark' // light or dark 优先级低于mainTheme
 			}
 		});
+		cherryInstance.setTheme((await GetActivatedTheme()) || 'default');
 		fileMenu.setCherry(cherryInstance);
 		exportMenu.setCherry(cherryInstance);
 		bubbleExtMenu.setCherry(cherryInstance);
@@ -235,7 +183,6 @@
 		} else {
 			cherryInstance = await newCherry();
 		}
-		cherryInstance.setTheme((await GetActivatedTheme()) || 'default');
 		try {
 			EventsOff(
 				'openFileEvent',
@@ -278,8 +225,9 @@
 		$globalState.loading = false;
 	}
 
-	onMount(() => {
-		init();
+	onMount(async () => {
+		await loadDefaultExtTheme();
+		await init();
 	});
 </script>
 

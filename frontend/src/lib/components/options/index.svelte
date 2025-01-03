@@ -1,5 +1,4 @@
 <script>
-	import { globalState } from '$lib/store';
 	import '@fluentui/web-components/button.js';
 	import '@fluentui/web-components/tab.js';
 	import '@fluentui/web-components/tabs.js';
