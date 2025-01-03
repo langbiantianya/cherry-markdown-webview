@@ -7,7 +7,7 @@ func initSettings(menuFunc SettingsMenu) {
 	settingsMenu.AddText("首选项", nil, func(cd *menu.CallbackData) {
 		menuFunc.OptionsEvent()
 	})
-	// settingsMenu.AddText("个性化", nil, func(cd *menu.CallbackData) {
-	// 	menuFunc.PersonalizaEvent()
-	// })
+	settingsMenu.AddText("个性化", nil, func(cd *menu.CallbackData) {
+		menuFunc.PersonalizaEvent()
+	})
 }

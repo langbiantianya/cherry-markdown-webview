@@ -108,7 +108,7 @@
 	--color-bg-base: #ffffff;
 	--color-bg-toolBar: #ffffff;
 	--color-bg-button: #ffffff;
-	--color-bg-button-hover: #ff922b;
+	--color-bg-button-hover: #fe993e;
 	--color-text-toolBar: #d9480f;
 	--color-text-button: #d9480f;
 	--color-text-button-hover: #fff4e6;
@@ -117,6 +117,7 @@
 	--color-border-select: #c5c5c5;
 	--color-bg-input: #ffffff;
 }
+
 a {
 	font-weight: 500;
 	color: #646cff;
