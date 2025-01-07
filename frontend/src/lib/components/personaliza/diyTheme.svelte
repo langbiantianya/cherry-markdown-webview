@@ -1,5 +1,9 @@
 <script>
 	import '@fluentui/web-components/button.js';
+	import '@fluentui/web-components/image.js';
+	import '@fluentui/web-components/tooltip.js';
+	import '@fluentui/web-components/accordion.js';
+	import '@fluentui/web-components/accordion-item.js';
 	import { onMount } from 'svelte';
 	import Cherry from 'cherry-markdown';
 	import { previewText } from './previewText';
@@ -10,7 +14,8 @@
 	import { TextInput } from '@fluentui/web-components';
 	import { applayDiyThemeScss, generateScss, generateToolbarCss } from './themeTemplate';
 	import { UpsertThemeItem } from '$lib/wailsjs/go/main/App';
-	import { config } from '$lib/wailsjs/go/models';
+	import { config, file } from '$lib/wailsjs/go/models';
+	import uploadPicture from '$lib/icon/upload-picture.svg';
 	/**
 	 * @type {string[]}
 	 */
@@ -45,7 +50,60 @@
 		].forEach((element, index) => {
 			colors[index] = element;
 		});
+		backgroundImage = new file.File();
+		for (const styleElement of document.head.getElementsByTagName('style')) {
+			if (styleElement.id === 'diy-preview-background-image') {
+				styleElement.remove();
+			}
+		}
 		applayDiyThemeScss(colors);
+	}
+	/**
+	 *
+	 * @param {Event} event
+	 */
+	function handleFileSelect(event) {
+		if (event.target instanceof HTMLInputElement && event.target.files) {
+			const bgFile = event.target.files[0];
+
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				if (e.target) {
+					const base64Image = e.target.result;
+					backgroundImage.Mime = bgFile.type;
+					backgroundImage.Name = bgFile.name;
+					backgroundImage.Bytes = base64Image?.toString().split(',')[1];
+
+					for (const styleElement of document.head.getElementsByTagName('style')) {
+						if (styleElement.id === 'diy-preview-background-image') {
+							styleElement.remove();
+						}
+					}
+					const style = document.createElement('style');
+					style.textContent = `
+						:root {
+							--diy-preview-background-opacity: 0.9;
+							--diy-preview-background-image: url(${base64Image});
+						}
+						`.trim();
+					style.id = 'diy-preview-background-image';
+					document.head.appendChild(style);
+				}
+			};
+			reader.readAsDataURL(bgFile);
+		}
+	}
+
+	function openFileDialog() {
+		const fileInput = document.createElement('input');
+		fileInput.type = 'file';
+		fileInput.accept = 'image/*';
+		fileInput.multiple = false;
+		fileInput.style.display = 'none';
+		fileInput.onchange = handleFileSelect;
+		document.body.appendChild(fileInput);
+		fileInput.click();
+		document.body.removeChild(fileInput);
 	}
 	/**
 	 * @param {HTMLElement} element
@@ -94,7 +152,7 @@
 			colors: colors,
 			toolBar: await generateToolbarCss(colors, diyClassThemeName.currentValue),
 			scss: await generateScss(colors, diyClassThemeName.currentValue),
-			backgroundImage: null
+			backgroundImage: backgroundImage
 		});
 		UpsertThemeItem(theme);
 	}
@@ -111,6 +169,11 @@
 			};
 		}
 	}
+	/**
+	 * @type {file.File}
+	 */
+	let backgroundImage = new file.File();
+
 	/**
 	 * @type {TextInput}
 	 */
@@ -194,7 +257,10 @@
 			width: 120
 		});
 		for (const element of themeInput.getElementsByTagName('fluent-text-input')) {
-			if (!element.id.includes('theme-name') && element instanceof HTMLElement) {
+			if (
+				(element.id.includes('color') || element.id.includes('-bg')) &&
+				element instanceof HTMLElement
+			) {
 				pickerClick(element);
 			}
 		}
@@ -229,148 +295,184 @@
 <div
 	class="drawer-contentw-full flex h-lvh flex-wrap space-y-4 overflow-y-scroll px-1 pb-10 align-top"
 >
-	<div bind:this={themeInput} class="theme-input flex flex-wrap space-x-1">
-		<div class="ml-1 w-52">
-			<fluent-label>主题名称</fluent-label>
-			<fluent-text-input
-				bind:this={diyLabelThemeName}
-				on:blur={hiddenColorPicker}
-				id="diy-label-theme-name"
-				appearance="outline"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>主题类名</fluent-label>
-			<fluent-text-input
-				on:input={verificationDiyClassThemeName}
-				bind:this={diyClassThemeName}
-				on:blur={hiddenColorPicker}
-				id="diy-class-theme-name"
-				appearance="outline"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>toolbarbg</fluent-label>
-			<fluent-text-input
-				initialValue={colors[10]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				id="toolbarbg"
-				appearance="outline"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>editorBg</fluent-label>
-			<fluent-text-input
-				initialValue={colors[11]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				id="editorBg"
-				appearance="outline"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color0</fluent-label>
-			<fluent-text-input
-				initialValue={colors[0]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				id="color0"
-				appearance="outline"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color1</fluent-label>
-			<fluent-text-input
-				initialValue={colors[1]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				id="color1"
-				appearance="outline"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color2</fluent-label>
-			<fluent-text-input
-				initialValue={colors[2]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color2"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color3</fluent-label>
-			<fluent-text-input
-				initialValue={colors[3]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color3"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color4</fluent-label>
-			<fluent-text-input
-				initialValue={colors[4]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color4"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color5</fluent-label>
-			<fluent-text-input
-				initialValue={colors[5]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color5"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color6</fluent-label>
-			<fluent-text-input
-				initialValue={colors[6]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color6"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color7</fluent-label>
-			<fluent-text-input
-				initialValue={colors[7]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color7"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color8</fluent-label>
-			<fluent-text-input
-				initialValue={colors[8]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color8"
-			></fluent-text-input>
-		</div>
-		<div class="w-52">
-			<fluent-label>color9</fluent-label>
-			<fluent-text-input
-				initialValue={colors[9]}
-				on:blur={hiddenColorPicker}
-				on:change={inputFildChange}
-				appearance="outline"
-				id="color9"
-			></fluent-text-input>
-		</div>
+	<div bind:this={themeInput} class="theme-input">
+		<fluent-accordion>
+			<fluent-accordion-item size="large">
+				<span slot="heading" class="accordion-item-head">主题颜色</span>
+				<div class=" flex flex-wrap space-x-1">
+					<div class="ml-1">
+						<fluent-label>主题名称</fluent-label>
+						<fluent-text-input
+							bind:this={diyLabelThemeName}
+							on:blur={hiddenColorPicker}
+							id="diy-label-theme-name"
+							appearance="outline"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>主题类名</fluent-label>
+						<fluent-text-input
+							on:input={verificationDiyClassThemeName}
+							bind:this={diyClassThemeName}
+							on:blur={hiddenColorPicker}
+							id="diy-class-theme-name"
+							appearance="outline"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>toolbarbg</fluent-label>
+						<fluent-text-input
+							initialValue={colors[10]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							id="toolbar-bg"
+							appearance="outline"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>editorBg</fluent-label>
+						<fluent-text-input
+							initialValue={colors[11]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							id="editor-bg"
+							appearance="outline"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color0</fluent-label>
+						<fluent-text-input
+							initialValue={colors[0]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							id="color0"
+							appearance="outline"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color1</fluent-label>
+						<fluent-text-input
+							initialValue={colors[1]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							id="color1"
+							appearance="outline"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color2</fluent-label>
+						<fluent-text-input
+							initialValue={colors[2]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color2"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color3</fluent-label>
+						<fluent-text-input
+							initialValue={colors[3]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color3"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color4</fluent-label>
+						<fluent-text-input
+							initialValue={colors[4]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color4"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color5</fluent-label>
+						<fluent-text-input
+							initialValue={colors[5]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color5"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color6</fluent-label>
+						<fluent-text-input
+							initialValue={colors[6]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color6"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color7</fluent-label>
+						<fluent-text-input
+							initialValue={colors[7]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color7"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color8</fluent-label>
+						<fluent-text-input
+							initialValue={colors[8]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color8"
+						></fluent-text-input>
+					</div>
+					<div class="">
+						<fluent-label>color9</fluent-label>
+						<fluent-text-input
+							initialValue={colors[9]}
+							on:blur={hiddenColorPicker}
+							on:change={inputFildChange}
+							appearance="outline"
+							id="color9"
+						></fluent-text-input>
+					</div>
+				</div>
+			</fluent-accordion-item>
+		</fluent-accordion>
+	</div>
+
+	<div class="diy-background-image w-full">
+		<fluent-accordion>
+			<fluent-accordion-item class="" size="large">
+				<span slot="heading" class="accordion-item-head">背景图片</span>
+				<fluent-tooltip
+					id="tooltip"
+					anchor="diy-background-name"
+					delay="100"
+					auto-update-mode="anchor"
+				>
+					点击上传背景图片
+				</fluent-tooltip>
+
+				<fluent-image class="" id="diy-background-name" fit="cover" shape="rounded">
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<img
+						class=""
+						on:click={openFileDialog}
+						src={backgroundImage.Bytes
+							? `data:data:${backgroundImage.Mime};base64,${backgroundImage.Bytes}`
+							: uploadPicture}
+						alt="点击选择图片"
+					/></fluent-image
+				>
+			</fluent-accordion-item>
+		</fluent-accordion>
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="w-52 space-x-3">
+		<div class="flex w-full justify-end space-x-4">
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<fluent-button
 				class="hover:bg-buttonHover hover:text-buttonHover bg-button text-button mt-5"
@@ -386,7 +488,8 @@
 			>
 		</div>
 	</div>
-	<div class="edit h-96">
+
+	<div class="edit diy-preview-background-image h-96">
 		<div
 			bind:this={editor}
 			class="mx-auto h-96 w-full"
@@ -395,6 +498,7 @@
 		></div>
 	</div>
 </div>
+
 <div bind:this={picker} hidden class=" fixed right-8 top-10 z-10 w-32"></div>
 
 <style>
@@ -417,12 +521,22 @@
 		--colorCompoundBrandStrokePressed: var(--color-text-base);
 		--colorNeutralBackground1: var(--color-bg-input);
 	}
-
+	#markdown-personaliza-preview {
+		opacity: var(--diy-preview-background-opacity);
+	}
+	.diy-preview-background-image {
+		background-image: var(--diy-preview-background-image);
+		background-size: cover; /* 调整背景图片大小以覆盖整个容器 */
+		background-position: center; /* 居中背景图片 */
+	}
+	.theme-input {
+		width: 100%;
+	}
 	.drawer-contentw-full {
 		height: calc(100lvh +200px);
 	}
 	.edit {
-		padding-bottom: 4rem;
+		margin-bottom: 4rem;
 		/* min-width: 37rem;
 		max-width: 57rem; */
 	}
@@ -431,8 +545,20 @@
 			min-width: 100lvw;
 		}
 	}
+	@media (min-width: 768px) {
+		.drawer-contentw-full {
+			/* align-items: center;  */
+			justify-content: center; /* 水平居中 */
+		}
+	}
+
 	@media (min-width: 1280px) {
+		.diy-background-image {
+			width: 27rem;
+			margin-right: 2rem;
+		}
 		.theme-input {
+			margin-top: 1rem;
 			min-width: 27rem;
 			justify-content: flex-start; /* 水平居中 */
 			align-items: flex-start;
@@ -444,7 +570,7 @@
 		.edit {
 			width: 47rem;
 			height: 27rem;
-			padding-bottom: 1.5rem;
+			margin-bottom: 1.5rem;
 		}
 		.theme-input {
 			max-width: 25rem;

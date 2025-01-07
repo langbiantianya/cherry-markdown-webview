@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type ThemeItemConf struct {
@@ -92,7 +93,10 @@ func UpsertThemeItem(theme ThemeItem) error {
 	_, err := os.Stat(themePath)
 	var themeItemConf ThemeItemConf
 	if os.IsNotExist(err) {
-		os.MkdirAll(themePath, 0755)
+		err = os.MkdirAll(themePath, 0755)
+		if err != nil {
+			return err
+		}
 		// 新建配置文件
 		themeItemConf = ThemeItemConf{
 			Name:        theme.Name.ClassName,
@@ -100,8 +104,8 @@ func UpsertThemeItem(theme ThemeItem) error {
 			ScssPath:    "theme.scss",
 			ToolBarPath: "toolbar.css",
 		}
-		if theme.BaclgroudImage != nil {
-			themeItemConf.BackgroundImagePath = theme.BaclgroudImage.Name
+		if theme.BaclgroudImage != nil && len(theme.BaclgroudImage.Bytes) > 0 {
+			themeItemConf.BackgroundImagePath = filepath.Join("./img", theme.BaclgroudImage.Name)
 		}
 	} else if err != nil {
 		logs.Logger.Error(err.Error())
@@ -131,7 +135,12 @@ func UpsertThemeItem(theme ThemeItem) error {
 	}
 
 	// 保存背景图片
-	if theme.BaclgroudImage != nil {
+	if theme.BaclgroudImage != nil && len(theme.BaclgroudImage.Bytes) > 0 {
+
+		err = os.MkdirAll(filepath.Join(themePath, strings.ReplaceAll(themeItemConf.BackgroundImagePath, theme.BaclgroudImage.Name, "")), 0755)
+		if err != nil {
+			return err
+		}
 		err = file.WireByteArray(filepath.Join(themePath, themeItemConf.BackgroundImagePath), theme.BaclgroudImage.Bytes)
 		if err != nil {
 			logs.Logger.Error(fmt.Sprintf("Failed save background image: %s", err.Error()))

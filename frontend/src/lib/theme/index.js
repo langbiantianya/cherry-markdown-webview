@@ -116,7 +116,6 @@ export function changeMainThemeEvent(theme) {
 				}
 				return null
 			}).then(res => {
-				console.log(res)
 				if (res) {
 					loadThemeCss(res.name.className, res.scss);
 					loadToolBarCss(res.name.className, res.toolBar)

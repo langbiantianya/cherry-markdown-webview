@@ -155,7 +155,7 @@
 		const activityThemeName = await GetActivatedTheme();
 		const activietTheme = (await themeList())
 			.filter((item) => {
-				return item.label === activityThemeName;
+				return item.className === activityThemeName;
 			})
 			.pop();
 		cherryInstance.setTheme(activietTheme?.className || 'default');
