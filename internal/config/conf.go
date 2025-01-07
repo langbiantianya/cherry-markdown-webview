@@ -1,10 +1,12 @@
 package config
 
 import (
+	"cherry-markdown-webview/internal/file"
 	"cherry-markdown-webview/internal/logs"
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -37,6 +39,27 @@ func (conf *Config) SetActivatedTheme(theme string) {
 	conf.UpsertConfigFile()
 }
 
+func (conf *Config) SetBackgroundImage(img file.File) {
+	if img.Path != "" {
+		conf.Theme.BackgroundImage = img.Path
+	} else {
+		bgFolderPath := filepath.Join(configFolderPath(), "background")
+		err := os.MkdirAll(bgFolderPath, 0755)
+		if err != nil {
+			logs.Logger.Error(fmt.Sprintf("Failed to mkdir path: %s", err.Error()))
+			return
+		}
+		bgPath := filepath.Join(bgFolderPath, img.Name)
+		err = file.WireByteArray(bgPath, img.Bytes)
+		if err != nil {
+			logs.Logger.Error(fmt.Sprintf("Failed to save background: %s", err.Error()))
+			return
+		}
+		conf.Theme.BackgroundImage = bgPath
+	}
+	conf.UpsertConfigFile()
+}
+
 func (conf *Config) GetActivatedTheme() string {
 	return conf.Theme.Activated
 }
@@ -47,7 +70,7 @@ func (conf *Config) UpsertConfigFile() {
 		logs.Logger.Fatal(fmt.Sprintf("Failed marshaling JSON: %s", err.Error()))
 		return
 	}
-	confFile, err := os.OpenFile(ConfigFilePath(), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	confFile, err := os.OpenFile(configFilePath(), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		logs.Logger.Fatal(fmt.Sprintf("Failed open File %s", err.Error()))
 		return
@@ -58,7 +81,7 @@ func (conf *Config) UpsertConfigFile() {
 		logs.Logger.Fatal(fmt.Sprintf("Failed write File %s", err.Error()))
 		return
 	}
-	logs.Logger.Info("Config.json upsert successfully: " + ConfigFilePath())
+	logs.Logger.Info("Config.json upsert successfully: " + configFilePath())
 }
 
 func (conf *Config) UpsertPicBed(picBed PicBed) {
@@ -67,7 +90,14 @@ func (conf *Config) UpsertPicBed(picBed PicBed) {
 }
 
 type Theme struct {
-	Activated string `json:"activated"`
+	Activated       string     `json:"activated"`
+	BackgroundImage string     `json:"backgroundImage"`
+	ExtThemes       []ExtTheme `json:"-"`
+}
+
+type ExtTheme struct {
+	ClassName string `json:"className"`
+	Label     string `json:"label"`
 }
 
 type Web struct {

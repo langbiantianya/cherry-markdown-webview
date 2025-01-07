@@ -18,6 +18,20 @@ export namespace config {
 	        this.bucketName = source["bucketName"];
 	    }
 	}
+	export class ExtTheme {
+	    className: string;
+	    label: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ExtTheme(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.className = source["className"];
+	        this.label = source["label"];
+	    }
+	}
 	export class TencentCloudCOS {
 	    secretID: string;
 	    secretKey: string;
@@ -50,6 +64,45 @@ export namespace config {
 	        this.activated = source["activated"];
 	        this.oss = this.convertValues(source["oss"], AliyunOSS);
 	        this.cos = this.convertValues(source["cos"], TencentCloudCOS);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	
+	export class ThemeItem {
+	    name: ExtTheme;
+	    colors: string[];
+	    scss: string;
+	    toolBar: string;
+	    backgroundImage?: file.File;
+	
+	    static createFrom(source: any = {}) {
+	        return new ThemeItem(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = this.convertValues(source["name"], ExtTheme);
+	        this.colors = source["colors"];
+	        this.scss = source["scss"];
+	        this.toolBar = source["toolBar"];
+	        this.backgroundImage = this.convertValues(source["backgroundImage"], file.File);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

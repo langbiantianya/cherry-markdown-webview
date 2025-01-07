@@ -1,14 +1,15 @@
 <script>
 	import '@fluentui/web-components/button.js';
+	import '@fluentui/web-components/tab.js';
+	import '@fluentui/web-components/tabs.js';
+	import '@fluentui/web-components/tab-panel.js';
 	import { onMount } from 'svelte';
-	import Cherry from 'cherry-markdown';
-	import { previewText } from './previewText';
-	import { themeList } from '$lib/theme';
-	import { GetActivatedTheme } from '$lib/wailsjs/go/main/App';
+	import '@fluentui/web-components/tab.js';
+	import '@fluentui/web-components/tabs.js';
+	import '@fluentui/web-components/tab-panel.js';
 	import '@fluentui/web-components/text-input.js';
 	import '@fluentui/web-components/label.js';
-	import iro from '@jaames/iro';
-	import { TextInput } from '@fluentui/web-components';
+	import DiyTheme from './diyTheme.svelte';
 	/**
 	 * @type {{heid:function():void}}
 	 */
@@ -18,107 +19,8 @@
 		// TODO 重置主题为激活的主题
 		heid();
 	}
-	/**
-	 * @param {HTMLElement} element
-	 */
-	function pickerClick(element) {
-		element.addEventListener('click', (event) => {
-			picker.style.top = event.pageY + 'px';
-			picker.style.left = event.pageX - 60 + 'px';
-			colorPicker.off('color:change', () => {});
-			colorPicker.on(
-				'color:change',
-				/**
-				 *
-				 * @param {iro.Color} color
-				 */
-				(color) => {
-					//将当前颜色记录为十六进制字符串
-					if (event.target instanceof TextInput) {
-						event.target['currentValue'] = color.hexString;
-						event.target.dispatchEvent(new Event('change'));
-					}
-				}
-			);
-			picker.hidden = false;
-		});
-	}
-	/**
-	 * @type {HTMLElement}
-	 */
-	let picker;
-	/**
-	 * @type {HTMLElement}
-	 */
-	let themeInput;
-	/**
-	 * @type {iro.ColorPicker}
-	 */
-	let colorPicker;
-	/**
-	 * @type {HTMLElement}
-	 */
-	let editor;
 
-	function hiddenColorPicker() {
-		picker.hidden = true;
-	}
-	/**
-	 * @param {Element}event
-	 */
-	function inputFildChange(event) {
-		console.log(event);
-	}
-	onMount(async () => {
-		colorPicker = iro.ColorPicker(picker, {
-			width: 120
-		});
-		for (const element of themeInput.getElementsByTagName('fluent-text-input')) {
-			if (element.id !== 'diy-theme-name' && element instanceof HTMLElement) {
-				pickerClick(element);
-			}
-		}
-
-		const cherrymarkdown = new Cherry({
-			value: previewText,
-			id: 'markdown-personaliza-preview',
-			editor: {
-				defaultModel: 'edit&preview'
-			},
-			toolbars: {
-				shortcutKeySettings: {
-					isReplace: true
-				},
-				float: false,
-				bubble: false
-			},
-			themeSettings: {
-				// 主题列表，用于切换主题
-				themeList: [...themeList(), { className: 'diy', label: 'diy' }],
-				mainTheme: 'default',
-				codeBlockTheme: 'default',
-				inlineCodeTheme: 'black', // red or black
-				toolbarTheme: 'dark' // light or dark 优先级低于mainTheme
-			}
-		});
-		cherrymarkdown.setTheme((await GetActivatedTheme()) || 'default');
-
-		for (const element of editor.getElementsByClassName('cherry-toolbar')) {
-			const mask = document.createElement('div');
-			mask.style.position = 'absolute';
-			mask.style.height = '3rem';
-			mask.style.width = '100%';
-			mask.style.zIndex = '2';
-			element.append(mask);
-		}
-		for (const code of editor.getElementsByClassName('CodeMirror')) {
-			for (const textarea of code.getElementsByTagName('textarea')) {
-				textarea.readOnly = true;
-				textarea.tabIndex = -1;
-				textarea.disabled = true;
-			}
-		}
-	});
+	onMount(async () => {});
 </script>
 
 <div class="bg-base m-0 h-full overflow-hidden p-0">
@@ -134,107 +36,15 @@
 			>
 		</div>
 	</div>
-	<div
-		class="drawer-contentw-full flex h-lvh flex-wrap space-y-4 overflow-y-scroll px-1 pb-10 align-top"
-	>
-		<div bind:this={themeInput} class="theme-input flex flex-wrap space-x-1">
-			<div class="pl-1">
-				<fluent-label>主题名称</fluent-label>
-				<fluent-text-input on:blur={hiddenColorPicker} id="diy-theme-name" appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color0</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					id="color0"
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color1</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color2</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color3</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color4</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color5</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color6</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color7</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color8</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-			<div>
-				<fluent-label>color9</fluent-label>
-				<fluent-text-input
-					on:blur={hiddenColorPicker}
-					on:change={inputFildChange}
-					appearance="outline"
-				></fluent-text-input>
-			</div>
-		</div>
-		<div class="edit h-96">
-			<div
-				bind:this={editor}
-				class="mx-auto h-96 w-full"
-				tabindex="-1"
-				id="markdown-personaliza-preview"
-			></div>
-		</div>
-	</div>
-	<div bind:this={picker} hidden class=" fixed right-8 top-10 z-10 w-32"></div>
+	<fluent-tabs orientation="vertical" size="large">
+		<fluent-tab id="background-image">背景图片</fluent-tab>
+		<fluent-tab-panel id="background-image-panel"> </fluent-tab-panel>
+
+		<fluent-tab id="diy-theme">自定义主题</fluent-tab>
+		<fluent-tab-panel id="diy-theme-panel">
+			<DiyTheme />
+		</fluent-tab-panel>
+	</fluent-tabs>
 </div>
 
 <style>

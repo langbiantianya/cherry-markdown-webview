@@ -30,12 +30,20 @@ export function GetSaved() {
   return window['go']['main']['App']['GetSaved']();
 }
 
+export function GetThemeList() {
+  return window['go']['main']['App']['GetThemeList']();
+}
+
 export function GetWebServerPort() {
   return window['go']['main']['App']['GetWebServerPort']();
 }
 
 export function IssuesEvent() {
   return window['go']['main']['App']['IssuesEvent']();
+}
+
+export function LoadTheme(arg1) {
+  return window['go']['main']['App']['LoadTheme'](arg1);
 }
 
 export function OpenFile() {
@@ -86,6 +94,10 @@ export function SetActivatedTheme(arg1) {
   return window['go']['main']['App']['SetActivatedTheme'](arg1);
 }
 
+export function SetBackground(arg1) {
+  return window['go']['main']['App']['SetBackground'](arg1);
+}
+
 export function SetSaved(arg1) {
   return window['go']['main']['App']['SetSaved'](arg1);
 }
@@ -96,4 +108,8 @@ export function UploadPicbed(arg1) {
 
 export function UpsertPicBed(arg1) {
   return window['go']['main']['App']['UpsertPicBed'](arg1);
+}
+
+export function UpsertThemeItem(arg1) {
+  return window['go']['main']['App']['UpsertThemeItem'](arg1);
 }

@@ -12,14 +12,14 @@ ${{DIY}}8: {{DIY8}};
 ${{DIY}}9: {{DIY9}};
 
 /** 工具栏样式 */
-$toolbarBg: ${{DIY}}0;
+$toolbarBg: {{toolbarBg}};
 $toolbarBtnColor: ${{DIY}}9;
 $toolbarBtnBgHover: ${{DIY}}5;
 $toolbarBtnHoverColor: ${{DIY}}0;
 $toolbarColorItemHoverBorderColor: ${{DIY}}9;
 $sidebarShadow: $shadow;
 /** 编辑区域样式 */
-$editorBg: ${{DIY}}0;
+$editorBg: {{editorBg}};
 $editorColor: ${{DIY}}9;
 $editorSelectedBg: ${{DIY}}2;
 $editorUrlBg: ${{DIY}}0;
@@ -28,7 +28,7 @@ $editorImportantColor: ${{DIY}}7;
 $editorCodeColor: ${{DIY}}6;
 /** 预览区域样式 */
 $previewBg: ${{DIY}}0;
-$previewMobileBgColor: #fff;
+$previewMobileBgColor: ${{DIY}}0;
 /** markdown样式 */
 $mdColor: $editorColor;
 $mdHeaderColor: $editorImportantColor;
@@ -39,7 +39,7 @@ $mdInlineCodeColor: $editorCodeColor;
 $mdInlineCodeBg: ${{DIY}}1;
 $mdBlockquoteBg: ${{DIY}}1;
 /** 编辑器样式 */
-.cherry.theme__orange {
+.cherry.theme__{{diy}} {
 	/** 顶部按钮, 选中文字时弹出的按钮, 光标focus到空行时联想出的按钮, 侧边栏按钮 */
 	.cherry-toolbar,
 	.cherry-floatmenu,
@@ -171,7 +171,7 @@ $mdBlockquoteBg: ${{DIY}}1;
 	}
 }
 /** 预览区域样式 */
-.cherry-markdown.theme__orange {
+.cherry-markdown.theme__{{diy}} {
 	color: $mdColor;
 	background-color: $previewBg;
 
@@ -185,7 +185,7 @@ $mdBlockquoteBg: ${{DIY}}1;
 	h4,
 	h5 {
 		color: $mdHeaderColor;
-		text-align: center;
+		// text-align: center;
 		margin-bottom: 35px;
 	}
 

@@ -17,9 +17,13 @@ export function GetPicBed():Promise<config.PicBed>;
 
 export function GetSaved():Promise<boolean>;
 
+export function GetThemeList():Promise<Array<config.ExtTheme>>;
+
 export function GetWebServerPort():Promise<number>;
 
 export function IssuesEvent():Promise<void>;
+
+export function LoadTheme(arg1:string):Promise<config.ThemeItem>;
 
 export function OpenFile():Promise<void>;
 
@@ -45,8 +49,12 @@ export function SelectLocalFile(arg1:file.File):Promise<file.File>;
 
 export function SetActivatedTheme(arg1:string):Promise<void>;
 
+export function SetBackground(arg1:file.File):Promise<void>;
+
 export function SetSaved(arg1:boolean):Promise<void>;
 
 export function UploadPicbed(arg1:file.File):Promise<string>;
 
 export function UpsertPicBed(arg1:config.PicBed):Promise<void>;
+
+export function UpsertThemeItem(arg1:config.ThemeItem):Promise<void>;

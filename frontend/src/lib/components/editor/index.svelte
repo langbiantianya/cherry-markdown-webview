@@ -1,12 +1,26 @@
 <script>
 	import { onMount } from 'svelte';
 	import 'cherry-markdown/dist/cherry-markdown.css';
-	import { changeMainThemeEvent, loadDefaultExtTheme, themeList } from '$lib/theme';
+	import {
+		changeMainThemeEvent,
+		clearBackgroundImage,
+		isDefault,
+		loadBackgroundImage,
+		loadDefaultExtTheme,
+		loadThemeCss,
+		themeList
+	} from '$lib/theme';
 	import Cherry from 'cherry-markdown';
 	import { FileMenu } from '$lib/utils/fileMenu';
 	import { ExportMenu } from '$lib/utils/exportMenu';
 	import { base64ToString } from '$lib/utils/blob';
-	import { AssociateOpen, SetSaved, GetSaved, GetActivatedTheme } from '$lib/wailsjs/go/main/App';
+	import {
+		AssociateOpen,
+		SetSaved,
+		GetSaved,
+		GetActivatedTheme,
+		LoadTheme
+	} from '$lib/wailsjs/go/main/App';
 	import { EventsOn, Quit, WindowSetTitle, EventsOff } from '$lib/wailsjs/runtime';
 	import { BubbleExtInit, BubbleExtMenu } from '$lib/utils/rightClickBubble';
 	import { hookbeforeImageMounted, hookFileUpload } from '$lib/utils/fileAnalysis';
@@ -131,14 +145,20 @@
 			previewer: {},
 			themeSettings: {
 				// 主题列表，用于切换主题
-				themeList: themeList(),
+				themeList: await themeList(),
 				mainTheme: 'default',
 				codeBlockTheme: 'default',
 				inlineCodeTheme: 'black', // red or black
 				toolbarTheme: 'dark' // light or dark 优先级低于mainTheme
 			}
 		});
-		cherryInstance.setTheme((await GetActivatedTheme()) || 'default');
+		const activityThemeName = await GetActivatedTheme();
+		const activietTheme = (await themeList())
+			.filter((item) => {
+				return item.label === activityThemeName;
+			})
+			.pop();
+		cherryInstance.setTheme(activietTheme?.className || 'default');
 		fileMenu.setCherry(cherryInstance);
 		exportMenu.setCherry(cherryInstance);
 		bubbleExtMenu.setCherry(cherryInstance);
@@ -157,11 +177,6 @@
 	}
 	async function init() {
 		let assciateOpenFile = await AssociateOpen();
-		// if (!cherryInstance) {
-		// 	cherryInstance = await newCherry();
-		// 	// hookbeforeImageMounted(assciateOpenFile, cherryInstance);
-		// 	hookFileUpload(cherryInstance);
-		// }
 		cherryInstance && cherryInstance.destroy();
 		if (assciateOpenFile && assciateOpenFile.Path !== '' && assciateOpenFile.Bytes.length > 0) {
 			if (typeof assciateOpenFile.Bytes === 'string') {
