@@ -1,0 +1,24 @@
+.{{diy}}-theme {
+  /* $editorBg */
+  --color-bg-base:  {{editorBg}};
+  /* $toolbarBg */
+  --color-bg-toolBar: {{toolbarBg}};
+  /* $toolbarBg */
+  --color-bg-button: {{toolbarBg}};
+  /* color5 */
+  --color-bg-button-hover: {{DIY5}};
+  /* color9 */
+  --color-text-toolBar: {{DIY9}};
+  /* color9 */
+  --color-text-button: {{DIY9}};
+  /* color0 */
+  --color-text-button-hover: {{DIY0}};
+  /* color9 */
+  --color-text-base: {{DIY9}};
+  /* color9 */
+  --color-text-input: {{DIY9}};
+  /* 自定义 */
+  --color-border-select: #c5c5c5;
+  /* $editorBg */
+  --color-bg-input:  {{editorBg}};
+}

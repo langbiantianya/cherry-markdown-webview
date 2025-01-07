@@ -39,16 +39,19 @@
 		});
 		EventsOn('optionsEvent', (event) => {
 			optionsDrawer.show();
+			personalizaDrawer.hide();
+			aboutDialog.hide();
 		});
 		EventsOn('personalizaEvent', (event) => {
 			personalizaDrawer.show();
+			optionsDrawer.hide();
+			aboutDialog.hide();
 		});
 	} catch (error) {
 		console.error(error);
 	}
 
 	onMount(async () => {
-		loadBackgroundImage();
 		changeMainThemeEvent(await GetActivatedTheme());
 	});
 </script>

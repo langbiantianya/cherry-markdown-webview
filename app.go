@@ -263,6 +263,38 @@ func (a *App) GetActivatedTheme() string {
 	return config.GetConfig().GetActivatedTheme()
 }
 
+func (a *App) LoadTheme(name string) *config.ThemeItem {
+	themeItem, err := config.LoadTheme(name)
+	if err != nil {
+		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+			Type:    "error",
+			Title:   "错误",
+			Message: err.Error(),
+		})
+		return nil
+	}
+	return themeItem
+}
+
+func (a *App) UpsertThemeItem(theme config.ThemeItem) {
+	err := config.UpsertThemeItem(theme)
+	if err != nil {
+		wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
+			Type:    "error",
+			Title:   "错误",
+			Message: err.Error(),
+		})
+	}
+}
+
+func (a *App) GetThemeList() []config.ExtTheme {
+	return config.GetConfig().Theme.ExtThemes
+}
+
+func (a *App) SetBackground(img file.File) {
+	config.GetConfig().SetBackgroundImage(img)
+}
+
 func (a *App) SetActivatedTheme(theme string) {
 	config.GetConfig().SetActivatedTheme(theme)
 }

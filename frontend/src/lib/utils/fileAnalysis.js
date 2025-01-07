@@ -20,7 +20,6 @@ export async function hookbeforeImageMounted(assciateOpenFile) {
 		if (!/^data:/.test(src)) {
 			try {
 				let url = new URL(src)
-				console.log("url", src)
 				if (url.protocol === "file:") {
 					return {
 						srcProp,
@@ -75,7 +74,7 @@ export function hookFileUpload() {
 						return UploadPicbed(file.File.createFrom({
 							Mime: sourcesFile.type,
 							Name: decodeURIComponent(sourcesFile.name),
-							Bytes: base64.split(',')[1],
+							Bytes: base64 ? base64.split(',')[1] : "",
 						}))
 					}
 

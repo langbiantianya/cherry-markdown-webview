@@ -50,8 +50,8 @@ func main() {
 		Title:     "cherry-markdown-webview",
 		Width:     800,
 		Height:    600,
-		MinWidth:  768,
-		MinHeight: 420,
+		MinWidth:  800,
+		MinHeight: 500,
 		Menu:      appmenu.NewAppMenu(app),
 		AssetServer: &assetserver.Options{
 			Assets: assets,

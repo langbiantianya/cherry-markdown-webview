@@ -31,6 +31,11 @@ export default {
 			borderColor: {
 				'select': 'var(--color-border-select)'
 			},
+			width: {
+				'104': "26rem",
+				'108': "27rem",
+				'112': "29rem"
+			},
 			colors: {
 
 			}
