@@ -10,6 +10,7 @@
 	import '@fluentui/web-components/text-input.js';
 	import '@fluentui/web-components/label.js';
 	import DiyTheme from './diyTheme.svelte';
+	import Background from './background.svelte';
 	/**
 	 * @type {{heid:function():void}}
 	 */
@@ -38,7 +39,9 @@
 	</div>
 	<fluent-tabs orientation="vertical" size="large">
 		<fluent-tab id="background-image">背景图片</fluent-tab>
-		<fluent-tab-panel id="background-image-panel"> </fluent-tab-panel>
+		<fluent-tab-panel id="background-image-panel">
+			<Background />
+		</fluent-tab-panel>
 
 		<fluent-tab id="diy-theme">自定义主题</fluent-tab>
 		<fluent-tab-panel id="diy-theme-panel">

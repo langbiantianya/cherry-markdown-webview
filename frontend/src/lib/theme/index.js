@@ -136,6 +136,13 @@ export function changeMainThemeEvent(theme) {
  * @param {string} bgimg 
  */
 export function loadBackgroundImage(bgimg) {
+
+	for (const styleElement of document.head.getElementsByTagName("style")) {
+		if (styleElement.id === "background-image") {
+			styleElement.remove()
+		}
+	}
+
 	const style = document.createElement("style")
 	style.textContent = `
 	:root {
