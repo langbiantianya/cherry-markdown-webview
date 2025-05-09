@@ -5,6 +5,14 @@
 一个功能丰富且支持`windows` `macos` `linux(龙芯也支持)`的 Markdown 编辑器，目前暂时只支持中文，待基础功能完善后会添加更多的语言支持,由于我没有 mac 所以有些问题是无法发现的，如有发现问题欢迎提 issues。
 待后期想好名字后会迁移到新仓库并加一个图标。
 
+## 以知问题
+
+- 链接跳转
+- 图片查看
+- 自定义界面难看
+- 提示信息不正常
+- 缺少自动保存
+
 ## 主题
 
 目前添加了 2 个主题的示例[芙丽莲](https://github.com/langbiantianya/edit-theme-frieren)和[瑶瑶](https://github.com/langbiantianya/edit-theme-yaoyao)
