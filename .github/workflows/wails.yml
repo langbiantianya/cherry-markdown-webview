@@ -19,10 +19,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build: [
-          {name: linux-amd64, platform: linux/amd64, os: ubuntu-22.04},
-          {name: macos, platform: darwin/universal, os: macos-latest}
-        ]
+        build:
+          [
+            { name: linux, platform: linux/amd64, os: ubuntu-22.04 },
+            { name: macos, platform: darwin/universal, os: macos-latest },
+            { name: windows, platform: windows/amd64, os: windows-2022 },
+          ]
     runs-on: ${{ matrix.build.os }}
     steps:
       - uses: actions/checkout@v4
@@ -33,30 +35,5 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           build-obfuscate: true
-  windows-amd64:
-    runs-on: windows-2022
-    steps:
-      # Checkout code
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: dAppServer/wails-build-action@main
-        with:
-          build-name: cherryMarkdown.exe
-          build-platform: windows/amd64
           wails-build-webview2: "embed"
-          nsis: "true"
-
-  windows-arm64:
-    runs-on: windows-2022
-    steps:
-      # Checkout code
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: dAppServer/wails-build-action@main
-        with:
-          build-name: cherryMarkdown.exe
-          build-platform: windows/arm64
-          wails-build-webview2: "embed"
-          nsis: "true"
+          nsis: true
