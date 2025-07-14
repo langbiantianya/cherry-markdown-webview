@@ -14,87 +14,50 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  linux-amd64:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
-    env:
-      JOB_NAME: "linux-amd64"
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  mac-and-linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        build: [
+          {name: linux-amd64, platform: linux/amd64, os: ubuntu-22.04},
+          {name: linux-amd64, platform: linux/arm64, os: ubuntu-22.04},
+          {name: macos, platform: darwin/universal, os: macos-latest}
+        ]
+    runs-on: ${{ matrix.build.os }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with:
-          repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
       - uses: dAppServer/wails-build-action@v3
         with:
-          build-name: cherryMarkdown
-          build-platform: linux/amd64
-          wails-build-webview2: "embed"
-          go-version: ^1.24.4
-          sign: "false"
-  macos:
-    runs-on: macos-latest
-    env:
-      JOB_NAME: "darwin-universal"
-    steps:
-      # Checkout code
-      - uses: actions/checkout@v4
-        with:
-          repository: "langbiantianya/cherry-markdown-webview"
-          submodules: recursive
-      - uses: dAppServer/wails-build-action@v3
-        with:
-          build-name: cherry-markdown-webview
-          build-platform: darwin/universal
-          wails-build-webview2: "embed"
-          wails-version: "v2.9.2"
-          go-version: ^1.24.4
-          sign: "false"
-  # sign-macos-apple-password: ${{ secrets.APPLE_PASSWORD }}
-  # sign-macos-app-id: "Developer ID Application: Lethean LTD (W2DNA5L5DY)"
-  # sign-macos-app-cert: ${{ secrets.MAC_DEVELOPER_CERT }}
-  # sign-macos-app-cert-password: ${{ secrets.MAC_DEVELOPER_PASS }}
-  # sign-macos-installer-id: "Developer ID Installer: Lethean LTD (W2DNA5L5DY)"
-  # sign-macos-installer-cert: ${{ secrets.MAC_DEVELOPER_INSTALL_CERT }}
-  # sign-macos-installer-cert-password: ${{ secrets.MAC_DEVELOPER_INSTALL_PASS }}
-
+          build-name: ${{ matrix.build.name }}
+          build-platform: ${{ matrix.build.platform }}
+          build-obfuscate: true
   windows-amd64:
     runs-on: windows-2022
-    env:
-      JOB_NAME: "windows-amd64"
     steps:
       # Checkout code
       - uses: actions/checkout@v4
         with:
-          repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
-      - uses: dAppServer/wails-build-action@v3
+      - uses: dAppServer/wails-build-action@v2.2
         with:
           build-name: cherryMarkdown.exe
           build-platform: windows/amd64
           wails-build-webview2: "embed"
-          go-version: ^1.24.4
           nsis: "true"
 
   windows-arm64:
     runs-on: windows-2022
-    env:
-      JOB_NAME: "windows-arm64"
     steps:
       # Checkout code
       - uses: actions/checkout@v4
         with:
-          repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
-      - uses: dAppServer/wails-build-action@v3
+      - uses: dAppServer/wails-build-action@v2.2
         with:
           build-name: cherryMarkdown.exe
           build-platform: windows/arm64
           wails-build-webview2: "embed"
-          go-version: ^1.24.4
           nsis: "true"
