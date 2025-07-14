@@ -26,18 +26,21 @@ jobs:
               platform: linux/amd64,
               os: ubuntu-22.04,
               nsis: false,
+              build-name: "cherryMarkdown"
             },
             {
               name: macos,
               platform: darwin/universal,
               os: macos-latest,
               nsis: false,
+              build-name: "cherryMarkdown"
             },
             {
               name: windows,
               platform: windows/amd64,
               os: windows-2022,
               nsis: true,
+              build-name: "cherryMarkdown.exe"
             },
           ]
     runs-on: ${{ matrix.build.os }}
@@ -52,4 +55,5 @@ jobs:
           build-obfuscate: true
           go-version: 1.24.4
           wails-build-webview2: "embed"
+          sign: "false"
           nsis: ${{ matrix.build.nsis }}
