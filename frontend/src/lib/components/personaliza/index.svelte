@@ -38,10 +38,10 @@
 		</div>
 	</div>
 	<fluent-tabs orientation="vertical" size="large">
-		<fluent-tab id="background-image">背景图片</fluent-tab>
+		<!-- <fluent-tab id="background-image">背景图片</fluent-tab>
 		<fluent-tab-panel id="background-image-panel">
 			<Background />
-		</fluent-tab-panel>
+		</fluent-tab-panel> -->
 
 		<fluent-tab id="diy-theme">自定义主题</fluent-tab>
 		<fluent-tab-panel id="diy-theme-panel">

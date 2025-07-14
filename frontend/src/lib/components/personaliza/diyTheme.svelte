@@ -297,7 +297,7 @@
 >
 	<div bind:this={themeInput} class="theme-input">
 		<fluent-accordion>
-			<fluent-accordion-item size="large">
+			<fluent-accordion-item size="large" expanded>
 				<span slot="heading" class="accordion-item-head">主题颜色</span>
 				<div class=" flex flex-wrap space-x-1">
 					<div class="ml-1">
@@ -440,13 +440,13 @@
 						></fluent-text-input>
 					</div>
 				</div>
-			</fluent-accordion-item>
+			</fluent-accordion-item >
 		</fluent-accordion>
 	</div>
 
-	<div class="diy-background-image w-full">
+	<div class="diy-background-image">
 		<fluent-accordion>
-			<fluent-accordion-item class="" size="large">
+			<fluent-accordion-item class="" size="large" expanded>
 				<span slot="heading" class="accordion-item-head">背景图片</span>
 				<fluent-tooltip
 					id="tooltip"
@@ -534,11 +534,6 @@
 	}
 	.drawer-contentw-full {
 		height: calc(100lvh +200px);
-	}
-	.edit {
-		margin-bottom: 4rem;
-		/* min-width: 37rem;
-		max-width: 57rem; */
 	}
 	@media (max-width: 768px) {
 		.theme-input {
