@@ -33,7 +33,7 @@ jobs:
               platform: darwin/universal,
               os: macos-latest,
               nsis: false,
-              build-name: "cherryMarkdown"
+              build-name: "cherry-markdown-webview"
             },
             {
               name: windows,
