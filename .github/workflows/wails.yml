@@ -30,13 +30,12 @@ jobs:
         with:
           repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
-      - uses: langbiantianya/cherry-markdown-webview@main
+      - uses: dAppServer/wails-build-action@v3
         with:
           build-name: cherryMarkdown
           build-platform: linux/amd64
           wails-build-webview2: "embed"
-          wails-version: v2.9.2
-          go-version: ^1.21
+          go-version: ^1.24.4
           sign: "false"
   macos:
     runs-on: macos-latest
@@ -48,13 +47,13 @@ jobs:
         with:
           repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
-      - uses: langbiantianya/cherry-markdown-webview@main
+      - uses: dAppServer/wails-build-action@v3
         with:
           build-name: cherry-markdown-webview
           build-platform: darwin/universal
           wails-build-webview2: "embed"
           wails-version: "v2.9.2"
-          go-version: ^1.21
+          go-version: ^1.24.4
           sign: "false"
   # sign-macos-apple-password: ${{ secrets.APPLE_PASSWORD }}
   # sign-macos-app-id: "Developer ID Application: Lethean LTD (W2DNA5L5DY)"
@@ -74,13 +73,12 @@ jobs:
         with:
           repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
-      - uses: langbiantianya/cherry-markdown-webview@main
+      - uses: dAppServer/wails-build-action@v3
         with:
           build-name: cherryMarkdown.exe
           build-platform: windows/amd64
           wails-build-webview2: "embed"
-          wails-version: v2.9.2
-          go-version: ^1.21
+          go-version: ^1.24.4
           nsis: "true"
 
   windows-arm64:
@@ -93,11 +91,10 @@ jobs:
         with:
           repository: "langbiantianya/cherry-markdown-webview"
           submodules: recursive
-      - uses: langbiantianya/cherry-markdown-webview@main
+      - uses: dAppServer/wails-build-action@v3
         with:
           build-name: cherryMarkdown.exe
           build-platform: windows/arm64
           wails-build-webview2: "embed"
-          wails-version: v2.9.2
-          go-version: ^1.21
+          go-version: ^1.24.4
           nsis: "true"
