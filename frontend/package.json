@@ -39,7 +39,7 @@
 	"dependencies": {
 		"@fluentui/web-components": "^3.0.0-beta.74",
 		"@jaames/iro": "^5.5.2",
-		"cherry-markdown": "^0.8.57",
+		"cherry-markdown": "^0.9.0",
 		"svelte-loading-spinners": "^0.3.6"
 	}
 }
