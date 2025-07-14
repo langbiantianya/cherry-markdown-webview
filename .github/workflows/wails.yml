@@ -46,7 +46,6 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           build-obfuscate: true
-          node-version: 22.17.0
           go-version: 1.24.4
           wails-build-webview2: "embed"
           sign: "false"
