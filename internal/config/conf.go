@@ -98,6 +98,7 @@ type Theme struct {
 type ExtTheme struct {
 	ClassName string `json:"className"`
 	Label     string `json:"label"`
+	FileName  string `json:"-"`
 }
 
 type Web struct {

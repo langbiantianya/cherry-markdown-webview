@@ -49,7 +49,16 @@ func LoadThemeConf(name string) (ThemeItemConf, error) {
 }
 
 func LoadTheme(name string) (*ThemeItem, error) {
-	themeConf, err := LoadThemeConf(name)
+	themes := scanerExtTheme()
+	fileName := ""
+	for _, theme := range themes {
+		if theme.ClassName == name {
+			fileName = theme.FileName
+			break
+		}
+	}
+	fmt.Println(fileName)
+	themeConf, err := LoadThemeConf(fileName)
 	if err != nil {
 		return nil, err
 	}
@@ -61,14 +70,14 @@ func LoadTheme(name string) (*ThemeItem, error) {
 		Colors: themeConf.Colors,
 	}
 	// 加载scss
-	scssByteArray, err := file.ReadFileToByteArray(filepath.Join(getBasehemePath(), name, themeConf.ScssPath))
+	scssByteArray, err := file.ReadFileToByteArray(filepath.Join(getBasehemePath(), fileName, themeConf.ScssPath))
 	if err != nil {
 		logs.Logger.Error(fmt.Sprintf("Failed load scss: %s", err.Error()))
 		return nil, err
 	}
 	themeItem.Scss = string(scssByteArray)
 
-	toolBarBytearry, err := file.ReadFileToByteArray(filepath.Join(getBasehemePath(), name, themeConf.ToolBarPath))
+	toolBarBytearry, err := file.ReadFileToByteArray(filepath.Join(getBasehemePath(), fileName, themeConf.ToolBarPath))
 	if err != nil {
 		logs.Logger.Error(fmt.Sprintf("Failed load scss: %s", err.Error()))
 		return nil, err
@@ -77,7 +86,7 @@ func LoadTheme(name string) (*ThemeItem, error) {
 	themeItem.ToolBar = string(toolBarBytearry)
 	// 加载背景图片
 	if themeConf.BackgroundImagePath != "" {
-		bgImg, err := file.ReadFile(filepath.Join(getBasehemePath(), name, themeConf.BackgroundImagePath))
+		bgImg, err := file.ReadFile(filepath.Join(getBasehemePath(), fileName, themeConf.BackgroundImagePath))
 		if err != nil {
 			logs.Logger.Error(fmt.Sprintf("Failed load background image: %s", err.Error()))
 			return nil, err
@@ -183,7 +192,8 @@ func scanerExtTheme() []ExtTheme {
 			}
 			theme = append(theme, ExtTheme{
 				ClassName: themeConf.Name,
-				Label:     info.Name(),
+				Label:     themeConf.Name,
+				FileName:  info.Name(),
 			})
 		}
 		return nil
