@@ -27,7 +27,7 @@
 	import { globalState } from '$lib/store';
 	import { InsertMenu } from '$lib/utils/InsertMenu';
 	import { file } from '$lib/wailsjs/go/models';
-
+	import { BrowserOpenURL } from '$lib/wailsjs/runtime';
 	const fileMenu = FileMenu();
 	const exportMenu = ExportMenu();
 	const bubbleExtMenu = BubbleExtMenu();
@@ -243,6 +243,15 @@
 	onMount(async () => {
 		await loadDefaultExtTheme();
 		await init();
+		// 获取class cherry-previewer 下的的a标签，并取出herf的地然后使用BrowserOpenURL打开
+		const aTags = document.querySelectorAll('.cherry-previewer a');
+		aTags.forEach((aTag) => {
+			aTag.addEventListener('click', (event) => {
+				event.preventDefault();
+				const href = aTag.href;
+				BrowserOpenURL(href);
+			});
+		});
 	});
 </script>
 
