@@ -15,7 +15,7 @@ func StartServer() {
 	// 尝试监听端口
 	ln, err := net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", port))
 
-	for countTry := 50; err != nil && countTry > 0; countTry-- {
+	for countTry := 5000; err != nil && countTry > 0; countTry-- {
 		port++
 		ln, err = net.Listen("tcp", fmt.Sprintf(":%d", port))
 	}
@@ -34,7 +34,7 @@ func StartServer() {
 	conf.Web.SetPort(port)
 
 	mux := http.NewServeMux()
-	
+
 	registerRouter(mux)
 
 	logs.Logger.Info(fmt.Sprintf("127.0.0.1:%d", port))
