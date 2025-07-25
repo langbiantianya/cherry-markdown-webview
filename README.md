@@ -36,7 +36,6 @@
 - [ ] 文件关联
   - [x] windows
   - [ ] linux
-  - [x] mac
 - [x] 优化文件保存提示
 - [ ] 跨平台支持(基础编辑器和文件 io 可用)
   - [x] windos
@@ -46,15 +45,11 @@
     - [x] amd64
     - [x] arm64
     - [ ] armf
-    - [x] loong64
-  - [x] mac
-    - [x] arm64
-    - [x] amd64
+    - [ ] loong64
 - [x] 大文件打开性能优化
-- [ ] webview 依赖缺少提示
+- [x] webview 依赖缺少提示
 - [x] 本地图片解析
 - [x] 图片上传对象存储
-- [ ] 工作区
 - [x] 个性化选项
 
 ## download
