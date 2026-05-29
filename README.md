@@ -1,5 +1,7 @@
 # README
 
+请使用[pwaMarkdownEdit](https://github.com/langbiantianya/pwaMarkdownEdit)这个项目来替代
+
 ## About
 
 一个功能丰富且支持`windows` `macos` `linux(龙芯也支持)`的 Markdown 编辑器，目前暂时只支持中文，待基础功能完善后会添加更多的语言支持,由于我没有 mac 所以有些问题是无法发现的，如有发现问题欢迎提 issues。
